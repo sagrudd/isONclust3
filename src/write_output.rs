@@ -1,4 +1,3 @@
-use crate::structs::FastqRecordIsonclInit;
 use crate::{file_actions, ClusterIdMap};
 use log::debug;
 use log::info;
@@ -69,52 +68,59 @@ fn write_final_clusters_tsv(
     info!("{} reads added to tsv file", nr_reads);
 }
 
-//TODO: this is the current RAM bottleneck: we read the whole file to then have the reads when we write the output
-//Outline: sort the fastq file by cluster and then write the entries from the sorted fastq file to not having to read the full file
-fn create_final_ds(
-    header_cluster_map: &FxHashMap<String, i32>,
-    fastq: &str,
-    cluster_map: &mut FxHashMap<i32, Vec<FastqRecordIsonclInit>>,
-) {
-    let fastq_file = File::open(fastq).unwrap();
-    file_actions::parse_fastq_records(fastq_file, |read| {
-        if let Some(cluster_id) = header_cluster_map.get(read.header.as_str()) {
-            cluster_map.entry(*cluster_id).or_default().push(read);
-        }
-    });
+fn cluster_fastq_output_ids(clusters: &ClusterIdMap, n: usize) -> FxHashMap<i32, usize> {
+    let mut cluster_ids: Vec<i32> = clusters
+        .iter()
+        .filter_map(|(cluster_id, reads)| (reads.len() >= n).then_some(*cluster_id))
+        .collect();
+    cluster_ids.sort_unstable();
+    cluster_ids
+        .into_iter()
+        .enumerate()
+        .map(|(output_id, cluster_id)| (cluster_id, output_id))
+        .collect()
 }
 
-fn write_fastq_files(
+fn write_fastq_files_streaming(
     outfolder: &Path,
-    cluster_map: FxHashMap<i32, Vec<FastqRecordIsonclInit>>,
+    clusters: &ClusterIdMap,
+    header_cluster_map: &FxHashMap<String, i32>,
+    fastq: &str,
     n: usize,
 ) {
-    let mut new_cl_id = 0;
     let mut read_cter = 0;
-    //fs::create_dir_all(PathBuf::from(outfolder).join("fastq_files"));
     let fastq_outfolder = PathBuf::from(outfolder);
-    //Writes the fastq files using the data structure cluster_map HashMap<i32, Vec<FastqRecordIsonclInit>>
-    for (cl_id, records) in cluster_map.into_iter() {
-        if records.len() >= n {
-            //only write the records if we have n or more reads supporting the cluster
-            let filename = new_cl_id.to_string() + ".fastq";
+    let cluster_output_ids = cluster_fastq_output_ids(clusters, n);
+    let mut writers: FxHashMap<i32, BufWriter<File>> = FxHashMap::default();
+    let fastq_file = File::open(fastq).unwrap();
+    file_actions::parse_fastq_records(fastq_file, |record| {
+        let Some(cluster_id) = header_cluster_map.get(record.header.as_str()) else {
+            return;
+        };
+        let Some(output_id) = cluster_output_ids.get(cluster_id) else {
+            return;
+        };
+        let writer = writers.entry(*cluster_id).or_insert_with(|| {
+            let filename = format!("{output_id}.fastq");
             let file_path = fastq_outfolder.join(filename);
-            let f = File::create(file_path).expect("unable to create file");
-            let mut buf_write = BufWriter::new(&f);
-            for record in records {
-                write!(
-                    buf_write,
-                    "@{}\n{}\n+\n{}\n",
-                    record.header, record.sequence, record.quality
-                )
-                .expect("We should be able to write the entries");
-                read_cter += 1;
-            }
-            buf_write.flush().expect("Failed to flush the buffer");
-            new_cl_id += 1; //this is the new cl_id as we skip some on the way
+            let file = File::create(file_path).expect("unable to create file");
+            BufWriter::new(file)
+        });
+        write!(
+            writer,
+            "@{}\n{}\n+\n{}\n",
+            record.header, record.sequence, record.quality
+        )
+        .expect("We should be able to write the entries");
+        read_cter += 1;
+    });
+    for writer in writers.values_mut() {
+        writer.flush().expect("Failed to flush the buffer");
+    }
+    for cluster_id in cluster_output_ids.keys() {
+        if !writers.contains_key(cluster_id) {
+            debug!("cl id for writing: {}, {}", cluster_id, read_cter);
         }
-
-        debug!("cl id for writing: {}, {}", cl_id, read_cter);
     }
     info!("{} reads written", read_cter);
 }
@@ -144,19 +150,30 @@ pub(crate) fn write_output(
     if !fastq_path.exists() {
         let _ = fs::create_dir(fastq_path.clone());
     }
-    let mut cluster_hashmap_fastq_record = FxHashMap::default();
     let mut header_cluster_map = FxHashMap::default();
     write_final_clusters_tsv(&clustering_path, clusters, id_map, &mut header_cluster_map);
     //no_fastq: true -> we do not want to write the fastq files
     if !no_fastq {
-        //create a data structure that we use to generate the proper fastq files
-        create_final_ds(
-            &header_cluster_map,
-            &fastq,
-            &mut cluster_hashmap_fastq_record,
-        );
-        debug!("Cluster_hashmap: {}", cluster_hashmap_fastq_record.len());
         info!("Writing the fastq files");
-        write_fastq_files(&fastq_path, cluster_hashmap_fastq_record, n);
+        write_fastq_files_streaming(&fastq_path, clusters, &header_cluster_map, &fastq, n);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn cluster_fastq_output_ids_are_sorted_and_thresholded() {
+        let mut clusters = ClusterIdMap::default();
+        clusters.insert(4, vec![10, 11]);
+        clusters.insert(2, vec![12]);
+        clusters.insert(7, vec![13, 14, 15]);
+
+        let output_ids = cluster_fastq_output_ids(&clusters, 2);
+
+        assert_eq!(output_ids.get(&2), None);
+        assert_eq!(output_ids.get(&4), Some(&0));
+        assert_eq!(output_ids.get(&7), Some(&1));
     }
 }

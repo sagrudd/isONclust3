@@ -66,7 +66,7 @@ Tasks are ordered to improve the fork without breaking the upstream
         vector during seed-quality filtering.
   - [x] Use fixed PHRED count storage during FASTQ sorting quality scoring.
 - [x] Replace ad hoc tuple merge bookkeeping with named structs.
-- [ ] Stream cluster FASTQ output where possible.
+- [x] Stream cluster FASTQ output where possible.
 - [ ] Add benchmark evidence before and after every algorithmic optimization.
 
 ## 6. Dockerized GB10 Evidence

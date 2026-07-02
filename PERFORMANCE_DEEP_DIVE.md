@@ -57,9 +57,10 @@ default `newONform` handoff, which uses `--no-fastq`.
 
 4. Per-cluster FASTQ output materialization.
    - Primary files: `src/write_output.rs`.
-   - Why it matters: the current output path clones cluster and ID maps, builds
-     a read-to-cluster map, rereads sorted FASTQ, and stores cluster records
-     before writing per-cluster FASTQ files.
+   - Why it matters: the output path builds a read-to-cluster map and rereads
+     sorted FASTQ; the current implementation streams eligible cluster records
+     directly to per-cluster writers instead of storing a full
+     cluster-to-record map first.
    - Measurement: run `scripts/run-local-profiling.sh --include-fastq-output`
      and compare memory against the default `--no-fastq` handoff.
    - Output risk: low for `newONform` handoff when `final_clusters.tsv` is
