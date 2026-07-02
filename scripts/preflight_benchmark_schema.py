@@ -227,6 +227,9 @@ def _validate_manifest_keys_against_schema(repo: Path, schema: dict[str, object]
             errors.append(f"{relative} root must be a JSON object")
             continue
 
+        expected_order = [key for key in properties if key in manifest]
+        if list(manifest) != expected_order:
+            errors.append(f"{relative} keys must follow benchmark schema order")
         missing = required_root_keys - set(manifest)
         if missing:
             errors.append(f"{relative} missing schema-required keys: {', '.join(sorted(missing))}")
@@ -282,9 +285,11 @@ def _validate_nested_object_keys(
     schema_property = properties.get(field)
     if not isinstance(schema_property, dict):
         return
-    allowed = _schema_property_keys(schema_property)
+    expected_order = _schema_property_order(schema_property)
+    allowed = set(expected_order)
     required = set(schema_property.get("required", []))
     _validate_key_set(manifest_path, field, value, allowed, required, errors)
+    _validate_key_order(manifest_path, field, value, expected_order, errors)
 
 
 def _validate_definition_object_keys(
@@ -296,14 +301,16 @@ def _validate_definition_object_keys(
 ) -> None:
     if not isinstance(definition, dict):
         return
-    allowed = _schema_property_keys(definition)
+    expected_order = _schema_property_order(definition)
+    allowed = set(expected_order)
     required = set(definition.get("required", []))
     _validate_key_set(manifest_path, field, value, allowed, required, errors)
+    _validate_key_order(manifest_path, field, value, expected_order, errors)
 
 
-def _schema_property_keys(schema_object: dict[str, object]) -> set[str]:
+def _schema_property_order(schema_object: dict[str, object]) -> list[str]:
     properties = schema_object.get("properties", {})
-    return set(properties) if isinstance(properties, dict) else set()
+    return list(properties) if isinstance(properties, dict) else []
 
 
 def _validate_key_set(
@@ -322,3 +329,17 @@ def _validate_key_set(
     unexpected = set(value) - allowed
     if unexpected:
         errors.append(f"{manifest_path} {field} has keys outside benchmark schema: {', '.join(sorted(unexpected))}")
+
+
+def _validate_key_order(
+    manifest_path: Path,
+    field: str,
+    value: object,
+    expected_order: list[str],
+    errors: list[str],
+) -> None:
+    if not isinstance(value, dict):
+        return
+    present_order = [key for key in expected_order if key in value]
+    if list(value) != present_order:
+        errors.append(f"{manifest_path} {field} keys must follow benchmark schema order")
