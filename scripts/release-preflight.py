@@ -93,7 +93,8 @@ REQUIRED_TEXT = {
         "scripts/release-preflight.py --expected-version",
         "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff",
         "sphinx-build -W -b html docs target/sphinx-html",
-        "newONform",
+        "Update `newONform` submodule, generated-input registers, release notes,",
+        "blockers, and Sphinx documentation in the same release train.",
     ],
     "RELEASE_NOTES.md": [
         "isONclust3 0.3.0-rc Planning Draft",
@@ -120,6 +121,7 @@ REQUIRED_TEXT = {
         "Record accepted GB10 benchmark reports",
         "Expose generated `final_clusters.tsv` checksums",
         "Keep `newONform` generated-input registers aligned",
+        "Gate release-checklist downstream handoff artifact markers.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",

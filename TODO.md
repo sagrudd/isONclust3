@@ -25,6 +25,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate README release-readiness documentation build instructions.
 - [x] Gate Sphinx release-readiness documentation build instructions.
 - [x] Gate AGENTS Sphinx documentation policy markers.
+- [x] Gate release-checklist downstream handoff artifact markers.
 
 ## 2. Output Contract Harmonization
 
