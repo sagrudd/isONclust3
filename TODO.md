@@ -19,7 +19,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Add tiny ONT fixture output with checksum-backed `final_clusters.tsv`.
 - [x] Add tiny PacBio fixture output with checksum-backed `final_clusters.tsv`.
 - [x] Add deterministic ordering checks for cluster table output.
-- [ ] Add a consumer fixture in `newONform` that reads committed `isONclust3`
+- [x] Add a consumer fixture in `newONform` that reads committed `isONclust3`
       output without manual transformation.
 
 ## 3. Strict Lint And Hygiene
@@ -73,7 +73,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Track `sagrudd/isONclust3` as a `newONform` submodule.
 - [ ] Document the end-to-end `isONclust3 -> newONform` transcriptome
       consolidation workflow.
-- [ ] Add a shared fixture path that lets `newONform` validate `isONclust3`
+- [x] Add a shared fixture path that lets `newONform` validate `isONclust3`
       output directly.
 - [ ] Keep `newONform` generated-input registers aligned with accepted
       `isONclust3` output checksums.
