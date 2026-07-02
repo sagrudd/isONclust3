@@ -82,8 +82,12 @@ def validate_output_contract_register(repo: Path) -> list[str]:
     errors.extend(validate_output_contract_schema(repo))
     try:
         register = json.loads(path.read_text(encoding="utf-8"))
+    except OSError as exc:
+        return [f"{path.relative_to(repo)} is not readable: {exc}"]
     except json.JSONDecodeError as exc:
         return [f"{path.relative_to(repo)} is invalid JSON: {exc}"]
+    if not isinstance(register, dict):
+        return [f"{path.relative_to(repo)} root must be a JSON object"]
 
     expected_root = {
         "$schema": OUTPUT_CONTRACT_SCHEMA_REFERENCE,

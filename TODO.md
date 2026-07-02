@@ -59,6 +59,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate output-contract schema root property types.
 - [x] Gate output-contract register root key ordering.
 - [x] Gate output-contract register entry key ordering.
+- [x] Gate output-contract register readability and object root.
 
 ## 2. Output Contract Harmonization
 
