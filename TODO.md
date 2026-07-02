@@ -175,6 +175,8 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Gate benchmark manifest file checksum value shape.
 - [x] Add a GB10 runner that records command, image, checksums, wall time,
       peak RSS, CPU architecture, and thread count.
+- [x] Gate GB10 runner report fields for generated `final_clusters.tsv`
+      checksum handoff.
 - [x] Add a local Docker toy benchmark smoke for ONT and PacBio manifests.
 - [ ] Record accepted GB10 benchmark reports with command, image, checksums, wall time,
       peak RSS, CPU architecture, and thread count.

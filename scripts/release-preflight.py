@@ -13,6 +13,7 @@ from pathlib import Path
 
 from preflight_artifacts import validate_tracked_artifacts
 from preflight_benchmark_schema import validate_benchmark_schema
+from preflight_gb10_runner import validate_gb10_runner
 from preflight_output_contracts import validate_output_contract_register
 
 try:
@@ -41,6 +42,7 @@ REQUIRED_FILES = [
     "scripts/run-gb10-benchmark.sh",
     "scripts/preflight_artifacts.py",
     "scripts/preflight_benchmark_schema.py",
+    "scripts/preflight_gb10_runner.py",
     "scripts/preflight_output_contracts.py",
     "fixtures/output-contracts/final-clusters-register.json",
     "schemas/benchmark-fixture.schema.json",
@@ -950,6 +952,7 @@ def main() -> int:
     errors.extend(validate_file_sizes(repo, args.max_lines))
     errors.extend(validate_benchmark_schema(repo))
     errors.extend(validate_output_contract_register(repo))
+    errors.extend(validate_gb10_runner(repo))
     errors.extend(validate_manifests(repo))
     errors.extend(validate_ci(repo))
     errors.extend(validate_optimization_evidence(repo))
