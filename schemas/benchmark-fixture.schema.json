@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sagrudd/isONclust3/schemas/benchmark-fixture.schema.json",
+  "title": "isONclust3 benchmark fixture manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "manifest_kind",
+    "manifest_id",
+    "project",
+    "benchmark_tier",
+    "mode",
+    "seeding",
+    "source",
+    "platform_targets",
+    "files",
+    "command",
+    "acceptance"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../schemas/benchmark-fixture.schema.json"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "manifest_kind": {
+      "const": "isonclust3-benchmark-fixture"
+    },
+    "manifest_id": {
+      "type": "string",
+      "pattern": "^isonclust3-[a-z0-9-]+$"
+    },
+    "project": {
+      "const": "isONclust3"
+    },
+    "benchmark_tier": {
+      "enum": ["toy", "medium", "phanerognostikon"]
+    },
+    "mode": {
+      "enum": ["ont", "pacbio"]
+    },
+    "seeding": {
+      "enum": ["minimizer", "syncmer"]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["description"],
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1
+        },
+        "availability": {
+          "enum": ["external_pending"]
+        },
+        "blocker_id": {
+          "const": "ISOCLUST-BLOCK-002"
+        }
+      }
+    },
+    "platform_targets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["linux/arm64", "linux/amd64"]
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/file"
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["container_image", "args"],
+      "properties": {
+        "container_image": {
+          "const": "isonclust3:gb10"
+        },
+        "args": {
+          "type": "array",
+          "minItems": 9,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requires_gb10_report",
+        "requires_container_digest",
+        "requires_output_checksums"
+      ],
+      "properties": {
+        "requires_gb10_report": {
+          "const": true
+        },
+        "requires_container_digest": {
+          "const": true
+        },
+        "requires_output_checksums": {
+          "const": true
+        },
+        "status": {
+          "enum": ["blocked_pending_data"]
+        },
+        "blocker_id": {
+          "enum": ["ISOCLUST-BLOCK-001", "ISOCLUST-BLOCK-002"]
+        }
+      }
+    },
+    "profiling_plan": {
+      "$ref": "#/$defs/profiling_plan"
+    },
+    "downstream_handoff": {
+      "$ref": "#/$defs/downstream_handoff"
+    }
+  },
+  "$defs": {
+    "checksum": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {
+          "const": "sha256"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "role", "checksum"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": ["input-fastq", "expected-final-clusters"]
+        },
+        "checksum": {
+          "$ref": "#/$defs/checksum"
+        }
+      }
+    },
+    "profiling_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "status", "blocker_id", "required_facets"],
+      "properties": {
+        "scope": {
+          "const": "smallest-accepted-larger-workload"
+        },
+        "status": {
+          "const": "blocked_pending_data"
+        },
+        "blocker_id": {
+          "const": "ISOCLUST-BLOCK-002"
+        },
+        "required_facets": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "seed-generation",
+              "minimizer-extraction",
+              "quality-filtering",
+              "final-clusters-contract"
+            ]
+          }
+        }
+      }
+    },
+    "downstream_handoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "consumer",
+        "generated_input_register",
+        "generated_input_id",
+        "consumer_blocker_id"
+      ],
+      "properties": {
+        "consumer": {
+          "const": "newONform"
+        },
+        "generated_input_register": {
+          "const": "fixtures/generated-inputs/register.json"
+        },
+        "generated_input_id": {
+          "enum": ["drr138512-final-clusters", "drr178488-final-clusters"]
+        },
+        "consumer_blocker_id": {
+          "const": "NOF-BLOCK-006"
+        }
+      }
+    }
+  }
+}

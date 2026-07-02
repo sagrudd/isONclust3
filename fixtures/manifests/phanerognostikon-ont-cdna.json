@@ -1,4 +1,5 @@
 {
+  "$schema": "../../schemas/benchmark-fixture.schema.json",
   "schema_version": 1,
   "manifest_kind": "isonclust3-benchmark-fixture",
   "manifest_id": "isonclust3-phanerognostikon-ont-cdna",

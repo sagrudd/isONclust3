@@ -41,6 +41,7 @@ REQUIRED_FILES = [
     "scripts/preflight_artifacts.py",
     "scripts/preflight_output_contracts.py",
     "fixtures/output-contracts/final-clusters-register.json",
+    "schemas/benchmark-fixture.schema.json",
     "schemas/output-contract-register.schema.json",
     "docs/requirements.txt",
     "docs/conf.py",
@@ -165,6 +166,7 @@ REQUIRED_TEXT = {
         "Gate benchmark manifest readability and object root.",
         "Gate benchmark manifest duplicate file roles.",
         "Gate benchmark manifest duplicate file paths.",
+        "Gate benchmark manifest schema path markers.",
         "Gate release-checklist downstream handoff artifact markers.",
         "Gate blocker waiver rules for upstream producer evidence.",
         "Gate Sphinx waiver-boundary release-readiness markers.",
@@ -314,6 +316,7 @@ REQUIRED_MANIFEST_STEMS = {
     "tiny-ont",
     "tiny-pacbio",
 }
+REQUIRED_MANIFEST_SCHEMA = "../../schemas/benchmark-fixture.schema.json"
 REQUIRED_PLATFORM_TARGETS = {
     "linux/amd64",
     "linux/arm64",
@@ -470,6 +473,7 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
         return [f"{path.relative_to(repo)} root must be a JSON object"]
 
     required = [
+        "$schema",
         "schema_version",
         "manifest_kind",
         "manifest_id",
@@ -488,6 +492,10 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
         )
     if manifest.get("schema_version") != 1:
         errors.append(f"{path.relative_to(repo)} schema_version must be 1")
+    if manifest.get("$schema") != REQUIRED_MANIFEST_SCHEMA:
+        errors.append(
+            f"{path.relative_to(repo)} $schema must be {REQUIRED_MANIFEST_SCHEMA}"
+        )
     if manifest.get("manifest_kind") != "isonclust3-benchmark-fixture":
         errors.append(
             f"{path.relative_to(repo)} manifest_kind must be isonclust3-benchmark-fixture"
