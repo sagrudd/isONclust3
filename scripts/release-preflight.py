@@ -316,6 +316,18 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
         if not relative:
             errors.append(f"{path.relative_to(repo)} file entry missing path")
             continue
+        if manifest.get("benchmark_tier") == "toy" and isinstance(role, str):
+            expected_paths = {
+                "expected-final-clusters": (
+                    f"fixtures/tiny/{manifest.get('mode')}/expected/final_clusters.tsv"
+                ),
+                "input-fastq": f"fixtures/tiny/{manifest.get('mode')}/reads.fastq",
+            }
+            expected_path = expected_paths.get(role)
+            if expected_path and relative != expected_path:
+                errors.append(
+                    f"{path.relative_to(repo)} {role} path must be {expected_path}"
+                )
         file_path = repo / relative
         if not file_path.is_file():
             errors.append(f"{path.relative_to(repo)} references missing file: {relative}")
