@@ -182,6 +182,7 @@ REQUIRED_TEXT = {
         "Gate benchmark manifest keys against the benchmark schema.",
         "Gate benchmark manifest checksum keys against the benchmark schema.",
         "Gate benchmark manifest key ordering against the benchmark schema.",
+        "Gate GB10 runner report fields for generated `final_clusters.tsv`",
         "Gate release-checklist downstream handoff artifact markers.",
         "Gate blocker waiver rules for upstream producer evidence.",
         "Gate Sphinx waiver-boundary release-readiness markers.",
@@ -265,6 +266,13 @@ REQUIRED_TEXT = {
         "sphinx-build -W -b html docs target/sphinx-html",
         "Downstream Handoff",
         "external/isONclust3",
+    ],
+    "scripts/preflight_gb10_runner.py": [
+        "GB10 runner contract checks",
+        "REQUIRED_RUNNER_MARKERS",
+        "REQUIRED_TSV_FIELDS",
+        "final_clusters_sha256",
+        "accepted_contract",
     ],
 }
 
