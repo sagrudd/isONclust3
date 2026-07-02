@@ -178,6 +178,7 @@ REQUIRED_TEXT = {
         "Gate a machine-readable tiny `final_clusters.tsv` output-contract",
         "Gate the output-contract register schema.",
         "Gate output-contract schema entry constraints.",
+        "Gate output-contract register paths as relative and non-escaping.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",

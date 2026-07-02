@@ -120,9 +120,24 @@ def validate_output_contract_register(repo: Path) -> list[str]:
             errors.append(f"{path.relative_to(repo)} {entry_id}.status must be resolved")
         if entry.get("consumer") != "newONform":
             errors.append(f"{path.relative_to(repo)} {entry_id}.consumer must be newONform")
-        run_path = repo / str(entry.get("run_path", ""))
-        fastq_path = repo / str(entry.get("fastq_path", ""))
+        referenced_paths: dict[str, Path] = {}
+        for path_field in ("run_path", "fastq_path"):
+            value = entry.get(path_field)
+            if not isinstance(value, str) or not value:
+                errors.append(f"{path.relative_to(repo)} {entry_id}.{path_field} must be non-empty")
+                continue
+            relative_path = Path(value)
+            if relative_path.is_absolute() or ".." in relative_path.parts:
+                errors.append(
+                    f"{path.relative_to(repo)} {entry_id}.{path_field} must be relative and non-escaping"
+                )
+                continue
+            referenced_paths[path_field] = repo / relative_path
+        run_path = referenced_paths.get("run_path")
+        fastq_path = referenced_paths.get("fastq_path")
         for referenced_path in (run_path, fastq_path):
+            if referenced_path is None:
+                continue
             if not referenced_path.is_file():
                 errors.append(
                     f"{path.relative_to(repo)} {entry_id} references missing file: "
@@ -131,12 +146,12 @@ def validate_output_contract_register(repo: Path) -> list[str]:
         expected_sha = entry.get("sha256")
         if not isinstance(expected_sha, str) or not SHA256_HEX_PATTERN.fullmatch(expected_sha):
             errors.append(f"{path.relative_to(repo)} {entry_id}.sha256 must be lowercase hex")
-        elif run_path.is_file() and sha256(run_path) != expected_sha:
+        elif run_path is not None and run_path.is_file() and sha256(run_path) != expected_sha:
             errors.append(f"{path.relative_to(repo)} {entry_id}.sha256 mismatch")
         expected_bytes = entry.get("bytes")
         if not isinstance(expected_bytes, int) or expected_bytes < 1:
             errors.append(f"{path.relative_to(repo)} {entry_id}.bytes must be positive")
-        elif run_path.is_file() and run_path.stat().st_size != expected_bytes:
+        elif run_path is not None and run_path.is_file() and run_path.stat().st_size != expected_bytes:
             errors.append(f"{path.relative_to(repo)} {entry_id}.bytes mismatch")
         expected_fastq_sha = entry.get("fastq_sha256")
         if not isinstance(expected_fastq_sha, str) or not SHA256_HEX_PATTERN.fullmatch(
@@ -145,14 +160,18 @@ def validate_output_contract_register(repo: Path) -> list[str]:
             errors.append(
                 f"{path.relative_to(repo)} {entry_id}.fastq_sha256 must be lowercase hex"
             )
-        elif fastq_path.is_file() and sha256(fastq_path) != expected_fastq_sha:
+        elif fastq_path is not None and fastq_path.is_file() and sha256(fastq_path) != expected_fastq_sha:
             errors.append(f"{path.relative_to(repo)} {entry_id}.fastq_sha256 mismatch")
         expected_fastq_bytes = entry.get("fastq_bytes")
         if not isinstance(expected_fastq_bytes, int) or expected_fastq_bytes < 1:
             errors.append(
                 f"{path.relative_to(repo)} {entry_id}.fastq_bytes must be positive"
             )
-        elif fastq_path.is_file() and fastq_path.stat().st_size != expected_fastq_bytes:
+        elif (
+            fastq_path is not None
+            and fastq_path.is_file()
+            and fastq_path.stat().st_size != expected_fastq_bytes
+        ):
             errors.append(f"{path.relative_to(repo)} {entry_id}.fastq_bytes mismatch")
 
     missing = set(REQUIRED_OUTPUT_CONTRACT_ENTRIES) - observed_ids
