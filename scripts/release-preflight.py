@@ -287,6 +287,22 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
                         f"{path.relative_to(repo)} command.args {flag} "
                         f"must appear exactly once"
                     )
+            expected_args = [
+                "--fastq",
+                REQUIRED_COMMAND_VALUES["--fastq"],
+                "--mode",
+                str(manifest.get("mode")),
+                "--outfolder",
+                REQUIRED_COMMAND_VALUES["--outfolder"],
+                "--seeding",
+                str(manifest.get("seeding")),
+                "--no-fastq",
+            ]
+            if args != expected_args:
+                errors.append(
+                    f"{path.relative_to(repo)} command.args must match the "
+                    "canonical file-based handoff sequence"
+                )
             expected_values = {
                 **REQUIRED_COMMAND_VALUES,
                 "--mode": str(manifest.get("mode")),

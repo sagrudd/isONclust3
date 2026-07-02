@@ -60,7 +60,7 @@ Every accepted Dockerized or GB10 report must include:
   `--fastq`, `--mode`, `--outfolder`, `--seeding`, and `--no-fastq` under the
   `isonclust3:gb10` image, with `--mode` and `--seeding` matching the manifest
   metadata, no unrecognized command flags, and each supported flag appearing
-  exactly once.
+  exactly once in the canonical file-based handoff sequence.
 - Medium ONT and Phanerognostikon-scale workloads must not be accepted until
   their source inputs, producer commands, and generated cluster-table checksums
   are recorded.
