@@ -93,6 +93,14 @@ REQUIRED_MANIFEST_STEMS = {
     "tiny-ont",
     "tiny-pacbio",
 }
+REQUIRED_FILE_ROLES = {
+    "expected-final-clusters",
+    "input-fastq",
+}
+REQUIRED_TOY_FILE_ROLES = {
+    "expected-final-clusters",
+    "input-fastq",
+}
 REQUIRED_COMMAND_FLAGS = {
     "--fastq",
     "--mode",
@@ -292,7 +300,17 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
                         f"must be {value}"
                     )
 
+    file_roles: set[str] = set()
     for entry in manifest.get("files", []):
+        role = entry.get("role")
+        if role not in REQUIRED_FILE_ROLES:
+            expected_roles = ", ".join(sorted(REQUIRED_FILE_ROLES))
+            errors.append(
+                f"{path.relative_to(repo)} file entry role must be one of "
+                f"{expected_roles}"
+            )
+        elif isinstance(role, str):
+            file_roles.add(role)
         relative = entry.get("path")
         checksum = entry.get("checksum", {})
         if not relative:
@@ -311,6 +329,13 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
             errors.append(
                 f"{path.relative_to(repo)} {relative} checksum mismatch: "
                 f"{observed} != {expected}"
+            )
+    if manifest.get("benchmark_tier") == "toy":
+        missing_roles = REQUIRED_TOY_FILE_ROLES - file_roles
+        if missing_roles:
+            errors.append(
+                f"{path.relative_to(repo)} missing toy file role(s): "
+                f"{', '.join(sorted(missing_roles))}"
             )
     return errors
 

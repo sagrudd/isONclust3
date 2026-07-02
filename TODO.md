@@ -91,6 +91,7 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Gate benchmark manifest kind and seeding metadata.
   - [x] Gate benchmark manifest schema version and tier vocabulary.
   - [x] Gate benchmark manifest filename-to-ID identity and uniqueness.
+  - [x] Gate toy benchmark manifest file-role coverage.
 - [x] Add a GB10 runner that records command, image, checksums, wall time,
       peak RSS, CPU architecture, and thread count.
 - [x] Add a local Docker toy benchmark smoke for ONT and PacBio manifests.
