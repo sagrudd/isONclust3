@@ -84,6 +84,8 @@ Tasks are ordered to improve the fork without breaking the upstream
         `final_clusters.tsv` handoff.
   - [x] Gate benchmark manifest command values against mode, seeding, and
         container path metadata.
+  - [x] Gate benchmark manifests so every evidence run requires a container
+        digest.
 - [x] Add a GB10 runner that records command, image, checksums, wall time,
       peak RSS, CPU architecture, and thread count.
 - [x] Add a local Docker toy benchmark smoke for ONT and PacBio manifests.

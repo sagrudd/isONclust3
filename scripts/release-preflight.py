@@ -176,6 +176,8 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
     acceptance = manifest.get("acceptance", {})
     if acceptance.get("requires_gb10_report") is not True:
         errors.append(f"{path.relative_to(repo)} must require a GB10 report")
+    if acceptance.get("requires_container_digest") is not True:
+        errors.append(f"{path.relative_to(repo)} must require a container digest")
     if acceptance.get("requires_output_checksums") is not True:
         errors.append(f"{path.relative_to(repo)} must require output checksums")
 
