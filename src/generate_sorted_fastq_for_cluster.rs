@@ -43,7 +43,7 @@ fn compress_sequence(seq: &[u8]) -> String {
 }
 
 fn calculate_error_rate(qual: &[u8], d_no_min: &[f64; 128]) -> f64 {
-    let mut counts = vec![0; 128];
+    let mut counts = [0usize; 128];
     let mut total_count = 0;
     let mut poisson_mean = 0.0;
 
