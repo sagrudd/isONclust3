@@ -163,6 +163,7 @@ REQUIRED_TEXT = {
         "Expose generated `final_clusters.tsv` checksums",
         "Keep `newONform` generated-input registers aligned",
         "Gate benchmark manifest readability and object root.",
+        "Gate benchmark manifest duplicate file roles.",
         "Gate release-checklist downstream handoff artifact markers.",
         "Gate blocker waiver rules for upstream producer evidence.",
         "Gate Sphinx waiver-boundary release-readiness markers.",
@@ -685,6 +686,8 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
                 f"{expected_roles}"
             )
         elif isinstance(role, str):
+            if role in file_roles:
+                errors.append(f"{path.relative_to(repo)} duplicate file role: {role}")
             file_roles.add(role)
         relative = entry.get("path")
         checksum = entry.get("checksum", {})
