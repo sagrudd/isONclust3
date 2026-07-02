@@ -73,6 +73,33 @@ ordering fixture gate is complete.
 See [`OUTPUT_CONTRACTS.md`](OUTPUT_CONTRACTS.md) for the maintained
 `final_clusters.tsv` contract consumed by `newONform`.
 
+# Release And Benchmark Evidence
+
+This maintained fork gates release-candidate evidence through:
+
+- [`RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md) for the local and GB10 release
+  checklist.
+- [`BLOCKERS.md`](BLOCKERS.md) for unresolved upstream producer-evidence gaps.
+- [`BENCHMARK_ACCEPTANCE.md`](BENCHMARK_ACCEPTANCE.md) for Dockerized and GB10
+  benchmark report requirements.
+- `fixtures/manifests/*.json` for toy and pending larger workload manifests.
+
+Run the local release preflight with:
+
+```sh
+scripts/release-preflight.py --expected-version 0.3.0
+```
+
+Build the benchmark image from a clean checkout with:
+
+```sh
+docker build --platform linux/arm64 -t isonclust3:gb10 .
+```
+
+Then run toy or externally mounted GB10 workloads through
+`scripts/run-gb10-benchmark.sh`. Generated reports, raw inputs, and bulky output
+directories must remain outside Git.
+
 ### Clusters
 IsONclust outputs the reads in .fastq file format with each file containing the reads for the respective cluster. The .fastq files are located in the `fastq_files` directory that is created in the given outfolder.
 

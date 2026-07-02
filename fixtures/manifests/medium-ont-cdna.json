@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "manifest_kind": "isonclust3-benchmark-fixture",
+  "manifest_id": "isonclust3-medium-ont-cdna",
+  "project": "isONclust3",
+  "benchmark_tier": "medium",
+  "mode": "ont",
+  "seeding": "minimizer",
+  "source": {
+    "description": "Medium ONT cDNA workload reserved for GB10 producer-evidence collection.",
+    "availability": "external_pending",
+    "blocker_id": "ISOCLUST-BLOCK-002"
+  },
+  "platform_targets": ["linux/arm64"],
+  "files": [],
+  "command": {
+    "container_image": "isonclust3:gb10",
+    "args": [
+      "--fastq",
+      "/work/data/reads.fastq",
+      "--mode",
+      "ont",
+      "--outfolder",
+      "/work/out/isonclust3",
+      "--seeding",
+      "minimizer",
+      "--no-fastq"
+    ]
+  },
+  "acceptance": {
+    "requires_gb10_report": true,
+    "requires_container_digest": true,
+    "requires_output_checksums": true,
+    "status": "blocked_pending_data",
+    "blocker_id": "ISOCLUST-BLOCK-002"
+  }
+}

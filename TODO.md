@@ -9,8 +9,8 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Add `AGENTS.md`, `MILESTONES.md`, and `TODO.md`.
 - [x] Update package metadata for the maintained fork while preserving upstream
       attribution.
-- [ ] Add a release checklist and blocker register.
-- [ ] Add preflight checks for version syntax, file-size limits, fixture
+- [x] Add a release checklist and blocker register.
+- [x] Add preflight checks for version syntax, file-size limits, fixture
       hygiene, and documentation markers.
 
 ## 2. Output Contract Harmonization
@@ -38,7 +38,7 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Remove avoidable mutable bindings and late initialization.
   - [x] Replace redundant struct field initializers.
   - [x] Triage high-argument functions into typed configuration structs.
-- [ ] Add `cargo fmt --check`, `cargo test`, and clippy to CI.
+- [x] Add `cargo fmt --check`, `cargo test`, and clippy to CI.
 
 ## 4. Performance Deep Dive
 
@@ -58,10 +58,12 @@ Tasks are ordered to improve the fork without breaking the upstream
 
 ## 6. Dockerized GB10 Evidence
 
-- [ ] Add a Dockerfile for release and benchmark execution.
-- [ ] Add benchmark manifests for toy ONT, toy PacBio, medium ONT, and
+- [x] Add a Dockerfile for release and benchmark execution.
+- [x] Add benchmark manifests for toy ONT, toy PacBio, medium ONT, and
       Phanerognostikon-scale ONT workloads.
-- [ ] Record GB10 benchmark reports with command, image, checksums, wall time,
+- [x] Add a GB10 runner that records command, image, checksums, wall time,
+      peak RSS, CPU architecture, and thread count.
+- [ ] Record accepted GB10 benchmark reports with command, image, checksums, wall time,
       peak RSS, CPU architecture, and thread count.
 - [ ] Expose generated `final_clusters.tsv` checksums for `newONform` release
       evidence.

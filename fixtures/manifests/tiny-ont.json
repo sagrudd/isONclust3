@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "manifest_kind": "isonclust3-benchmark-fixture",
+  "manifest_id": "isonclust3-tiny-ont",
+  "project": "isONclust3",
+  "benchmark_tier": "toy",
+  "mode": "ont",
+  "seeding": "minimizer",
+  "source": {
+    "description": "Project-authored tiny ONT-like FASTQ for output-contract smoke tests.",
+    "license": "GPL-3.0-only"
+  },
+  "platform_targets": ["linux/arm64", "linux/amd64"],
+  "files": [
+    {
+      "path": "fixtures/tiny/ont/reads.fastq",
+      "role": "input-fastq",
+      "checksum": {
+        "algorithm": "sha256",
+        "value": "9294a3712cd8f1c1752dd5d81704d4baba4e7d71a822a1b6b8cef9468f863a96"
+      }
+    },
+    {
+      "path": "fixtures/tiny/ont/expected/final_clusters.tsv",
+      "role": "expected-final-clusters",
+      "checksum": {
+        "algorithm": "sha256",
+        "value": "e28ef900515871b0da07f0f10a2bccc7d35323b087ffd4633878bb372ada2538"
+      }
+    }
+  ],
+  "command": {
+    "container_image": "isonclust3:gb10",
+    "args": [
+      "--fastq",
+      "/work/data/reads.fastq",
+      "--mode",
+      "ont",
+      "--outfolder",
+      "/work/out/isonclust3",
+      "--seeding",
+      "minimizer",
+      "--no-fastq"
+    ]
+  },
+  "acceptance": {
+    "requires_gb10_report": true,
+    "requires_container_digest": true,
+    "requires_output_checksums": true,
+    "blocker_id": "ISOCLUST-BLOCK-001"
+  }
+}

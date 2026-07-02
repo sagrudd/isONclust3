@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "manifest_kind": "isonclust3-benchmark-fixture",
+  "manifest_id": "isonclust3-tiny-pacbio",
+  "project": "isONclust3",
+  "benchmark_tier": "toy",
+  "mode": "pacbio",
+  "seeding": "minimizer",
+  "source": {
+    "description": "Project-authored tiny PacBio-like FASTQ for output-contract smoke tests.",
+    "license": "GPL-3.0-only"
+  },
+  "platform_targets": ["linux/arm64", "linux/amd64"],
+  "files": [
+    {
+      "path": "fixtures/tiny/pacbio/reads.fastq",
+      "role": "input-fastq",
+      "checksum": {
+        "algorithm": "sha256",
+        "value": "f7a3b0979fc03b63e87f2fb03a21f7a655aba2660b3bc76c815ab228e5a36e23"
+      }
+    },
+    {
+      "path": "fixtures/tiny/pacbio/expected/final_clusters.tsv",
+      "role": "expected-final-clusters",
+      "checksum": {
+        "algorithm": "sha256",
+        "value": "8ff2dce95bd4cec748cb8ef1bab58d5f027bbaad2e6477a2bd8deb744393f48f"
+      }
+    }
+  ],
+  "command": {
+    "container_image": "isonclust3:gb10",
+    "args": [
+      "--fastq",
+      "/work/data/reads.fastq",
+      "--mode",
+      "pacbio",
+      "--outfolder",
+      "/work/out/isonclust3",
+      "--seeding",
+      "minimizer",
+      "--no-fastq"
+    ]
+  },
+  "acceptance": {
+    "requires_gb10_report": true,
+    "requires_container_digest": true,
+    "requires_output_checksums": true,
+    "blocker_id": "ISOCLUST-BLOCK-001"
+  }
+}

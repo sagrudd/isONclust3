@@ -16,9 +16,10 @@ Acceptance criteria:
 
 Status: active. The fork exists under `sagrudd/isONclust3`; `cargo test`,
 `cargo fmt --check`, and `cargo clippy --all-targets -- -D warnings` pass.
-Repository metadata points at the maintained fork. Remaining release-readiness
-work is centered on output-contract fixtures, deterministic evidence, and
-Dockerized GB10 benchmark gates.
+Repository metadata points at the maintained fork. `RELEASE_CHECKLIST.md`,
+`BLOCKERS.md`, `BENCHMARK_ACCEPTANCE.md`, CI, and `scripts/release-preflight.py`
+now define the release gate. Remaining release-readiness work is centered on
+Dockerized GB10 benchmark evidence and downstream generated-input checksums.
 
 ## Milestone 1: Output Contract Stabilization
 
@@ -88,7 +89,11 @@ Acceptance criteria:
   parameters, and thread count.
 - Bottlenecks are ranked before implementation begins.
 
-Status: planned.
+Status: active. `Dockerfile`, toy ONT/PacBio manifests, pending medium and
+Phanerognostikon workload manifests, and `scripts/run-gb10-benchmark.sh` now
+define the reproducible Docker/GB10 evidence path. Accepted GB10 reports and
+large-workload `final_clusters.tsv` checksums are still blocked by
+`ISOCLUST-BLOCK-001` and `ISOCLUST-BLOCK-002`.
 
 ## Milestone 4: Algorithmic Optimization
 
