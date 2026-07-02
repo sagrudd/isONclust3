@@ -164,6 +164,7 @@ REQUIRED_TEXT = {
         "Keep `newONform` generated-input registers aligned",
         "Gate benchmark manifest readability and object root.",
         "Gate benchmark manifest duplicate file roles.",
+        "Gate benchmark manifest duplicate file paths.",
         "Gate release-checklist downstream handoff artifact markers.",
         "Gate blocker waiver rules for upstream producer evidence.",
         "Gate Sphinx waiver-boundary release-readiness markers.",
@@ -674,6 +675,7 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
         files = []
 
     file_roles: set[str] = set()
+    file_paths: set[str] = set()
     for entry in files:
         if not isinstance(entry, dict):
             errors.append(f"{path.relative_to(repo)} file entry must be an object")
@@ -694,6 +696,10 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
         if not relative:
             errors.append(f"{path.relative_to(repo)} file entry missing path")
             continue
+        if isinstance(relative, str):
+            if relative in file_paths:
+                errors.append(f"{path.relative_to(repo)} duplicate file path: {relative}")
+            file_paths.add(relative)
         if manifest.get("benchmark_tier") == "toy" and isinstance(role, str):
             expected_paths = {
                 "expected-final-clusters": (
