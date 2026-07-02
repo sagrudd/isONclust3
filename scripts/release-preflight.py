@@ -74,6 +74,11 @@ REQUIRED_TEXT = {
     "TODO.md": ["Dockerized GB10 Evidence", "local profiling harness"],
 }
 
+REQUIRED_DOWNSTREAM_HANDOFFS = {
+    "isonclust3-medium-ont-cdna": "drr138512-final-clusters",
+    "isonclust3-phanerognostikon-ont-cdna": "drr178488-final-clusters",
+}
+
 
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -147,6 +152,26 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
         errors.append(f"{path.relative_to(repo)} must require a GB10 report")
     if acceptance.get("requires_output_checksums") is not True:
         errors.append(f"{path.relative_to(repo)} must require output checksums")
+
+    manifest_id = manifest.get("manifest_id")
+    if manifest_id in REQUIRED_DOWNSTREAM_HANDOFFS:
+        handoff = manifest.get("downstream_handoff")
+        if not isinstance(handoff, dict):
+            errors.append(f"{path.relative_to(repo)} missing downstream_handoff")
+        else:
+            expected_input_id = REQUIRED_DOWNSTREAM_HANDOFFS[manifest_id]
+            expected = {
+                "consumer": "newONform",
+                "generated_input_register": "fixtures/generated-inputs/register.json",
+                "generated_input_id": expected_input_id,
+                "consumer_blocker_id": "NOF-BLOCK-006",
+            }
+            for key, value in expected.items():
+                if handoff.get(key) != value:
+                    errors.append(
+                        f"{path.relative_to(repo)} downstream_handoff.{key} "
+                        f"must be {value}"
+                    )
 
     for entry in manifest.get("files", []):
         relative = entry.get("path")

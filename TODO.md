@@ -76,6 +76,8 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Add a Dockerfile for release and benchmark execution.
 - [x] Add benchmark manifests for toy ONT, toy PacBio, medium ONT, and
       Phanerognostikon-scale ONT workloads.
+  - [x] Gate downstream `newONform` generated-input handoff IDs for pending
+        medium and Phanerognostikon-scale producer manifests.
 - [x] Add a GB10 runner that records command, image, checksums, wall time,
       peak RSS, CPU architecture, and thread count.
 - [x] Add a local Docker toy benchmark smoke for ONT and PacBio manifests.

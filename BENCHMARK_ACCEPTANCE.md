@@ -39,6 +39,8 @@ Every accepted Dockerized or GB10 report must include:
 - Medium ONT and Phanerognostikon-scale workloads must not be accepted until
   their source inputs, producer commands, and generated cluster-table checksums
   are recorded.
+- Medium ONT and Phanerognostikon-scale manifests must record the downstream
+  `newONform` generated-input register entry they unblock under `NOF-BLOCK-006`.
 - Any algorithmic optimization must include before/after reports for at least
   one toy fixture and the smallest relevant larger workload.
 - Bulky raw data, generated output directories, and GB10 reports must remain

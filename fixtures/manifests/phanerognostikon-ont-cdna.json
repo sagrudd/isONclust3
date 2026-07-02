@@ -33,5 +33,11 @@
     "requires_output_checksums": true,
     "status": "blocked_pending_data",
     "blocker_id": "ISOCLUST-BLOCK-002"
+  },
+  "downstream_handoff": {
+    "consumer": "newONform",
+    "generated_input_register": "fixtures/generated-inputs/register.json",
+    "generated_input_id": "drr178488-final-clusters",
+    "consumer_blocker_id": "NOF-BLOCK-006"
   }
 }
