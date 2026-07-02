@@ -230,7 +230,10 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
     if manifest.get("benchmark_tier") == "toy" and source.get("license") != "GPL-3.0-only":
         errors.append(f"{path.relative_to(repo)} toy source.license must be GPL-3.0-only")
 
-    acceptance = manifest.get("acceptance", {})
+    acceptance = manifest.get("acceptance")
+    if not isinstance(acceptance, dict):
+        errors.append(f"{path.relative_to(repo)} acceptance must be an object")
+        acceptance = {}
     if acceptance.get("requires_gb10_report") is not True:
         errors.append(f"{path.relative_to(repo)} must require a GB10 report")
     if acceptance.get("requires_container_digest") is not True:

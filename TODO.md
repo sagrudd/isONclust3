@@ -89,6 +89,7 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Gate benchmark manifests so every evidence workload targets
         `linux/arm64` for GB10 execution.
   - [x] Gate benchmark manifest source provenance and toy fixture license.
+  - [x] Gate benchmark manifest acceptance object structure.
   - [x] Gate benchmark manifest kind and seeding metadata.
   - [x] Gate benchmark manifest schema version and tier vocabulary.
   - [x] Gate benchmark manifest filename-to-ID identity and uniqueness.

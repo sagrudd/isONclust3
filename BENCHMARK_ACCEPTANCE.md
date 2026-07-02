@@ -44,6 +44,8 @@ Every accepted Dockerized or GB10 report must include:
   inside the release-known manifest set.
 - Benchmark manifests must include populated source descriptions; committed toy
   sources must record the `GPL-3.0-only` fixture license.
+- Benchmark manifest `acceptance` entries must be represented as objects before
+  GB10 report, container digest, and checksum gates are evaluated.
 - Toy benchmark manifests must include checksum-backed `input-fastq` and
   `expected-final-clusters` file roles pointing at the canonical toy
   `reads.fastq` and `expected/final_clusters.tsv` paths.
