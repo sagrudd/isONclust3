@@ -20,6 +20,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate release-checklist visibility for active benchmark blocker IDs.
 - [x] Gate TODO visibility for unresolved evidence tasks.
 - [x] Gate release-note scope, evidence, known-limit, and no-tag markers.
+- [x] Add Sphinx governance and release-readiness source pages.
 
 ## 2. Output Contract Harmonization
 

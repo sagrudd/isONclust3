@@ -34,6 +34,10 @@ REQUIRED_FILES = [
     "scripts/check-docker-toy-benchmarks.sh",
     "scripts/run-local-profiling.sh",
     "scripts/run-gb10-benchmark.sh",
+    "docs/conf.py",
+    "docs/index.rst",
+    "docs/project-governance.rst",
+    "docs/release-readiness.rst",
 ]
 
 REQUIRED_TEXT = {
@@ -102,6 +106,34 @@ REQUIRED_TEXT = {
         "Record accepted GB10 benchmark reports",
         "Expose generated `final_clusters.tsv` checksums",
         "Keep `newONform` generated-input registers aligned",
+    ],
+    "docs/index.rst": [
+        "isONclust3 Maintained Fork",
+        "Current Status",
+        "accepted GB10 reports",
+        "generated ``final_clusters.tsv`` producer checksums",
+        "project-governance",
+        "release-readiness",
+    ],
+    "docs/project-governance.rst": [
+        "Project Governance",
+        ".. literalinclude:: ../AGENTS.md",
+        ".. literalinclude:: ../MILESTONES.md",
+        ".. literalinclude:: ../TODO.md",
+        ".. literalinclude:: ../BLOCKERS.md",
+        ".. literalinclude:: ../BENCHMARK_ACCEPTANCE.md",
+        ".. literalinclude:: ../RELEASE_CHECKLIST.md",
+        ".. literalinclude:: ../RELEASE_NOTES.md",
+    ],
+    "docs/release-readiness.rst": [
+        "Release Readiness",
+        "Minimum Local Checks",
+        "Current High-Priority Blockers",
+        "ISOCLUST-BLOCK-001",
+        "ISOCLUST-BLOCK-002",
+        "ISOCLUST-BLOCK-003",
+        "Downstream Handoff",
+        "external/isONclust3",
     ],
 }
 
