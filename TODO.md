@@ -90,6 +90,7 @@ Tasks are ordered to improve the fork without breaking the upstream
         `linux/arm64` for GB10 execution.
   - [x] Gate benchmark manifest kind and seeding metadata.
   - [x] Gate benchmark manifest schema version and tier vocabulary.
+  - [x] Gate benchmark manifest filename-to-ID identity and uniqueness.
 - [x] Add a GB10 runner that records command, image, checksums, wall time,
       peak RSS, CPU architecture, and thread count.
 - [x] Add a local Docker toy benchmark smoke for ONT and PacBio manifests.

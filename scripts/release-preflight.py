@@ -87,6 +87,12 @@ REQUIRED_BENCHMARK_TIERS = {
     "phanerognostikon",
     "toy",
 }
+REQUIRED_MANIFEST_STEMS = {
+    "medium-ont-cdna",
+    "phanerognostikon-ont-cdna",
+    "tiny-ont",
+    "tiny-pacbio",
+}
 REQUIRED_COMMAND_FLAGS = {
     "--fastq",
     "--mode",
@@ -181,6 +187,11 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
     for key in required:
         if key not in manifest:
             errors.append(f"{path.relative_to(repo)} missing required key: {key}")
+    expected_manifest_id = f"isonclust3-{path.stem}"
+    if manifest.get("manifest_id") != expected_manifest_id:
+        errors.append(
+            f"{path.relative_to(repo)} manifest_id must be {expected_manifest_id}"
+        )
     if manifest.get("schema_version") != 1:
         errors.append(f"{path.relative_to(repo)} schema_version must be 1")
     if manifest.get("manifest_kind") != "isonclust3-benchmark-fixture":
@@ -312,16 +323,32 @@ def validate_manifests(repo: Path) -> list[str]:
         errors.append("fixtures/manifests contains no benchmark manifests")
     for manifest in manifests:
         errors.extend(validate_manifest(repo, manifest))
-    ids = {manifest.stem for manifest in manifests}
-    required = {
-        "tiny-ont",
-        "tiny-pacbio",
-        "medium-ont-cdna",
-        "phanerognostikon-ont-cdna",
-    }
-    missing = required - ids
+    stems = {manifest.stem for manifest in manifests}
+    missing = REQUIRED_MANIFEST_STEMS - stems
     if missing:
         errors.append(f"missing benchmark manifest(s): {', '.join(sorted(missing))}")
+    unexpected = stems - REQUIRED_MANIFEST_STEMS
+    if unexpected:
+        errors.append(
+            f"unexpected benchmark manifest(s): {', '.join(sorted(unexpected))}"
+        )
+
+    observed_ids: dict[str, Path] = {}
+    for manifest in manifests:
+        try:
+            manifest_data = json.loads(manifest.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        manifest_id = manifest_data.get("manifest_id")
+        if not isinstance(manifest_id, str):
+            continue
+        duplicate = observed_ids.get(manifest_id)
+        if duplicate:
+            errors.append(
+                f"duplicate benchmark manifest_id {manifest_id}: "
+                f"{duplicate.relative_to(repo)} and {manifest.relative_to(repo)}"
+            )
+        observed_ids[manifest_id] = manifest
     return errors
 
 
