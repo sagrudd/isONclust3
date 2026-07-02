@@ -261,6 +261,14 @@ def _validate_manifest_keys_against_schema(repo: Path, schema: dict[str, object]
                 _validate_definition_object_keys(
                     relative, f"files[{index}]", entry, file_definition, errors
                 )
+                if isinstance(entry, dict):
+                    _validate_definition_object_keys(
+                        relative,
+                        f"files[{index}].checksum",
+                        entry.get("checksum"),
+                        definitions.get("checksum"),
+                        errors,
+                    )
     return errors
 
 
