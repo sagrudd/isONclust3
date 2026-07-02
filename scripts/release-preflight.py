@@ -15,6 +15,7 @@ from preflight_artifacts import validate_tracked_artifacts
 from preflight_benchmark_schema import validate_benchmark_schema
 from preflight_gb10_runner import validate_gb10_runner
 from preflight_output_contracts import validate_output_contract_register
+from preflight_release_checklist import validate_release_checklist
 
 try:
     import tomllib
@@ -44,6 +45,7 @@ REQUIRED_FILES = [
     "scripts/preflight_benchmark_schema.py",
     "scripts/preflight_gb10_runner.py",
     "scripts/preflight_output_contracts.py",
+    "scripts/preflight_release_checklist.py",
     "fixtures/output-contracts/final-clusters-register.json",
     "schemas/benchmark-fixture.schema.json",
     "schemas/output-contract-register.schema.json",
@@ -338,11 +340,6 @@ REQUIRED_OPTIMIZATION_CONTRACT_MARKERS = (
 )
 REQUIRED_OPTIMIZATION_COMMAND_MARKER = "scripts/run-local-profiling.sh"
 REQUIRED_OPTIMIZATION_REPORT_PATH_MARKER = "`target/local-profile/`"
-REQUIRED_RELEASE_CHECKLIST_SECTIONS = (
-    "## Required Local Checks",
-    "## Required Docker And GB10 Evidence",
-    "## Required Integration Evidence",
-)
 REQUIRED_BENCHMARK_TIERS = {
     "medium",
     "phanerognostikon",
@@ -915,33 +912,6 @@ def validate_optimization_evidence(repo: Path) -> list[str]:
     return errors
 
 
-def validate_release_checklist(repo: Path) -> list[str]:
-    path = repo / "RELEASE_CHECKLIST.md"
-    text = path.read_text(encoding="utf-8")
-    errors = [
-        f"RELEASE_CHECKLIST.md missing section: {section}"
-        for section in REQUIRED_RELEASE_CHECKLIST_SECTIONS
-        if section not in text
-    ]
-    for blocker in sorted(REQUIRED_ACTIVE_BLOCKERS):
-        if blocker not in text:
-            errors.append(f"RELEASE_CHECKLIST.md missing blocker marker: {blocker}")
-    checked_items = [
-        (line_number, line)
-        for line_number, line in enumerate(text.splitlines(), start=1)
-        if re.match(r"- \[[xX]\]", line)
-    ]
-    for line_number, line in checked_items:
-        errors.append(
-            f"RELEASE_CHECKLIST.md line {line_number} must remain unchecked "
-            f"until release evidence is collected: {line}"
-        )
-    unchecked_items = [line for line in text.splitlines() if line.startswith("- [ ]")]
-    if len(unchecked_items) < 10:
-        errors.append("RELEASE_CHECKLIST.md must keep the operator checklist populated")
-    return errors
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run isONclust3 release preflight checks.")
     parser.add_argument("--repo", type=Path, default=Path.cwd())
@@ -965,7 +935,7 @@ def main() -> int:
     errors.extend(validate_manifests(repo))
     errors.extend(validate_ci(repo))
     errors.extend(validate_optimization_evidence(repo))
-    errors.extend(validate_release_checklist(repo))
+    errors.extend(validate_release_checklist(repo, REQUIRED_ACTIVE_BLOCKERS))
     errors.extend(validate_tracked_artifacts(repo))
 
     if errors:
