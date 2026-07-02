@@ -19,9 +19,10 @@ committed expected outputs. Reports are written under `target/` by default and
 must not be committed.
 
 Use `--include-fastq-output` when profiling per-cluster FASTQ materialization,
-and `--include-post-cluster` when profiling merge refinement behavior. These
-variants are intentionally opt-in because they measure different code paths
-than the default `newONform` handoff, which uses `--no-fastq`.
+`--include-post-cluster` when profiling merge refinement behavior, and
+`--include-gff` when profiling annotation-seeded initialization. These variants
+are intentionally opt-in because they measure different code paths than the
+default `newONform` handoff, which uses `--no-fastq`.
 
 ## Ranked Facets
 
@@ -68,8 +69,10 @@ than the default `newONform` handoff, which uses `--no-fastq`.
    - Primary files: `src/gff_handling.rs`, `src/clustering.rs`.
    - Why it matters: this path constructs initial cluster maps from annotation
      records and has different seed-generation locality than the default path.
-   - Measurement: blocked until a small committed GFF fixture or external
-     profiling input is approved.
+   - Measurement: run `scripts/run-local-profiling.sh --include-gff` against
+     the committed tiny ONT/PacBio reference FASTA and GFF3 fixtures, then
+     repeat with an approved external profiling input before making
+     release-evidence claims.
    - Output risk: medium. This is an optional path, but it shares clustering
      internals with the default mode.
 
@@ -82,4 +85,3 @@ than the default `newONform` handoff, which uses `--no-fastq`.
 - Run Docker toy smoke before accepting any algorithmic optimization as
   candidate release work.
 - Do not mark GB10 blockers resolved from local profiling results.
-

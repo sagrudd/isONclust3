@@ -204,7 +204,7 @@ pub(crate) fn sort_fastq_for_cluster(config: &SortFastqConfig<'_>) {
     let elapsed = now.elapsed();
     info!("Elapsed: {:.2?}", elapsed);
     if !path_exists(config.outfolder) {
-        fs::create_dir(config.outfolder).expect("We should be able to create the directory");
+        fs::create_dir_all(config.outfolder).expect("We should be able to create the directory");
     }
     //write a fastq-file that contains the reordered reads
     write_output::write_ordered_fastq(&score_vec, config.outfolder, &id_map, config.in_file_path);

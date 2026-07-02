@@ -25,6 +25,65 @@ pub(crate) struct GffClusteringConfig<'a> {
     pub noncanonical: bool,
 }
 
+fn gff_feature_sequence<'a>(sequence: &'a str, start: &u64, end: &u64) -> &'a str {
+    let start_index = start
+        .checked_sub(1)
+        .expect("GFF coordinates are 1-based and must start at 1") as usize;
+    let end_index = *end as usize;
+    &sequence[start_index..end_index]
+}
+
+fn collect_feature_minimizers(
+    feature_sequence: &str,
+    config: &GffClusteringConfig<'_>,
+) -> Vec<MinimizerHashed> {
+    let mut minimizers = vec![];
+    if config.seeding == "minimizer" {
+        if config.noncanonical {
+            let min_iter = MinimizerBuilder::<u64, _>::new()
+                .minimizer_size(config.k)
+                .width((config.w) as u16)
+                .iter(feature_sequence.as_bytes());
+            for (minimizer, position) in min_iter {
+                minimizers.push(MinimizerHashed {
+                    sequence: minimizer,
+                    position,
+                });
+            }
+        } else {
+            let min_iter = MinimizerBuilder::<u64, _>::new()
+                .canonical()
+                .minimizer_size(config.k)
+                .width((config.w) as u16)
+                .iter(feature_sequence.as_bytes());
+            for (minimizer, position, _) in min_iter {
+                minimizers.push(MinimizerHashed {
+                    sequence: minimizer,
+                    position,
+                });
+            }
+        }
+    } else if config.seeding == "syncmer" && feature_sequence.len() > config.s {
+        seeding_and_filtering_seeds::syncmers_canonical(
+            feature_sequence.as_bytes(),
+            config.k,
+            config.s,
+            config.t,
+            &mut minimizers,
+        );
+    }
+    minimizers
+}
+
+fn is_protein_coding_gene(record: &gff::Record) -> bool {
+    record.feature_type() == "gene"
+        && record
+            .attributes()
+            .get("gene_biotype")
+            .expect("This algorithm requires a gene_biotype to extract the coding genes")
+            == "protein_coding"
+}
+
 pub(crate) fn gff_based_clustering(
     config: &GffClusteringConfig<'_>,
     clusters: &mut ClusterIdMap,
@@ -39,7 +98,7 @@ pub(crate) fn gff_based_clustering(
     let gff_buf_reader = BufReader::new(gff_reader);
     let mut binding = gff::Reader::new(gff_buf_reader, GFF3);
     let mut gff_records = binding.records();
-    let mut gene_id = 0;
+    let mut gene_id = -1;
     let mut previous_genes = 0;
     // Iterate through FASTA records
     for fasta_record in fasta_records {
@@ -48,7 +107,6 @@ pub(crate) fn gff_based_clustering(
         let sequence = std::str::from_utf8(fasta_record.seq())
             .unwrap()
             .to_uppercase();
-        let record_minis = vec![];
         debug!("scaffold {}", scaffold_id);
         // Process GFF records for the current scaffold ID
         for gff_record in gff_records.by_ref() {
@@ -56,56 +114,19 @@ pub(crate) fn gff_based_clustering(
             let gff_scaffold_id = gff_record.seqname().to_string();
             // Check if the scaffold IDs match
             if scaffold_id == gff_scaffold_id {
-                if gff_record.feature_type() == "gene"
-                    && gff_record.attributes().get("gene_biotype").expect(
-                        "This algorithm requires a gene_biotype to extract the coding genes",
-                    ) == "protein_coding"
-                {
+                if is_protein_coding_gene(&gff_record) {
                     gene_id += 1;
-                } else if gff_record.feature_type() == "exon" {
+                } else if gff_record.feature_type() == "exon" && gene_id >= 0 {
                     let exon_seq =
-                        &sequence[*gff_record.start() as usize..*gff_record.end() as usize];
-                    let mut this_minimizers = vec![];
-                    if config.seeding == "minimizer" {
-                        if config.noncanonical {
-                            let min_iter = MinimizerBuilder::<u64, _>::new()
-                                .minimizer_size(config.k)
-                                .width((config.w) as u16)
-                                .iter(sequence.as_bytes());
-                            for (minimizer, position) in min_iter {
-                                let mini = MinimizerHashed {
-                                    sequence: minimizer,
-                                    position,
-                                };
-                                this_minimizers.push(mini);
-                            }
-                        } else {
-                            let min_iter = MinimizerBuilder::<u64, _>::new()
-                                .canonical()
-                                .minimizer_size(config.k)
-                                .width((config.w) as u16)
-                                .iter(sequence.as_bytes());
-                            for (minimizer, position, _) in min_iter {
-                                let mini = MinimizerHashed {
-                                    sequence: minimizer,
-                                    position,
-                                };
-                                this_minimizers.push(mini);
-                            }
-                        }
-                    } else if config.seeding == "syncmer" && exon_seq.len() > config.s {
-                        seeding_and_filtering_seeds::syncmers_canonical(
-                            exon_seq.as_bytes(),
-                            config.k,
-                            config.s,
-                            config.t,
-                            &mut this_minimizers,
-                        );
-                    }
+                        gff_feature_sequence(&sequence, gff_record.start(), gff_record.end());
+                    let this_minimizers = collect_feature_minimizers(exon_seq, config);
+                    clustering::generate_initial_cluster_map(
+                        &this_minimizers,
+                        cluster_map,
+                        gene_id,
+                    );
+                    clusters.entry(gene_id).or_default();
                 }
-                clustering::generate_initial_cluster_map(&record_minis, cluster_map, gene_id);
-                let id_vec = vec![];
-                clusters.insert(gene_id, id_vec);
             } else {
                 info!(
                     "found {} genes in {}",
@@ -113,16 +134,23 @@ pub(crate) fn gff_based_clustering(
                     scaffold_id
                 );
                 previous_genes = gene_id;
-                if gff_record.feature_type() == "gene"
-                    && gff_record.attributes().get("gene_biotype").expect(
-                        "This algorithm requires a gene_biotype to extract the coding genes",
-                    ) == "protein_coding"
-                {
+                if is_protein_coding_gene(&gff_record) {
                     gene_id += 1;
                 }
                 // If scaffold IDs don't match, break the inner loop
                 break;
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn converts_gff_coordinates_to_rust_slice_bounds() {
+        assert_eq!(gff_feature_sequence("ACGT", &1, &4), "ACGT");
+        assert_eq!(gff_feature_sequence("ACGT", &2, &3), "CG");
     }
 }

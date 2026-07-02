@@ -51,7 +51,7 @@ Tasks are ordered to improve the fork without breaking the upstream
       post-clustering enabled.
 - [x] Profile FASTQ record sorting and per-cluster output generation with
       `--include-fastq-output`.
-- [ ] Profile GFF-assisted clustering separately from the default path.
+- [x] Profile GFF-assisted clustering separately from the default path.
 
 ## 5. Optimizations
 

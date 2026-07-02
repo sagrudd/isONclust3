@@ -14,6 +14,7 @@ Options:
   --skip-build             Reuse --binary without running cargo build --release.
   --include-fastq-output   Also profile per-cluster FASTQ output.
   --include-post-cluster   Also profile post-clustering refinement.
+  --include-gff            Also profile GFF-assisted initialization.
   -h, --help               Show this help.
 USAGE
 }
@@ -25,6 +26,7 @@ binary="$repo_root/target/release/isONclust3"
 skip_build="false"
 include_fastq_output="false"
 include_post_cluster="false"
+include_gff="false"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -50,6 +52,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --include-post-cluster)
       include_post_cluster="true"
+      shift
+      ;;
+    --include-gff)
+      include_gff="true"
       shift
       ;;
     -h|--help)
@@ -86,6 +92,8 @@ run_case() {
   local input_dir="$repo_root/fixtures/tiny/$mode"
   local fastq="$input_dir/reads.fastq"
   local expected="$input_dir/expected/final_clusters.tsv"
+  local reference="$input_dir/reference.fasta"
+  local annotation="$input_dir/annotation.gff3"
   local run_dir="$output_dir/$mode-$variant/isonclust3"
   local report_json="$output_dir/$mode-$variant.json"
   local report_tsv="$output_dir/$mode-$variant.tsv"
@@ -100,6 +108,10 @@ run_case() {
   fi
   if [[ "$variant" == *"post-cluster"* ]]; then
     extra_args+=(--post-cluster)
+  fi
+  if [[ "$variant" == *"gff"* ]]; then
+    expected="$input_dir/expected/gff_final_clusters.tsv"
+    extra_args+=(--init-cl "$reference" --gff "$annotation")
   fi
 
   local -a profiler_args=(
@@ -150,6 +162,20 @@ def sha256(path: Path) -> str | None:
             digest.update(chunk)
     return digest.hexdigest()
 
+
+inputs = [
+    {
+        "role": "input_fastq",
+        "path": str(fastq),
+        "sha256": sha256(fastq),
+    }
+]
+for flag, role in [("--init-cl", "reference_fasta"), ("--gff", "annotation_gff3")]:
+    if flag in extra_args:
+        flag_index = extra_args.index(flag)
+        if flag_index + 1 < len(extra_args):
+            path = Path(extra_args[flag_index + 1])
+            inputs.append({"role": role, "path": str(path), "sha256": sha256(path)})
 
 cmd = [
     str(binary),
@@ -202,13 +228,7 @@ report = {
         "wall_time_seconds": wall_time,
         "peak_rss_mb": peak_rss_mb,
     },
-    "inputs": [
-        {
-            "role": "input_fastq",
-            "path": str(fastq),
-            "sha256": sha256(fastq),
-        }
-    ],
+    "inputs": inputs,
     "outputs": [
         {
             "role": "final_clusters",
@@ -223,6 +243,7 @@ report = {
         "cluster-assignment",
         "fastq-output" if "write-fastq" in variant else "handoff-no-fastq",
         "post-cluster" if "post-cluster" in variant else "default-clustering",
+        "gff-assisted" if "gff" in variant else "de-novo-initialization",
     ],
     "log": str(log_file),
 }
@@ -275,6 +296,9 @@ for mode in ont pacbio; do
   fi
   if [[ "$include_post_cluster" == "true" ]]; then
     run_case "$mode" "no-fastq-post-cluster"
+  fi
+  if [[ "$include_gff" == "true" ]]; then
+    run_case "$mode" "no-fastq-gff"
   fi
 done
 
