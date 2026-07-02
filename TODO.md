@@ -61,6 +61,7 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Stream parsed FASTQ records into the per-cluster output map without an
         intermediate all-record vector.
 - [ ] Reduce repeated minimizer/syncmer allocation.
+  - [x] Make seed records copyable and avoid cloning filtered minimizer records.
 - [ ] Replace ad hoc tuple merge bookkeeping with named structs.
 - [ ] Stream cluster FASTQ output where possible.
 - [ ] Add benchmark evidence before and after every algorithmic optimization.

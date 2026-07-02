@@ -1,6 +1,6 @@
 use std::fmt;
 
-#[derive(Debug, Eq, PartialEq, Clone)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct MinimizerHashed {
     pub sequence: u64,
     pub position: usize,

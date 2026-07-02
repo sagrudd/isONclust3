@@ -28,16 +28,14 @@ pub(crate) fn write_ordered_fastq(
     for score_tup in score_vec.iter() {
         let this_header = id_map.get(&score_tup.0).unwrap();
         let record = fastq_records.get(this_header).unwrap();
-        if &record.header == this_header {
-            write!(
-                buf_write,
-                "@{}\n{}\n+\n{}\n",
-                record.get_header(),
-                record.get_sequence(),
-                record.get_quality()
-            )
-            .expect("Could not write file");
-        }
+        write!(
+            buf_write,
+            "@{}\n{}\n+\n{}\n",
+            record.get_header(),
+            record.get_sequence(),
+            record.get_quality()
+        )
+        .expect("Could not write file");
     }
     buf_write.flush().expect("Failed to flush the buffer");
 }

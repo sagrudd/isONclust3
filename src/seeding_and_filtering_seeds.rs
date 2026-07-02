@@ -163,7 +163,7 @@ pub fn is_significant(
 
 //filter out minimizers for which the quality of the minimizer_impact range is too bad
 pub fn filter_seeds_by_quality(
-    this_minimizers: &Vec<MinimizerHashed>,
+    this_minimizers: &[MinimizerHashed],
     fastq_quality: &[u8],
     k: usize,
     d_no_min: [f64; 128],
@@ -183,7 +183,7 @@ pub fn filter_seeds_by_quality(
         significant = is_significant(qualitiy_interval, d_no_min, quality_threshold);
         debug!("Quality intervallen {}", qualitiy_interval.len());
         if significant {
-            minimizers_filtered.push(mini.clone())
+            minimizers_filtered.push(*mini)
         } else {
             skipped_cter += 1;
         }
