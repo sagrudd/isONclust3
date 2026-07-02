@@ -141,6 +141,18 @@ The smoke runs both tiny ONT and PacBio manifests through the same benchmark
 runner and exact-compares the generated `final_clusters.tsv` files to the
 committed expected outputs.
 
+For local performance triage before algorithm changes, run:
+
+```sh
+scripts/run-local-profiling.sh --output-dir target/local-profile
+```
+
+This emits local JSON/TSV profiling reports for tiny ONT and PacBio fixtures
+and verifies the `final_clusters.tsv` contract. It is useful for before/after
+developer checks but is not GB10 release evidence. See
+[`PERFORMANCE_DEEP_DIVE.md`](PERFORMANCE_DEEP_DIVE.md) for ranked optimization
+facets and measurement rules.
+
 ### Clusters
 IsONclust outputs the reads in .fastq file format with each file containing the reads for the respective cluster. The .fastq files are located in the `fastq_files` directory that is created in the given outfolder.
 

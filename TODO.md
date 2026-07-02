@@ -42,11 +42,16 @@ Tasks are ordered to improve the fork without breaking the upstream
 
 ## 4. Performance Deep Dive
 
-- [ ] Profile seed generation and minimizer/syncmer extraction.
-- [ ] Profile clustering merge bookkeeping and shared-seed maps.
-- [ ] Profile FASTQ record sorting and per-cluster output generation.
+- [x] Add a local profiling harness for toy ONT/PacBio runs that records
+      wall time, peak RSS, checksums, and output-contract status.
+- [x] Rank optimization candidates by wall-time, memory, and output-risk.
+- [ ] Profile seed generation and minimizer/syncmer extraction on the smallest
+      accepted larger workload.
+- [ ] Profile clustering merge bookkeeping and shared-seed maps with
+      post-clustering enabled.
+- [ ] Profile FASTQ record sorting and per-cluster output generation with
+      `--include-fastq-output`.
 - [ ] Profile GFF-assisted clustering separately from the default path.
-- [ ] Rank optimization candidates by wall-time, memory, and output-risk.
 
 ## 5. Optimizations
 

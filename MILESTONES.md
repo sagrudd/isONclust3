@@ -92,9 +92,12 @@ Acceptance criteria:
 Status: active. `Dockerfile`, toy ONT/PacBio manifests, pending medium and
 Phanerognostikon workload manifests, `scripts/run-gb10-benchmark.sh`, and
 `scripts/check-docker-toy-benchmarks.sh` now define the reproducible
-Docker/GB10 evidence path. Accepted GB10 reports and large-workload
-`final_clusters.tsv` checksums are still blocked by `ISOCLUST-BLOCK-001` and
-`ISOCLUST-BLOCK-002`.
+Docker/GB10 evidence path. `PERFORMANCE_DEEP_DIVE.md` and
+`scripts/run-local-profiling.sh` provide a local profiling harness and ranked
+optimization candidates for seed extraction, cluster assignment, merge
+bookkeeping, FASTQ output materialization, and GFF-assisted clustering. Accepted
+GB10 reports and large-workload `final_clusters.tsv` checksums are still
+blocked by `ISOCLUST-BLOCK-001` and `ISOCLUST-BLOCK-002`.
 
 ## Milestone 4: Algorithmic Optimization
 
@@ -109,7 +112,9 @@ Candidate facets:
 - Stream cluster FASTQ output without holding avoidable intermediate state.
 - Make thread scheduling and shared-map mutation costs measurable.
 
-Status: planned.
+Status: planned. Optimization candidates are ranked in
+`PERFORMANCE_DEEP_DIVE.md`; implementation remains blocked until before/after
+profiling evidence is collected for the relevant path.
 
 ## Milestone 5: Dockerized GB10 Benchmarking
 

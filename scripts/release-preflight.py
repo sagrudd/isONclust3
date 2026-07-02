@@ -24,11 +24,13 @@ REQUIRED_FILES = [
     "Dockerfile",
     "MILESTONES.md",
     "OUTPUT_CONTRACTS.md",
+    "PERFORMANCE_DEEP_DIVE.md",
     "README.md",
     "RELEASE_CHECKLIST.md",
     "TODO.md",
     "scripts/check-output-contract-fixtures.sh",
     "scripts/check-docker-toy-benchmarks.sh",
+    "scripts/run-local-profiling.sh",
     "scripts/run-gb10-benchmark.sh",
 ]
 
@@ -51,11 +53,18 @@ REQUIRED_TEXT = {
     ],
     "MILESTONES.md": ["Dockerized GB10 Benchmarking"],
     "OUTPUT_CONTRACTS.md": ["<outfolder>/clustering/final_clusters.tsv"],
+    "PERFORMANCE_DEEP_DIVE.md": [
+        "local-profiling",
+        "Ranked Facets",
+        "Seed extraction and filtering",
+        "Do not mark GB10 blockers resolved",
+    ],
     "RELEASE_CHECKLIST.md": [
         "scripts/release-preflight.py --expected-version",
+        "scripts/run-local-profiling.sh",
         "newONform",
     ],
-    "TODO.md": ["Dockerized GB10 Evidence"],
+    "TODO.md": ["Dockerized GB10 Evidence", "local profiling harness"],
 }
 
 
@@ -186,6 +195,7 @@ def validate_ci(repo: Path) -> list[str]:
         "cargo test",
         "cargo clippy --all-targets -- -D warnings",
         "scripts/check-output-contract-fixtures.sh",
+        "scripts/run-local-profiling.sh",
         "scripts/release-preflight.py",
     ]
     return [f"CI workflow missing marker: {marker}" for marker in markers if marker not in text]
