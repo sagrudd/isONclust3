@@ -218,6 +218,8 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
     properties = schema.get("properties", {})
     if not isinstance(properties, dict):
         return errors + [f"{path.relative_to(repo)} properties must be an object"]
+    if list(properties) != list(OUTPUT_CONTRACT_SCHEMA_REQUIRED_FIELDS):
+        errors.append(f"{path.relative_to(repo)} properties must follow required field order")
     expected_consts = {
         "$schema": OUTPUT_CONTRACT_SCHEMA_REFERENCE,
         **OUTPUT_CONTRACT_IDENTITY,
@@ -247,6 +249,8 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
     entry_properties = entry.get("properties", {})
     if not isinstance(entry_properties, dict):
         return errors + [f"{path.relative_to(repo)} entry properties must be an object"]
+    if list(entry_properties) != list(OUTPUT_CONTRACT_SCHEMA_ENTRY_FIELDS):
+        errors.append(f"{path.relative_to(repo)} entry properties must follow required field order")
     entry_id_property = entry_properties.get("entry_id", {})
     if entry_id_property.get("type") != "string" or entry_id_property.get("minLength") != 1:
         errors.append(f"{path.relative_to(repo)} entry_id must be non-empty")
