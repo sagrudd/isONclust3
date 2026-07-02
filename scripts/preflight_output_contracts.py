@@ -253,7 +253,11 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
     if list(entry_properties) != list(OUTPUT_CONTRACT_SCHEMA_ENTRY_FIELDS):
         errors.append(f"{path.relative_to(repo)} entry properties must follow required field order")
     entry_id_property = entry_properties.get("entry_id", {})
-    if entry_id_property.get("type") != "string" or entry_id_property.get("minLength") != 1:
+    if (
+        entry_id_property.get("type") != "string"
+        or entry_id_property.get("minLength") != 1
+        or entry_id_property.get("enum") != list(REQUIRED_OUTPUT_CONTRACT_ENTRY_IDS)
+    ):
         errors.append(f"{path.relative_to(repo)} entry_id must be non-empty")
     mode_property = entry_properties.get("mode", {})
     if mode_property.get("type") != "string" or mode_property.get("enum") != ["ont", "pacbio"]:

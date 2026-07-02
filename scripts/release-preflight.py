@@ -188,6 +188,7 @@ REQUIRED_TEXT = {
         "Gate output-contract schema required field ordering.",
         "Gate output-contract schema property ordering.",
         "Gate output-contract schema catalog title.",
+        "Gate output-contract schema entry ID enum.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",

@@ -53,6 +53,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate output-contract schema required field ordering.
 - [x] Gate output-contract schema property ordering.
 - [x] Gate output-contract schema catalog title.
+- [x] Gate output-contract schema entry ID enum.
 
 ## 2. Output Contract Harmonization
 

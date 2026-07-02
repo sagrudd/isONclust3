@@ -61,7 +61,13 @@
       "properties": {
         "entry_id": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "enum": [
+            "isonclust3-tiny-ont-final-clusters",
+            "isonclust3-gff-tiny-ont-final-clusters",
+            "isonclust3-tiny-pacbio-final-clusters",
+            "isonclust3-gff-tiny-pacbio-final-clusters"
+          ]
         },
         "mode": {
           "type": "string",
