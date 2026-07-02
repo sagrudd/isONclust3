@@ -1,5 +1,5 @@
-use crate::structs::FastqRecord_isoncl_init;
-use crate::{file_actions, Cluster_ID_Map};
+use crate::structs::FastqRecordIsonclInit;
+use crate::{file_actions, ClusterIdMap};
 use log::debug;
 use log::info;
 use rustc_hash::FxHashMap;
@@ -44,7 +44,7 @@ pub(crate) fn write_ordered_fastq(
 
 fn write_final_clusters_tsv(
     outfolder: &Path,
-    clusters: Cluster_ID_Map,
+    clusters: ClusterIdMap,
     id_map: FxHashMap<i32, String>,
     header_cluster_map: &mut FxHashMap<String, i32>,
 ) {
@@ -76,7 +76,7 @@ fn write_final_clusters_tsv(
 fn create_final_ds(
     header_cluster_map: FxHashMap<String, i32>,
     fastq: String,
-    cluster_map: &mut FxHashMap<i32, Vec<FastqRecord_isoncl_init>>,
+    cluster_map: &mut FxHashMap<i32, Vec<FastqRecordIsonclInit>>,
 ) {
     let fastq_file = File::open(fastq).unwrap();
     let mut fastq_vec = vec![];
@@ -88,7 +88,7 @@ fn create_final_ds(
         if header_cluster_map.contains_key(&id) {
             let cluster_id = header_cluster_map.get(&id).unwrap();
             if cluster_map.contains_key(cluster_id) {
-                let id_vec: &mut Vec<FastqRecord_isoncl_init> =
+                let id_vec: &mut Vec<FastqRecordIsonclInit> =
                     cluster_map.get_mut(cluster_id).unwrap();
                 id_vec.push(read)
             } else {
@@ -101,14 +101,14 @@ fn create_final_ds(
 
 fn write_fastq_files(
     outfolder: &Path,
-    cluster_map: FxHashMap<i32, Vec<FastqRecord_isoncl_init>>,
+    cluster_map: FxHashMap<i32, Vec<FastqRecordIsonclInit>>,
     n: usize,
 ) {
     let mut new_cl_id = 0;
     let mut read_cter = 0;
     //fs::create_dir_all(PathBuf::from(outfolder).join("fastq_files"));
     let fastq_outfolder = PathBuf::from(outfolder);
-    //Writes the fastq files using the data structure cluster_map HashMap<i32, Vec<FastqRecord_isoncl_init>>
+    //Writes the fastq files using the data structure cluster_map HashMap<i32, Vec<FastqRecordIsonclInit>>
     for (cl_id, records) in cluster_map.into_iter() {
         if records.len() >= n {
             //only write the records if we have n or more reads supporting the cluster
@@ -140,7 +140,7 @@ pub fn path_exists(path: &str) -> bool {
 
 pub(crate) fn write_output(
     outfolder: String,
-    clusters: &Cluster_ID_Map,
+    clusters: &ClusterIdMap,
     fastq: String,
     id_map: FxHashMap<i32, String>,
     n: usize,

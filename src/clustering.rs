@@ -1,7 +1,7 @@
-use crate::structs::Minimizer_hashed;
+use crate::structs::MinimizerHashed;
 use std::time::Instant;
 
-use crate::{Cluster_ID_Map, Seed_Map};
+use crate::{ClusterIdMap, SeedMap};
 use log::debug;
 use rustc_hash::{FxHashMap, FxHashSet};
 
@@ -25,7 +25,7 @@ fn calculate_shared_perc(nr_sign_minis: usize, value: i32) -> f64 {
     value as f64 / nr_sign_minis as f64
 }
 
-fn new_Fx_hashset() -> FxHashSet<i32> {
+fn new_fx_hashset() -> FxHashSet<i32> {
     let return_set: FxHashSet<i32> = FxHashSet::default();
     return_set
 }
@@ -33,7 +33,7 @@ fn new_Fx_hashset() -> FxHashSet<i32> {
 fn detect_whether_shared(
     min_shared_minis: f64,
     shared_seed_infos: &FxHashMap<i32, i32>,
-    minimizers: &[Minimizer_hashed],
+    minimizers: &[MinimizerHashed],
 ) -> (bool, i32) {
     let mut most_shared = 0.0;
     let mut shared = false;
@@ -65,15 +65,15 @@ fn detect_whether_shared(
 //shared_seed_infos: hashmap that holds read_id->nr shared minimizers with clusters->not updated when cluster changes!
 //clustering method for the case that we do not have any annotation to compare the reads against
 pub(crate) fn cluster(
-    sign_minis: &Vec<Minimizer_hashed>,
+    sign_minis: &Vec<MinimizerHashed>,
     min_shared_minis: f64,
-    minimizers: &Vec<Minimizer_hashed>,
-    clusters: &mut Cluster_ID_Map,
-    cluster_map: &mut Seed_Map,
+    minimizers: &Vec<MinimizerHashed>,
+    clusters: &mut ClusterIdMap,
+    cluster_map: &mut SeedMap,
     id: i32,
     shared_seed_infos_norm_vec: &mut [i32],
 ) {
-    //clusters contains the main result we are interested in: it will contain the cluster id as key and the read_ids of reads from the cluster as value
+    //clusters contains the main result we are interested in: it will contain the cluster id as key and the ReadIds of reads from the cluster as value
     //cluster_map contains a hashmap in which we have a hash_value for a minimizer as key and a vector of ids as a value
     let cl_id: i32 = clusters.len() as i32;
     //we do not yet have a cluster and therefore need to fill the first read into the first
@@ -171,7 +171,7 @@ pub(crate) fn cluster(
 //takes clusters_map as input and generates cl_set_map: a Hashmap containing the cluster id as key and a hashset of seedhashes as value.
 fn generate_cluster_merging_ds(
     cl_set_map: &mut FxHashMap<i32, Vec<u64>>,
-    clusters_map: &mut Seed_Map,
+    clusters_map: &mut SeedMap,
 ) {
     //cl_set_map is a hashmap with cl_id -> Hashset of seed hashes
     //iterate over clusters_map
@@ -191,8 +191,8 @@ fn generate_cluster_merging_ds(
 
 //helper function for the post_clustering step: Updates the 'clusters' and 'clusters_map' data structures
 fn update_clusters(
-    clusters: &mut Cluster_ID_Map,
-    clusters_map: &mut Seed_Map,
+    clusters: &mut ClusterIdMap,
+    clusters_map: &mut SeedMap,
     small_hs: &[u64],
     large_cluster_id: &i32,
     small_cluster_id: &i32,
@@ -219,7 +219,7 @@ fn update_clusters(
 
 fn detect_overlaps(
     cl_set_map: &FxHashMap<i32, Vec<u64>>,
-    cluster_map: &mut Seed_Map,
+    cluster_map: &mut SeedMap,
     merge_into: &mut Vec<(i32, i32)>,
     min_shared_minis: f64,
     small_hs: &mut FxHashSet<i32>,
@@ -294,8 +294,8 @@ fn detect_overlaps(
 
 fn merge_clusters_from_merge_into(
     merge_into: &mut Vec<(i32, i32)>,
-    clusters_map: &mut Seed_Map,
-    clusters: &mut Cluster_ID_Map,
+    clusters_map: &mut SeedMap,
+    clusters: &mut ClusterIdMap,
     cl_set_map: &mut FxHashMap<i32, Vec<u64>>,
     small_hs: &FxHashSet<i32>,
     not_large: &mut FxHashSet<i32>,
@@ -318,8 +318,8 @@ fn merge_clusters_from_merge_into(
 }
 
 pub(crate) fn cluster_merging(
-    clusters: &mut Cluster_ID_Map,
-    cluster_map: &mut Seed_Map,
+    clusters: &mut ClusterIdMap,
+    cluster_map: &mut SeedMap,
     min_shared_minis: f64,
     shared_seed_infos_vec: &mut [i32],
     verbose: bool,
@@ -390,8 +390,8 @@ pub(crate) fn cluster_merging(
 }
 
 pub(crate) fn generate_initial_cluster_map(
-    this_minimizers: &Vec<Minimizer_hashed>,
-    init_cluster_map: &mut Seed_Map,
+    this_minimizers: &Vec<MinimizerHashed>,
+    init_cluster_map: &mut SeedMap,
     identifier: i32,
 ) {
     for minimizer in this_minimizers {

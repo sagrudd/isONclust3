@@ -1,5 +1,5 @@
 use crate::clustering::reverse_complement;
-use crate::structs::Minimizer_hashed;
+use crate::structs::MinimizerHashed;
 use log::debug;
 use std::borrow::Cow;
 use std::collections::hash_map::DefaultHasher;
@@ -36,7 +36,7 @@ pub fn get_canonical_kmer_minimizers_hashed(
     seq: &[u8],
     k_size: usize,
     w_size: usize,
-    this_minimizers: &mut Vec<Minimizer_hashed>,
+    this_minimizers: &mut Vec<MinimizerHashed>,
 ) {
     //make sure that we have suitable values for k_size and w_size (w_size should be larger)
     let w = if w_size > k_size {
@@ -75,7 +75,7 @@ pub fn get_canonical_kmer_minimizers_hashed(
         let mut binding = window_kmers.clone();
         let (curr_min, min_pos) = binding.iter().min_by_key(|&(kmer, _)| kmer).unwrap();
         //add the initial minimizer to the vector
-        let mut mini = Minimizer_hashed {
+        let mut mini = MinimizerHashed {
             sequence: *curr_min,
             position: *min_pos,
         };
@@ -108,7 +108,7 @@ pub fn get_canonical_kmer_minimizers_hashed(
             if min_pos != prev_minimizer.position {
                 //&& *curr_min != prev_minimizer.1 {
                 //add the minimizer into the vector and store the minimizer as previously detected minimizer
-                mini = Minimizer_hashed {
+                mini = MinimizerHashed {
                     sequence: curr_min,
                     position: min_pos,
                 };
@@ -139,7 +139,7 @@ pub fn get_kmer_minimizers_hashed(
     seq: &[u8],
     k_size: usize,
     w_size: usize,
-    this_minimizers: &mut Vec<Minimizer_hashed>,
+    this_minimizers: &mut Vec<MinimizerHashed>,
 ) {
     //make sure that we have suitable values for k_size and w_size (w_size should be larger)
     let w = if w_size > k_size {
@@ -167,7 +167,7 @@ pub fn get_kmer_minimizers_hashed(
         let mut binding = window_kmers.clone();
         let (curr_min, min_pos) = binding.iter().min_by_key(|&(kmer, _)| kmer).unwrap();
         //add the initial minimizer to the vector
-        let mut mini = Minimizer_hashed {
+        let mut mini = MinimizerHashed {
             sequence: *curr_min,
             position: *min_pos,
         };
@@ -192,7 +192,7 @@ pub fn get_kmer_minimizers_hashed(
             if min_pos != prev_minimizer.position {
                 //&& *curr_min != prev_minimizer.1 {
                 //add the minimizer into the vector and store the minimizer as previously detected minimizer
-                mini = Minimizer_hashed {
+                mini = MinimizerHashed {
                     sequence: curr_min,
                     position: min_pos,
                 };
@@ -210,7 +210,7 @@ pub(crate) fn syncmers_canonical(
     k: usize,
     s: usize,
     t: usize,
-    syncmers: &mut Vec<Minimizer_hashed>,
+    syncmers: &mut Vec<MinimizerHashed>,
 ) {
     // Calculate reverse complement
     let seq_rc = reverse_complement(std::str::from_utf8(seq).unwrap());
@@ -249,7 +249,7 @@ pub(crate) fn syncmers_canonical(
 
     // Initialize syncmers list
     if pos_min == t {
-        syncmers.push(Minimizer_hashed {
+        syncmers.push(MinimizerHashed {
             sequence: seq_tmp,
             position: 0,
         });
@@ -300,7 +300,7 @@ pub(crate) fn syncmers_canonical(
 
         // Add syncmer to the list
         if pos_min == t {
-            syncmers.push(Minimizer_hashed {
+            syncmers.push(MinimizerHashed {
                 sequence: kmer,
                 position: i,
             });
@@ -348,11 +348,11 @@ pub fn is_significant(
 
 //filter out minimizers for which the quality of the minimizer_impact range is too bad
 pub fn filter_seeds_by_quality(
-    this_minimizers: &Vec<Minimizer_hashed>,
+    this_minimizers: &Vec<MinimizerHashed>,
     fastq_quality: &[u8],
     k: usize,
     d_no_min: [f64; 128],
-    minimizers_filtered: &mut Vec<Minimizer_hashed>,
+    minimizers_filtered: &mut Vec<MinimizerHashed>,
     quality_threshold: &f64,
     verbose: bool,
 ) {
@@ -390,7 +390,7 @@ pub(crate) fn get_kmer_syncmers(
     k: usize,
     s: usize,
     t: usize,
-    syncmers: &mut Vec<Minimizer_hashed>,
+    syncmers: &mut Vec<MinimizerHashed>,
 ) {
     //TODO: add neccessity that the user should give only valid combinations of s t and k
     // Calculate reverse complement
@@ -427,7 +427,7 @@ pub(crate) fn get_kmer_syncmers(
 
     // Initialize syncmers list
     if pos_min_fw == t {
-        syncmers.push(Minimizer_hashed {
+        syncmers.push(MinimizerHashed {
             sequence: calculate_hash(&seq[0..k]),
             position: 0,
         });
@@ -464,7 +464,7 @@ pub(crate) fn get_kmer_syncmers(
 
         // Add syncmer to the list
         if pos_min_fw == t {
-            syncmers.push(Minimizer_hashed {
+            syncmers.push(MinimizerHashed {
                 sequence: calculate_hash(&seq[i - (k - s)..i - (k - s) + k]),
                 position: i,
             });

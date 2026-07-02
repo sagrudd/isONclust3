@@ -1,5 +1,5 @@
 use crate::seeding_and_filtering_seeds;
-use crate::structs::{FastqRecord_isoncl_init, Minimizer_hashed};
+use crate::structs::{FastqRecordIsonclInit, MinimizerHashed};
 use crate::write_output;
 use crate::write_output::path_exists;
 use rayon::prelude::*;
@@ -152,7 +152,7 @@ fn analyse_fastq_and_sort(
                         .width((w) as u16)
                         .iter(sequence);
                     for (minimizer, position) in min_iter {
-                        let mini = Minimizer_hashed {
+                        let mini = MinimizerHashed {
                             sequence: minimizer,
                             position,
                         };
@@ -165,7 +165,7 @@ fn analyse_fastq_and_sort(
                         .width((w) as u16)
                         .iter(sequence);
                     for (minimizer, position, _) in min_iter {
-                        let mini = Minimizer_hashed {
+                        let mini = MinimizerHashed {
                             sequence: minimizer,
                             position,
                         };
@@ -229,7 +229,7 @@ fn analyse_fastq_and_sort(
     debug!("{:?}", score_vec.pop());
 }
 
-fn print_statistics(fastq_records: &[FastqRecord_isoncl_init]) {
+fn print_statistics(fastq_records: &[FastqRecordIsonclInit]) {
     /*
     Prints the statistics for the resulting file TODO: add median and mean
      */

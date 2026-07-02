@@ -14,11 +14,11 @@ mod seeding_and_filtering_seeds;
 mod structs;
 mod write_output;
 
-mod Parallelization_side;
+mod parallelization_side;
 
 //mod isONclust;
 use crate::clustering::cluster_merging;
-use crate::structs::{FastqRecord_isoncl_init, Minimizer_hashed};
+use crate::structs::{FastqRecordIsonclInit, MinimizerHashed};
 use std::collections::HashMap;
 
 use clap::Parser;
@@ -38,8 +38,8 @@ use log::info;
 use minimizer_iter::MinimizerBuilder;
 use simple_logger::SimpleLogger;
 
-type Seed_Map = FxHashMap<u64, Vec<i32>>; // Change here to any other hash table implementation, e.g.,  HashMap<u64, Vec<i32>, nohash_hasher::BuildNoHashHasher<u64>>;
-type Cluster_ID_Map = FxHashMap<i32, Vec<i32>>; //  Change here to any other hash table implementation, e.g., HashMap<i32, Vec<i32>,nohash_hasher::BuildNoHashHasher<i32>>;
+type SeedMap = FxHashMap<u64, Vec<i32>>; // Change here to any other hash table implementation, e.g.,  HashMap<u64, Vec<i32>, nohash_hasher::BuildNoHashHasher<u64>>;
+type ClusterIdMap = FxHashMap<i32, Vec<i32>>; //  Change here to any other hash table implementation, e.g., HashMap<i32, Vec<i32>,nohash_hasher::BuildNoHashHasher<i32>>;
 
 fn compute_d() -> [f64; 128] {
     let mut d = [0.0; 128];
@@ -97,10 +97,10 @@ fn calculate_error_rate(qual: &str, d_no_min: &[f64; 128]) -> f64 {
 }
 
 fn get_sorted_entries(
-    mini_map_filtered: FxHashMap<i32, Vec<structs::Minimizer_hashed>>,
-) -> Vec<(i32, Vec<structs::Minimizer_hashed>)> {
+    mini_map_filtered: FxHashMap<i32, Vec<structs::MinimizerHashed>>,
+) -> Vec<(i32, Vec<structs::MinimizerHashed>)> {
     // Sort by the length of vectors in descending order
-    let mut sorted_entries: Vec<(i32, Vec<structs::Minimizer_hashed>)> =
+    let mut sorted_entries: Vec<(i32, Vec<structs::MinimizerHashed>)> =
         mini_map_filtered.into_iter().collect();
     sorted_entries.sort_by(|a, b| b.1.len().cmp(&a.1.len()).then_with(|| a.0.cmp(&b.0)));
 
@@ -108,12 +108,12 @@ fn get_sorted_entries(
 }
 
 fn filter_fastq_records(
-    mut fastq_records: Vec<FastqRecord_isoncl_init>,
+    mut fastq_records: Vec<FastqRecordIsonclInit>,
     d_no_min: [f64; 128],
     q_threshold: f64,
     k: usize,
     d: [f64; 128],
-) -> Vec<FastqRecord_isoncl_init> {
+) -> Vec<FastqRecordIsonclInit> {
     fastq_records.par_iter_mut().for_each(|fastq_record| {
         //calculate the error rate and store it in vector errors
         if fastq_record.sequence.len() > k {
@@ -348,7 +348,7 @@ fn main() {
     let gff_path = cli.gff.as_deref();
     //makes the read  identifiable and gives us the possibility to only use ids during the clustering step
     let mut id_map = FxHashMap::default();
-    let mut clusters: Cluster_ID_Map = HashMap::default(); //FxHashMap<i32, Vec<i32>> = FxHashMap::default();
+    let mut clusters: ClusterIdMap = HashMap::default(); //FxHashMap<i32, Vec<i32>> = FxHashMap::default();
 
     let filename = outfolder.clone() + "/clustering/sorted.fastq";
 
@@ -360,7 +360,7 @@ fn main() {
         //main scope (holds all the data structures that we can delete when the clustering is done
         //holds the mapping of which minimizer belongs to what clusters
         //let mut shared_seed_info: FxHashMap<i32,i32>=FxHashMap::default();
-        let mut cluster_map: Seed_Map = HashMap::default(); //FxHashMap<u64, Vec<i32>> = FxHashMap::default();
+        let mut cluster_map: SeedMap = HashMap::default(); //FxHashMap<u64, Vec<i32>> = FxHashMap::default();
         let initial_clustering_path = cli.init_cl.as_deref();
         if gff_path.is_some() {
             gff_handling::gff_based_clustering(
@@ -474,7 +474,7 @@ fn main() {
                             .width((w) as u16)
                             .iter(sequence);
                         for (minimizer, position) in min_iter {
-                            let mini = Minimizer_hashed {
+                            let mini = MinimizerHashed {
                                 sequence: minimizer,
                                 position,
                             };
@@ -487,7 +487,7 @@ fn main() {
                             .width((w) as u16)
                             .iter(sequence);
                         for (minimizer, position, _) in min_iter {
-                            let mini = Minimizer_hashed {
+                            let mini = MinimizerHashed {
                                 sequence: minimizer,
                                 position,
                             };

@@ -1,6 +1,6 @@
 use crate::structs;
 use crate::structs::FastaRecord;
-use crate::structs::FastqRecord_isoncl_init;
+use crate::structs::FastqRecordIsonclInit;
 use rustc_hash::FxHashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -49,7 +49,7 @@ fn shorten_header(header: &str) -> &str {
 
 pub(crate) fn parse_fastq_hashmap(
     file: File,
-    records: &mut FxHashMap<String, structs::FastqRecord_isoncl_init>,
+    records: &mut FxHashMap<String, structs::FastqRecordIsonclInit>,
 ) {
     //Parses a fastq file, returns a vector of FastqRecords
     let mut reader = BufReader::new(file);
@@ -91,7 +91,7 @@ pub(crate) fn parse_fastq_hashmap(
         let error_rate = 0.0_f64;
         records.insert(
             header.clone(),
-            FastqRecord_isoncl_init {
+            FastqRecordIsonclInit {
                 header,
                 sequence,
                 /* quality_header,*/ quality,
@@ -103,7 +103,7 @@ pub(crate) fn parse_fastq_hashmap(
     }
 }
 
-pub(crate) fn parse_fastq(file: File, records: &mut Vec<structs::FastqRecord_isoncl_init>) {
+pub(crate) fn parse_fastq(file: File, records: &mut Vec<structs::FastqRecordIsonclInit>) {
     //Parses a fastq file, returns a vector of FastqRecords
     let mut reader = BufReader::new(file);
     //let mut records=vec![];
@@ -142,7 +142,7 @@ pub(crate) fn parse_fastq(file: File, records: &mut Vec<structs::FastqRecord_iso
         quality = quality.trim().to_owned();
         let score = 0.0_f64;
         let error_rate = 0.0_f64;
-        records.push(FastqRecord_isoncl_init {
+        records.push(FastqRecordIsonclInit {
             header,
             sequence,
             /* quality_header,*/ quality,
@@ -152,7 +152,7 @@ pub(crate) fn parse_fastq(file: File, records: &mut Vec<structs::FastqRecord_iso
     }
 }
 
-/*pub(crate) fn parse_fastq(file: File) -> (Vec<FastqRecord_isoncl_init>, HashMap<i32,String>) {
+/*pub(crate) fn parse_fastq(file: File) -> (Vec<FastqRecordIsonclInit>, HashMap<i32,String>) {
     let file = File::open(file)?;
     let mut id_map=HashMap::new();
     let reader = BufReader::new(file);
@@ -184,7 +184,7 @@ pub(crate) fn parse_fastq(file: File, records: &mut Vec<structs::FastqRecord_iso
 
     return (records,id_map)
 }
-pub(crate) fn parse_fastq(file: File) -> (Vec<FastqRecord_isoncl_init>, HashMap<i32,String>) {
+pub(crate) fn parse_fastq(file: File) -> (Vec<FastqRecordIsonclInit>, HashMap<i32,String>) {
     //Parses a fastq file, returns a vector of FastqRecords
     let mut reader = BufReader::new(file);
     let mut records=vec![];
@@ -223,7 +223,7 @@ pub(crate) fn parse_fastq(file: File) -> (Vec<FastqRecord_isoncl_init>, HashMap<
         let error_rate=0.0_f64;
         let internal_id=id_int;
         id_map.insert(id_int, header);
-        records.push(FastqRecord_isoncl_init { header,internal_id, sequence,/* quality_header,*/ quality, score,error_rate});
+        records.push(FastqRecordIsonclInit { header,internal_id, sequence,/* quality_header,*/ quality, score,error_rate});
         id_int += 1;
     }
     return(records, id_map)

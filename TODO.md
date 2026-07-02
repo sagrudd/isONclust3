@@ -28,7 +28,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [ ] Make `cargo clippy --all-targets -- -D warnings` pass.
   - [x] Remove unused imports.
   - [ ] Remove or justify dead code.
-  - [ ] Rename non-camel-case types and variants without changing output.
+  - [x] Rename non-camel-case types and variants without changing output.
   - [x] Remove avoidable mutable bindings and late initialization.
   - [x] Replace redundant struct field initializers.
   - [ ] Triage high-argument functions into typed configuration structs.

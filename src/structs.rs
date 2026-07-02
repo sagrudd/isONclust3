@@ -2,8 +2,8 @@ use std::collections::HashSet;
 use std::fmt;
 
 pub enum Cluster<T, U> {
-    read_ids(HashSet<T>),
-    mini_seqs(HashSet<U>),
+    ReadIds(HashSet<T>),
+    MiniSeqs(HashSet<U>),
 }
 
 /// Represents a minimizer along with its starting position in the input string.
@@ -16,7 +16,7 @@ pub struct Minimizer {
 }
 
 #[derive(Debug, Eq, PartialEq, Clone)]
-pub struct Minimizer_hashed {
+pub struct MinimizerHashed {
     pub sequence: u64,
     pub position: usize,
     // pub is_representative: bool
@@ -41,18 +41,18 @@ impl fmt::Display for GtfEntry {
 }
 
 #[derive(Debug, Eq, PartialEq, Hash, Clone)]
-pub(crate) struct Coord_obj {
+pub(crate) struct CoordObj {
     pub startpos: u64,
     pub endpos: u64,
 }
-impl fmt::Display for Coord_obj {
+impl fmt::Display for CoordObj {
     // enables displaying the fasta record
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}, {}", self.startpos, self.endpos)
     }
 }
-impl Coord_obj {
-    pub fn overlaps_with(&self, other: &Coord_obj) -> bool {
+impl CoordObj {
+    pub fn overlaps_with(&self, other: &CoordObj) -> bool {
         self.startpos <= other.endpos && self.endpos >= other.startpos
     }
 }
@@ -85,7 +85,7 @@ impl fmt::Display for FastqRecord {
     }
 }
 
-pub(crate) struct FastqRecord_isoncl_init {
+pub(crate) struct FastqRecordIsonclInit {
     //a struct used to store fastq records
     pub header: String,
     pub sequence: String,
@@ -93,14 +93,14 @@ pub(crate) struct FastqRecord_isoncl_init {
     pub score: f64,
     pub error_rate: f64,
 }
-pub(crate) struct internal_gff {
+pub(crate) struct InternalGff {
     pub seqname: String,
     pub feature_type: String,
     pub start_coord: u64,
     pub end_coord: u64,
 }
 
-impl FastqRecord_isoncl_init {
+impl FastqRecordIsonclInit {
     pub fn get_header(&self) -> &str {
         &self.header
     }
@@ -125,7 +125,7 @@ impl FastqRecord_isoncl_init {
     }
 }
 
-impl fmt::Display for FastqRecord_isoncl_init {
+impl fmt::Display for FastqRecordIsonclInit {
     // enables displaying the fastq record
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}\n{}", self.header, self.sequence)

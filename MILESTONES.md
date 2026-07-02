@@ -53,8 +53,11 @@ several mechanical cleanup opportunities.
 The first hygiene pass removed unused imports, redundant struct fields,
 avoidable mutable bindings, late initialization, manual prefix stripping, and
 several iterator warnings, reducing strict clippy from 95 inherited errors to
-43 remaining errors. The remaining work is naming normalization, dead-code
-triage, and typed configuration structs for high-argument APIs.
+43 remaining errors. The naming-normalization pass then converted internal
+types, enum variants, helper names, and the parallelization module to idiomatic
+Rust naming without changing the output contract, reducing strict clippy to 33
+remaining errors. The remaining work is dead-code triage and typed
+configuration structs for high-argument APIs.
 
 ## Milestone 3: Performance Profiling
 

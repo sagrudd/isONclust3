@@ -1,4 +1,4 @@
-use crate::structs::{Coord_obj, Minimizer_hashed};
+use crate::structs::{CoordObj, MinimizerHashed};
 use std::fs::File;
 use std::io::BufReader;
 
@@ -13,7 +13,7 @@ use minimizer_iter::MinimizerBuilder;
 use std::path::Path;
 extern crate rayon;
 use crate::clustering;
-use crate::{seeding_and_filtering_seeds, Cluster_ID_Map, Seed_Map};
+use crate::{seeding_and_filtering_seeds, ClusterIdMap, SeedMap};
 use log::debug;
 use std::time::Instant;
 
@@ -22,9 +22,9 @@ use std::time::Instant;
 //TODO: possibly use the gene id for cluster_identification
 
 fn detect_overlaps(
-    gene_map: &FxHashMap<i32, Vec<Coord_obj>>,
+    gene_map: &FxHashMap<i32, Vec<CoordObj>>,
     this_gene_id: &i32,
-    this_coords: &Vec<Coord_obj>,
+    this_coords: &Vec<CoordObj>,
     overlap_ctr: &mut i32,
 ) {
     for (gene_id_other, coords) in gene_map {
@@ -42,9 +42,9 @@ fn detect_overlaps(
 
 fn parse_fasta_and_gen_clusters(
     fasta_path: Option<&str>,
-    coords: FxHashMap<String, FxHashMap<i32, Vec<Coord_obj>>>,
-    clusters: &mut Cluster_ID_Map,
-    init_cluster_map: &mut Seed_Map,
+    coords: FxHashMap<String, FxHashMap<i32, Vec<CoordObj>>>,
+    clusters: &mut ClusterIdMap,
+    init_cluster_map: &mut SeedMap,
     k: usize,
     w: usize,
 ) {
@@ -96,7 +96,7 @@ fn parse_fasta_and_gen_clusters(
 
 fn parse_gtf_and_collect_coords(
     gtf_path: Option<&str>,
-    coords: &mut FxHashMap<String, FxHashMap<i32, Vec<Coord_obj>>>,
+    coords: &mut FxHashMap<String, FxHashMap<i32, Vec<CoordObj>>>,
 ) {
     let reader = gff::Reader::from_file(gtf_path.unwrap(), GFF3);
     let mut gene_id = 0;
@@ -123,7 +123,7 @@ fn parse_gtf_and_collect_coords(
                 debug!("{} {} {}", rec.seqname(), rec.feature_type(), gene_id);
                 if let Some(gene_map) = coords.get_mut(rec.seqname()) {
                     if let Some(coord_vec) = gene_map.get_mut(&gene_id) {
-                        let coord_o = Coord_obj {
+                        let coord_o = CoordObj {
                             startpos: *rec.start(),
                             endpos: *rec.end(),
                         };
@@ -132,7 +132,7 @@ fn parse_gtf_and_collect_coords(
                             coords_in_gene.insert(coord_o);
                         }
                     } else {
-                        let coord_o = Coord_obj {
+                        let coord_o = CoordObj {
                             startpos: *rec.start(),
                             endpos: *rec.end(),
                         };
@@ -155,14 +155,14 @@ fn parse_gtf_and_collect_coords(
 pub(crate) fn resolve_gff(
     gff_path: Option<&str>,
     fasta_path: Option<&str>,
-    clusters: &mut Cluster_ID_Map,
-    cluster_map: &mut Seed_Map,
+    clusters: &mut ClusterIdMap,
+    cluster_map: &mut SeedMap,
     k: usize,
     w: usize,
 ) {
     info!("Resolving GFF file ");
     let now1 = Instant::now();
-    let mut coords = FxHashMap::default(); //: HashMap<K, HashMap<i32, Vec<Coord_obj>, BuildHasherDefault<FxHasher>>, BuildHasherDefault<FxHasher>> = FxHashMap::default();
+    let mut coords = FxHashMap::default(); //: HashMap<K, HashMap<i32, Vec<CoordObj>, BuildHasherDefault<FxHasher>>, BuildHasherDefault<FxHasher>> = FxHashMap::default();
     parse_gtf_and_collect_coords(gff_path, &mut coords);
     info!(
         "{} s used for parsing the gff file",
@@ -186,8 +186,8 @@ pub(crate) fn resolve_gff(
 pub(crate) fn gff_based_clustering(
     gff_path: Option<&str>,
     fasta_path: Option<&str>,
-    clusters: &mut Cluster_ID_Map,
-    cluster_map: &mut Seed_Map,
+    clusters: &mut ClusterIdMap,
+    cluster_map: &mut SeedMap,
     k: usize,
     w: usize,
     seeding: &str,
@@ -238,7 +238,7 @@ pub(crate) fn gff_based_clustering(
                                 .width((w) as u16)
                                 .iter(sequence.as_bytes());
                             for (minimizer, position) in min_iter {
-                                let mini = Minimizer_hashed {
+                                let mini = MinimizerHashed {
                                     sequence: minimizer,
                                     position,
                                 };
@@ -251,7 +251,7 @@ pub(crate) fn gff_based_clustering(
                                 .width((w) as u16)
                                 .iter(sequence.as_bytes());
                             for (minimizer, position, _) in min_iter {
-                                let mini = Minimizer_hashed {
+                                let mini = MinimizerHashed {
                                     sequence: minimizer,
                                     position,
                                 };
