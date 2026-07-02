@@ -129,6 +129,19 @@ def _validate_root_properties(
         _validate_schema_property_order(
             path, repo, f"properties.{field}", field_property, expected_order, errors
         )
+    nested_required_fields = {
+        "source": ("description",),
+        "command": ("container_image", "args"),
+        "acceptance": (
+            "requires_gb10_report",
+            "requires_container_digest",
+            "requires_output_checksums",
+        ),
+    }
+    for field, expected_order in nested_required_fields.items():
+        _validate_required_fields(
+            path, repo, f"properties.{field}", properties.get(field), expected_order, errors
+        )
     nested_additional_properties = {
         "source": True,
         "command": False,
@@ -178,6 +191,9 @@ def _validate_checksum_definition(
     _validate_additional_properties(
         path, repo, "$defs.checksum", definition, False, errors
     )
+    _validate_required_fields(
+        path, repo, "$defs.checksum", definition, ("algorithm", "value"), errors
+    )
     _validate_schema_property_order(
         path, repo, "$defs.checksum", definition, ("algorithm", "value"), errors
     )
@@ -195,8 +211,9 @@ def _validate_file_definition(
     if not isinstance(definition, dict):
         errors.append(f"{path.relative_to(repo)} $defs.file must be an object")
         return
-    if definition.get("required") != ["path", "role", "checksum"]:
-        errors.append(f"{path.relative_to(repo)} file required fields are incomplete")
+    _validate_required_fields(
+        path, repo, "$defs.file", definition, ("path", "role", "checksum"), errors
+    )
     properties = definition.get("properties", {})
     _validate_additional_properties(path, repo, "$defs.file", definition, False, errors)
     _validate_schema_property_order(
@@ -219,6 +236,14 @@ def _validate_profiling_plan_definition(
     properties = definition.get("properties", {})
     _validate_additional_properties(
         path, repo, "$defs.profiling_plan", definition, False, errors
+    )
+    _validate_required_fields(
+        path,
+        repo,
+        "$defs.profiling_plan",
+        definition,
+        ("scope", "status", "blocker_id", "required_facets"),
+        errors,
     )
     _validate_schema_property_order(
         path,
@@ -246,6 +271,19 @@ def _validate_downstream_handoff_definition(
     properties = definition.get("properties", {})
     _validate_additional_properties(
         path, repo, "$defs.downstream_handoff", definition, False, errors
+    )
+    _validate_required_fields(
+        path,
+        repo,
+        "$defs.downstream_handoff",
+        definition,
+        (
+            "consumer",
+            "generated_input_register",
+            "generated_input_id",
+            "consumer_blocker_id",
+        ),
+        errors,
     )
     _validate_schema_property_order(
         path,
@@ -409,6 +447,20 @@ def _validate_schema_property_order(
         errors.append(
             f"{path.relative_to(repo)} {field}.properties keys must follow schema order"
         )
+
+
+def _validate_required_fields(
+    path: Path,
+    repo: Path,
+    field: str,
+    schema_object: object,
+    expected_order: tuple[str, ...],
+    errors: list[str],
+) -> None:
+    if not isinstance(schema_object, dict):
+        return
+    if schema_object.get("required") != list(expected_order):
+        errors.append(f"{path.relative_to(repo)} {field}.required fields are incomplete")
 
 
 def _validate_key_set(
