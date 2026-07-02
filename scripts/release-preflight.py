@@ -143,6 +143,7 @@ REQUIRED_TEXT = {
         "Gate README waiver-scope release evidence markers.",
         "Gate release-note waiver-scope operator markers.",
         "Gate benchmark acceptance waiver-scope status markers.",
+        "Gate Sphinx index generated-checksum waiver-scope markers.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",
@@ -150,7 +151,8 @@ REQUIRED_TEXT = {
         "accepted GB10 reports",
         "generated ``final_clusters.tsv`` producer checksums",
         "Any explicit waiver must stay visible as a scoped",
-        "must not claim accepted producer evidence",
+        "must not claim accepted GB10 producer evidence",
+        "generated ``final_clusters.tsv`` checksum readiness",
         "project-governance",
         "release-readiness",
     ],
