@@ -85,6 +85,9 @@ REQUIRED_TEXT = {
         "scripts/release-preflight.py --expected-version 0.3.0",
         "python -m pip install -r docs/requirements.txt",
         "sphinx-build -W -b html docs target/sphinx-html",
+        "Waivers must stay visible as scoped release limitations",
+        "do not claim accepted GB10 producer evidence",
+        "generated `final_clusters.tsv` checksum",
         "scripts/check-docker-toy-benchmarks.sh",
         "scripts/run-local-profiling.sh --output-dir target/local-profile",
     ],
@@ -130,6 +133,7 @@ REQUIRED_TEXT = {
         "Gate blocker waiver rules for upstream producer evidence.",
         "Gate Sphinx waiver-boundary release-readiness markers.",
         "Gate Sphinx index waiver-scope status markers.",
+        "Gate README waiver-scope release evidence markers.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",

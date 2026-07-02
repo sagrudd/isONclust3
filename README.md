@@ -115,6 +115,8 @@ This maintained fork gates release-candidate evidence through:
   benchmark report requirements.
 - `fixtures/manifests/*.json` for toy and pending larger workload manifests.
 
+Waivers must stay visible as scoped release limitations and do not claim accepted GB10 producer evidence or generated `final_clusters.tsv` checksum readiness for `newONform`.
+
 Run the local release preflight with:
 
 ```sh
