@@ -134,11 +134,10 @@ pub(crate) fn syncmers_canonical(
 ///
 pub fn is_significant(
     quality_interval: &[u8],
-    d_no_min: [f64; 128],
+    d_no_min: &[f64; 128],
     quality_threshold: &f64,
 ) -> bool {
     let mut significance_indicator = false;
-    let mut qualities: Vec<f64> = vec![];
     let mut quality = 1.0;
     let mut index;
     let mut q_value;
@@ -150,7 +149,6 @@ pub fn is_significant(
         q_value = d_no_min[index];
         //here we get the base call accuracy
         probability_error = 1.0 - q_value;
-        qualities.push(probability_error);
         quality *= probability_error
     }
 
@@ -166,7 +164,7 @@ pub fn filter_seeds_by_quality(
     this_minimizers: &[MinimizerHashed],
     fastq_quality: &[u8],
     k: usize,
-    d_no_min: [f64; 128],
+    d_no_min: &[f64; 128],
     minimizers_filtered: &mut Vec<MinimizerHashed>,
     quality_threshold: &f64,
     verbose: bool,

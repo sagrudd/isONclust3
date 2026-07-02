@@ -165,7 +165,7 @@ fn analyse_fastq_and_sort(
                 &this_minimizers,
                 quality,
                 config.k,
-                d_no_min,
+                &d_no_min,
                 &mut filtered_minis,
                 &config.quality_threshold,
                 false,

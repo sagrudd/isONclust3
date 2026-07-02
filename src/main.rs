@@ -415,7 +415,7 @@ fn main() {
                     &this_minimizers,
                     quality,
                     k,
-                    d_no_min,
+                    &d_no_min,
                     &mut filtered_minis,
                     &quality_threshold,
                     verbose,

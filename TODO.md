@@ -62,6 +62,8 @@ Tasks are ordered to improve the fork without breaking the upstream
         intermediate all-record vector.
 - [ ] Reduce repeated minimizer/syncmer allocation.
   - [x] Make seed records copyable and avoid cloning filtered minimizer records.
+  - [x] Avoid copying the PHRED lookup table and unused quality-probability
+        vector during seed-quality filtering.
 - [ ] Replace ad hoc tuple merge bookkeeping with named structs.
 - [ ] Stream cluster FASTQ output where possible.
 - [ ] Add benchmark evidence before and after every algorithmic optimization.

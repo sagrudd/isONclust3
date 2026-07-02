@@ -16,7 +16,6 @@ pub(crate) fn reverse_complement(dna: &str) -> String {
             'G' => 'C',
             _ => c,
         })
-        .clone()
         .collect();
     reverse_complement
 }
