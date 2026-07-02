@@ -47,7 +47,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Rank optimization candidates by wall-time, memory, and output-risk.
 - [ ] Profile seed generation and minimizer/syncmer extraction on the smallest
       accepted larger workload.
-- [ ] Profile clustering merge bookkeeping and shared-seed maps with
+- [x] Profile clustering merge bookkeeping and shared-seed maps with
       post-clustering enabled.
 - [x] Profile FASTQ record sorting and per-cluster output generation with
       `--include-fastq-output`.

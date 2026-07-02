@@ -61,7 +61,7 @@ REQUIRED_TEXT = {
     ],
     "RELEASE_CHECKLIST.md": [
         "scripts/release-preflight.py --expected-version",
-        "scripts/run-local-profiling.sh --case all --include-fastq-output",
+        "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster",
         "newONform",
     ],
     "TODO.md": ["Dockerized GB10 Evidence", "local profiling harness"],
@@ -195,7 +195,7 @@ def validate_ci(repo: Path) -> list[str]:
         "cargo test",
         "cargo clippy --all-targets -- -D warnings",
         "scripts/check-output-contract-fixtures.sh",
-        "scripts/run-local-profiling.sh --case all --include-fastq-output",
+        "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster",
         "scripts/release-preflight.py",
     ]
     return [f"CI workflow missing marker: {marker}" for marker in markers if marker not in text]
