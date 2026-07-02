@@ -119,6 +119,9 @@ REQUIRED_TEXT = {
         "ISOCLUST-BLOCK-002",
         "ISOCLUST-BLOCK-003",
         "## Operator Notes",
+        "Waivers must stay visible as scoped release limitations",
+        "not claim accepted GB10 producer evidence",
+        "generated `final_clusters.tsv`",
         "Do not tag a release candidate from this draft alone.",
     ],
     "TODO.md": [
@@ -134,6 +137,7 @@ REQUIRED_TEXT = {
         "Gate Sphinx waiver-boundary release-readiness markers.",
         "Gate Sphinx index waiver-scope status markers.",
         "Gate README waiver-scope release evidence markers.",
+        "Gate release-note waiver-scope operator markers.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",

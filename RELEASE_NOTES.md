@@ -51,4 +51,6 @@ downstream generated-input checksums are complete.
 ## Operator Notes
 
 Use `BLOCKERS.md`, `BENCHMARK_ACCEPTANCE.md`, and `RELEASE_CHECKLIST.md` as the
-release gate. Do not tag a release candidate from this draft alone.
+release gate. Waivers must stay visible as scoped release limitations and do
+not claim accepted GB10 producer evidence or generated `final_clusters.tsv`
+checksum readiness for `newONform`. Do not tag a release candidate from this draft alone.
