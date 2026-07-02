@@ -181,6 +181,7 @@ REQUIRED_TEXT = {
         "Gate output-contract register paths as relative and non-escaping.",
         "Gate output-contract schema path patterns.",
         "Gate output-contract register entry ordering.",
+        "Gate output-contract schema entry count.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",
