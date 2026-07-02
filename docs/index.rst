@@ -14,7 +14,7 @@ hygiene, tiny ONT/PacBio output-contract fixtures, local profiling automation,
 Dockerized benchmark manifests, a GB10 benchmark runner, and explicit
 ``newONform`` handoff documentation.
 
-It is not release-ready until accepted GB10 reports, generated ``final_clusters.tsv`` producer checksums, and larger-workload profiling evidence are recorded or explicitly waived.
+It is not release-ready until accepted GB10 reports, generated ``final_clusters.tsv`` producer checksums, and larger-workload profiling evidence are recorded. Any explicit waiver must stay visible as a scoped release limitation and must not claim accepted producer evidence.
 
 .. toctree::
    :maxdepth: 2
