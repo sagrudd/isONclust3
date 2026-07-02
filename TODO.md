@@ -25,13 +25,14 @@ Tasks are ordered to improve the fork without breaking the upstream
 ## 3. Strict Lint And Hygiene
 
 - [x] Apply repository-wide `cargo fmt` normalization.
-- [ ] Make `cargo clippy --all-targets -- -D warnings` pass.
+- [x] Make `cargo clippy --all-targets -- -D warnings` pass.
   - [x] Remove unused imports.
-  - [ ] Remove or justify dead code.
+  - [x] Remove or justify dead code.
     - [x] Remove isolated legacy helpers from `main.rs`, clustering, and
           seed-filtering code that were not reachable from the active CLI.
-    - [ ] Preserve or fixture-test dormant GFF/FASTA helpers before removal.
-    - [ ] Decide whether unused compatibility structs should become fixture
+    - [x] Remove dormant GFF/FASTA helpers that were superseded by the active
+          `gff_based_clustering` path.
+    - [x] Decide whether unused compatibility structs should become fixture
           API types or be removed.
   - [x] Rename non-camel-case types and variants without changing output.
   - [x] Remove avoidable mutable bindings and late initialization.

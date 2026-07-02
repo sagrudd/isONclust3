@@ -47,9 +47,9 @@ Acceptance criteria:
 - `src/main.rs` remains below 1000 lines and moves toward orchestration-only
   responsibilities.
 
-Status: active. Current strict clippy fails with unused imports, unused
-variables, dead-code warnings, naming warnings, redundant struct fields, and
-several mechanical cleanup opportunities.
+Status: complete for the current binary crate surface. Strict clippy now passes
+for all targets; fixture-backed output-contract work remains tracked under
+Milestone 1.
 The first hygiene pass removed unused imports, redundant struct fields,
 avoidable mutable bindings, late initialization, manual prefix stripping, and
 several iterator warnings, reducing strict clippy from 95 inherited errors to
@@ -63,7 +63,10 @@ GFF/FASTA dead-code triage, compatibility struct decisions, and typed
 configuration structs for high-argument APIs. The configuration pass replaced
 positional FASTQ sorting and GFF clustering arguments with typed module-local
 configuration structs, reducing strict clippy to 17 remaining errors, all of
-which are now dead-code or compatibility-struct decisions.
+which were dead-code or compatibility-struct decisions. The final hygiene pass
+removed the superseded GFF/FASTA resolver path, obsolete compatibility structs,
+unused FASTQ scoring fields, and orphaned legacy minimizer helpers; `cargo
+clippy --all-targets -- -D warnings` now passes.
 
 ## Milestone 3: Performance Profiling
 
