@@ -143,6 +143,7 @@ REQUIRED_TEXT = {
         "ISOCLUST-BLOCK-001",
         "ISOCLUST-BLOCK-002",
         "ISOCLUST-BLOCK-003",
+        "sphinx-build -W -b html docs target/sphinx-html",
         "Downstream Handoff",
         "external/isONclust3",
     ],

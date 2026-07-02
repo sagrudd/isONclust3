@@ -12,6 +12,7 @@ Minimum Local Checks
 - ``cargo clippy --all-targets -- -D warnings``
 - ``scripts/check-output-contract-fixtures.sh``
 - ``scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff``
+- ``sphinx-build -W -b html docs target/sphinx-html``
 - ``scripts/release-preflight.py --expected-version 0.3.0``
 - ``scripts/check-docker-toy-benchmarks.sh``
 

@@ -23,6 +23,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Add Sphinx governance and release-readiness source pages.
 - [x] Add Sphinx warning-as-error build to CI and release checklist.
 - [x] Gate README release-readiness documentation build instructions.
+- [x] Gate Sphinx release-readiness documentation build instructions.
 
 ## 2. Output Contract Harmonization
 
