@@ -22,6 +22,7 @@ REQUIRED_FILES = [
     "BENCHMARK_ACCEPTANCE.md",
     "BLOCKERS.md",
     "Dockerfile",
+    ".gitignore",
     "MILESTONES.md",
     "OPTIMIZATION_EVIDENCE.md",
     "OUTPUT_CONTRACTS.md",
@@ -53,6 +54,15 @@ REQUIRED_TEXT = {
         "## Documentation Rules",
         "Sphinx governance and release-readiness documentation",
         "sphinx-build -W -b html docs target/sphinx-html",
+    ],
+    ".gitignore": [
+        "docs/_build/",
+        ".venv/",
+        "benchmark-artifacts/",
+        "benchmark-output/",
+        "gb10-output/",
+        "reports/",
+        "gb10-reports/",
     ],
     "BENCHMARK_ACCEPTANCE.md": [
         "final_clusters.tsv",
@@ -152,6 +162,7 @@ REQUIRED_TEXT = {
         "Gate release-checklist waiver-scope evidence markers.",
         "Gate AGENTS compatibility-waiver evidence markers.",
         "Gate expanded tracked-artifact hygiene markers.",
+        "Gate .gitignore generated-artifact markers.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",
