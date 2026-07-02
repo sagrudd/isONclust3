@@ -85,7 +85,6 @@ struct Cli {
     noncanonical: bool,
     #[arg(long, help = "Run mode of isONclust (pacbio or ont")]
     mode: String,
-    //TODO:add argument telling us whether we want to use syncmers instead of kmers, maybe also add argument determining whether we want to use canonical_minimizers
     #[arg(long, help = "seeding approach we choose")]
     seeding: Option<String>,
     #[arg(long, help = "quality threshold used for the data (standard: 0.9) ")]
@@ -121,7 +120,6 @@ fn main() {
 
     let cli = Cli::parse();
 
-    // TODO - move later on.
     let level = match cli.verbose {
         true => log::LevelFilter::Debug,
         false => log::LevelFilter::Info,
@@ -148,7 +146,7 @@ fn main() {
     if mode == "ont" {
         k = 13;
         w = 21;
-        quality_threshold = 0.9_f64.powi(k as i32); //TODO: standard: 0.9_f64
+        quality_threshold = 0.9_f64.powi(k as i32);
         min_shared_minis = 0.5;
         cm_mini = 0.5;
         s = 9;
@@ -156,7 +154,7 @@ fn main() {
     } else if mode == "pacbio" {
         k = 15;
         w = 51;
-        quality_threshold = 0.98_f64.powi(k as i32); //TODO://standard: 0.97_f64
+        quality_threshold = 0.98_f64.powi(k as i32);
         min_shared_minis = 0.5;
         cm_mini = 0.8;
         s = 9;
@@ -218,23 +216,15 @@ fn main() {
     if seeding == "syncmer" {
         if cli.s.is_some() {
             s = cli.s.unwrap();
-            if (k - s + 1) % 2 != 0 {
-                panic!("Please set k and s so that (k-s)+1 yields an odd number")
-            }
         }
         if cli.t.is_some() {
             t = cli.t.unwrap();
-            if (k - s) / 2 != t {
-                panic!("Please set k,s and t to fulfill (k-s)/2=t")
-            }
         }
     } else if seeding == "minimizer" && cli.w.is_some() {
         w = cli.w.unwrap();
-        if w < k {
-            panic!("Please set w greater than k")
-        } else if w % 2 == 0 {
-            panic!("Please choose w to be odd")
-        }
+    }
+    if let Err(error) = validate_seed_parameters(k, w, s, t, seeding) {
+        panic!("{error}");
     }
 
     info!("k: {}, w: {}, s: {}, t: {}", k, w, s, t);
@@ -495,4 +485,97 @@ fn main() {
         info!("Couldn't get the current memory usage :(");
     }
     info!("{} overall runtime", now1.elapsed().as_secs());
+}
+
+fn validate_seed_parameters(
+    k: usize,
+    w: usize,
+    s: usize,
+    t: usize,
+    seeding: &str,
+) -> Result<(), String> {
+    match seeding {
+        "minimizer" => {
+            if w < k {
+                return Err(format!(
+                    "minimizer parameters require w >= k, got w={w}, k={k}"
+                ));
+            }
+            if w.is_multiple_of(2) {
+                return Err(format!("minimizer parameters require odd w, got w={w}"));
+            }
+        }
+        "syncmer" => {
+            if k <= s {
+                return Err(format!(
+                    "syncmer parameters require k > s, got k={k}, s={s}"
+                ));
+            }
+            let syncmer_window = k - s + 1;
+            if syncmer_window.is_multiple_of(2) {
+                return Err(format!(
+                    "syncmer parameters require odd (k - s + 1), got {syncmer_window}"
+                ));
+            }
+            let expected_t = (k - s) / 2;
+            if t != expected_t {
+                return Err(format!(
+                    "syncmer parameters require t == (k - s) / 2, got t={t}, expected {expected_t}"
+                ));
+            }
+        }
+        _ => {
+            return Err(format!(
+                "seeding must be 'minimizer' or 'syncmer', got '{seeding}'"
+            ));
+        }
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::validate_seed_parameters;
+
+    #[test]
+    fn accepts_default_minimizer_shapes() {
+        assert!(validate_seed_parameters(13, 21, 9, 2, "minimizer").is_ok());
+        assert!(validate_seed_parameters(15, 51, 9, 3, "minimizer").is_ok());
+    }
+
+    #[test]
+    fn rejects_invalid_minimizer_shapes() {
+        assert!(validate_seed_parameters(21, 13, 9, 2, "minimizer")
+            .unwrap_err()
+            .contains("w >= k"));
+        assert!(validate_seed_parameters(13, 20, 9, 2, "minimizer")
+            .unwrap_err()
+            .contains("odd w"));
+    }
+
+    #[test]
+    fn accepts_default_syncmer_shapes() {
+        assert!(validate_seed_parameters(13, 21, 9, 2, "syncmer").is_ok());
+        assert!(validate_seed_parameters(15, 51, 9, 3, "syncmer").is_ok());
+    }
+
+    #[test]
+    fn rejects_invalid_syncmer_shapes() {
+        assert!(validate_seed_parameters(9, 21, 9, 0, "syncmer")
+            .unwrap_err()
+            .contains("k > s"));
+        assert!(validate_seed_parameters(14, 21, 9, 2, "syncmer")
+            .unwrap_err()
+            .contains("odd"));
+        assert!(validate_seed_parameters(13, 21, 9, 1, "syncmer")
+            .unwrap_err()
+            .contains("expected 2"));
+    }
+
+    #[test]
+    fn rejects_unknown_seed_modes() {
+        assert!(validate_seed_parameters(13, 21, 9, 2, "none")
+            .unwrap_err()
+            .contains("seeding must be"));
+    }
 }
