@@ -280,6 +280,13 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
                     f"{path.relative_to(repo)} command.args unexpected flags: "
                     f"{', '.join(sorted(unexpected_flags))}"
                 )
+            for flag in sorted(REQUIRED_COMMAND_FLAGS):
+                occurrences = args.count(flag)
+                if occurrences != 1:
+                    errors.append(
+                        f"{path.relative_to(repo)} command.args {flag} "
+                        f"must appear exactly once"
+                    )
             expected_values = {
                 **REQUIRED_COMMAND_VALUES,
                 "--mode": str(manifest.get("mode")),

@@ -83,6 +83,7 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Gate benchmark manifest command shape for the file-based
         `final_clusters.tsv` handoff.
   - [x] Gate benchmark manifest command flags against the supported flag set.
+  - [x] Gate benchmark manifest command flags so each appears exactly once.
   - [x] Gate benchmark manifest command values against mode, seeding, and
         container path metadata.
   - [x] Gate benchmark manifests so every evidence run requires a container
