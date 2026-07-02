@@ -238,7 +238,11 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
     ):
         errors.append(f"{path.relative_to(repo)} entries must require entry definitions")
 
-    entry = schema.get("$defs", {}).get("entry", {})
+    definitions = schema.get("$defs")
+    if not isinstance(definitions, dict) or list(definitions) != ["entry"]:
+        return errors + [f"{path.relative_to(repo)} $defs must contain only entry"]
+
+    entry = definitions.get("entry", {})
     if not isinstance(entry, dict):
         return errors + [f"{path.relative_to(repo)} $defs.entry must be an object"]
     if entry.get("type") != "object":

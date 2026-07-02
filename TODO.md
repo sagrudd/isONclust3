@@ -55,6 +55,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate output-contract schema catalog title.
 - [x] Gate output-contract schema entry ID enum.
 - [x] Gate output-contract schema unique entry rows.
+- [x] Gate output-contract schema definition keys.
 
 ## 2. Output Contract Harmonization
 
