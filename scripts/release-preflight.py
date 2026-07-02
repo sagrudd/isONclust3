@@ -86,6 +86,25 @@ REQUIRED_ACTIVE_BLOCKERS = {
 REQUIRED_RESOLVED_BLOCKERS = {
     "ISOCLUST-BLOCK-004",
 }
+REQUIRED_BENCHMARK_ACCEPTANCE_SECTIONS = (
+    "## Required Report Fields",
+    "## Acceptance Classes",
+    "## Initial Gates",
+)
+REQUIRED_BENCHMARK_ACCEPTANCE_CLASSES = (
+    "accepted_contract",
+    "accepted_calibration",
+    "rejected_contract",
+    "rejected_operational",
+    "blocked_pending_data",
+)
+REQUIRED_BENCHMARK_REPORT_MARKERS = (
+    "Container image ID or digest.",
+    "Host operating system, CPU architecture, platform target, and thread count.",
+    "Input FASTQ checksum and generated `final_clusters.tsv` checksum.",
+    "Full command line.",
+    "Exit code, wall time, peak RSS status, and peak RSS when measurable.",
+)
 REQUIRED_BLOCKED_EXTERNAL_MANIFESTS = {
     "isonclust3-medium-ont-cdna",
     "isonclust3-phanerognostikon-ont-cdna",
@@ -215,6 +234,27 @@ def validate_blockers(repo: Path) -> list[str]:
     for blocker in sorted(REQUIRED_RESOLVED_BLOCKERS):
         if blocker not in resolved_section[1]:
             errors.append(f"BLOCKERS.md missing resolved blocker marker: {blocker}")
+    return errors
+
+
+def validate_benchmark_acceptance(repo: Path) -> list[str]:
+    path = repo / "BENCHMARK_ACCEPTANCE.md"
+    text = path.read_text(encoding="utf-8")
+    errors = [
+        f"BENCHMARK_ACCEPTANCE.md missing section: {section}"
+        for section in REQUIRED_BENCHMARK_ACCEPTANCE_SECTIONS
+        if section not in text
+    ]
+    for class_name in REQUIRED_BENCHMARK_ACCEPTANCE_CLASSES:
+        if f"- `{class_name}`:" not in text:
+            errors.append(
+                f"BENCHMARK_ACCEPTANCE.md missing acceptance class: {class_name}"
+            )
+    for marker in REQUIRED_BENCHMARK_REPORT_MARKERS:
+        if marker not in text:
+            errors.append(
+                f"BENCHMARK_ACCEPTANCE.md missing required report marker: {marker}"
+            )
     return errors
 
 
@@ -705,6 +745,7 @@ def main() -> int:
     errors: list[str] = []
     errors.extend(validate_required_files(repo))
     errors.extend(validate_blockers(repo))
+    errors.extend(validate_benchmark_acceptance(repo))
     errors.extend(validate_package_version(repo, args.expected_version))
     errors.extend(validate_file_sizes(repo, args.max_lines))
     errors.extend(validate_manifests(repo))

@@ -104,6 +104,7 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Gate benchmark manifest platform target vocabulary.
   - [x] Gate benchmark manifest source provenance and toy fixture license.
   - [x] Gate benchmark manifest acceptance object structure.
+  - [x] Gate benchmark acceptance classes and report-field markers.
   - [x] Gate benchmark manifest kind and seeding metadata.
   - [x] Gate benchmark manifest schema version and tier vocabulary.
   - [x] Gate benchmark manifest filename-to-ID identity and uniqueness.
