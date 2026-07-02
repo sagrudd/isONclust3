@@ -17,6 +17,7 @@ from preflight_governance import (
     validate_benchmark_acceptance,
     validate_blockers,
 )
+from preflight_local_profiling import validate_local_profiling_harness
 from preflight_manifests import validate_manifests
 from preflight_output_contracts import validate_output_contract_register
 from preflight_optimization_evidence import validate_optimization_evidence
@@ -75,6 +76,7 @@ def main() -> int:
     errors.extend(validate_benchmark_schema(repo))
     errors.extend(validate_output_contract_register(repo))
     errors.extend(validate_gb10_runner(repo))
+    errors.extend(validate_local_profiling_harness(repo))
     errors.extend(validate_manifests(repo))
     errors.extend(validate_ci(repo))
     errors.extend(validate_optimization_evidence(repo))
@@ -93,7 +95,7 @@ def main() -> int:
         f"{manifests} benchmark manifest(s), "
         "package version passed, file-size limits passed, "
         "benchmark schema passed, output contract register passed, "
-        "manifest checksums passed, "
+        "local profiling harness passed, manifest checksums passed, "
         "CI markers passed, artifact hygiene passed"
     )
     return 0

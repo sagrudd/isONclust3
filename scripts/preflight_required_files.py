@@ -151,6 +151,7 @@ REQUIRED_TEXT = {
     "TODO.md": [
         "Dockerized GB10 Evidence",
         "local profiling harness",
+        "Gate the local profiling harness report contract as non-release evidence.",
         "Profile seed generation and minimizer/syncmer extraction",
         "Add benchmark evidence before and after every algorithmic optimization",
         "Record accepted GB10 benchmark reports",
