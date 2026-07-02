@@ -172,6 +172,9 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
         errors.append(f"{path.relative_to(repo)} project must be isONclust3")
     if manifest.get("mode") not in {"ont", "pacbio"}:
         errors.append(f"{path.relative_to(repo)} mode must be ont or pacbio")
+    platform_targets = manifest.get("platform_targets")
+    if not isinstance(platform_targets, list) or "linux/arm64" not in platform_targets:
+        errors.append(f"{path.relative_to(repo)} platform_targets must include linux/arm64")
 
     acceptance = manifest.get("acceptance", {})
     if acceptance.get("requires_gb10_report") is not True:
