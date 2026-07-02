@@ -108,6 +108,22 @@ def validate_output_contract_register(repo: Path) -> list[str]:
             errors.append(f"{path.relative_to(repo)} {entry_id}.bytes must be positive")
         elif run_path.is_file() and run_path.stat().st_size != expected_bytes:
             errors.append(f"{path.relative_to(repo)} {entry_id}.bytes mismatch")
+        expected_fastq_sha = entry.get("fastq_sha256")
+        if not isinstance(expected_fastq_sha, str) or not SHA256_HEX_PATTERN.fullmatch(
+            expected_fastq_sha
+        ):
+            errors.append(
+                f"{path.relative_to(repo)} {entry_id}.fastq_sha256 must be lowercase hex"
+            )
+        elif fastq_path.is_file() and sha256(fastq_path) != expected_fastq_sha:
+            errors.append(f"{path.relative_to(repo)} {entry_id}.fastq_sha256 mismatch")
+        expected_fastq_bytes = entry.get("fastq_bytes")
+        if not isinstance(expected_fastq_bytes, int) or expected_fastq_bytes < 1:
+            errors.append(
+                f"{path.relative_to(repo)} {entry_id}.fastq_bytes must be positive"
+            )
+        elif fastq_path.is_file() and fastq_path.stat().st_size != expected_fastq_bytes:
+            errors.append(f"{path.relative_to(repo)} {entry_id}.fastq_bytes mismatch")
 
     missing = set(REQUIRED_OUTPUT_CONTRACT_ENTRIES) - observed_ids
     if missing:
