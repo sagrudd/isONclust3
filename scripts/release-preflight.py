@@ -128,6 +128,7 @@ REQUIRED_TEXT = {
         "Keep `newONform` generated-input registers aligned",
         "Gate release-checklist downstream handoff artifact markers.",
         "Gate blocker waiver rules for upstream producer evidence.",
+        "Gate Sphinx waiver-boundary release-readiness markers.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",
@@ -154,6 +155,9 @@ REQUIRED_TEXT = {
         "ISOCLUST-BLOCK-001",
         "ISOCLUST-BLOCK-002",
         "ISOCLUST-BLOCK-003",
+        "Waivers must name the blocker, workload, available evidence",
+        "does not claim accepted GB10 producer evidence",
+        "``final_clusters.tsv`` checksum readiness",
         "sphinx-build -W -b html docs target/sphinx-html",
         "Downstream Handoff",
         "external/isONclust3",

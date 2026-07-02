@@ -26,6 +26,11 @@ Current High-Priority Blockers
 - ``ISOCLUST-BLOCK-003``: accepted larger-workload profiling evidence is still
   required before further algorithmic optimization claims.
 
+Waivers must name the blocker, workload, available evidence, downstream
+``newONform`` impact, and expiry condition. A waiver narrows release scope; it
+does not claim accepted GB10 producer evidence or generated
+``final_clusters.tsv`` checksum readiness.
+
 Downstream Handoff
 ------------------
 

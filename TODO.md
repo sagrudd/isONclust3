@@ -27,6 +27,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate AGENTS Sphinx documentation policy markers.
 - [x] Gate release-checklist downstream handoff artifact markers.
 - [x] Gate blocker waiver rules for upstream producer evidence.
+- [x] Gate Sphinx waiver-boundary release-readiness markers.
 
 ## 2. Output Contract Harmonization
 
