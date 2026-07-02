@@ -15,8 +15,10 @@ Acceptance criteria:
 - Known lint and modularity debt is tracked without claiming release readiness.
 
 Status: active. The fork exists under `sagrudd/isONclust3`; `cargo test`
-passes, while strict clippy currently exposes warning debt that must be retired
-before the fork can act as a release-quality upstream dependency.
+passes, repository metadata now points at the maintained fork, and code is
+normalized with `cargo fmt`. Strict clippy currently exposes warning debt that
+must be retired before the fork can act as a release-quality upstream
+dependency.
 
 ## Milestone 1: Output Contract Stabilization
 
@@ -107,4 +109,5 @@ Acceptance criteria:
 - Release notes and blockers in both repositories identify the same upstream
   evidence gates.
 
-Status: active once `newONform` points at this fork.
+Status: active. `newONform` tracks this fork as `external/isONclust3`; shared
+fixtures and accepted upstream producer evidence remain outstanding.

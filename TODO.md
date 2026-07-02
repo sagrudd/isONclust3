@@ -7,7 +7,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 
 - [x] Confirm the maintained fork exists under `sagrudd/isONclust3`.
 - [x] Add `AGENTS.md`, `MILESTONES.md`, and `TODO.md`.
-- [ ] Update package metadata for the maintained fork while preserving upstream
+- [x] Update package metadata for the maintained fork while preserving upstream
       attribution.
 - [ ] Add a release checklist and blocker register.
 - [ ] Add preflight checks for version syntax, file-size limits, fixture
@@ -24,6 +24,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 
 ## 3. Strict Lint And Hygiene
 
+- [x] Apply repository-wide `cargo fmt` normalization.
 - [ ] Make `cargo clippy --all-targets -- -D warnings` pass.
   - [ ] Remove unused imports.
   - [ ] Remove or justify dead code.
@@ -61,7 +62,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 
 ## 7. newONform Product Integration
 
-- [ ] Track `sagrudd/isONclust3` as a `newONform` submodule.
+- [x] Track `sagrudd/isONclust3` as a `newONform` submodule.
 - [ ] Document the end-to-end `isONclust3 -> newONform` transcriptome
       consolidation workflow.
 - [ ] Add a shared fixture path that lets `newONform` validate `isONclust3`

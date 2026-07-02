@@ -2,6 +2,12 @@
 
 isONclust3 is a tool for clustering either PacBio Iso-Seq reads, or Oxford Nanopore reads into clusters, where each cluster represents all reads that came from a gene family. Output is a tsv file with each read assigned to a cluster-ID and a folder 'fastq' containing one fastq file per cluster generated. Detailed information is available in the [isONclust3 paper](https://doi.org/10.1093/bioinformatics/btaf207).
 
+This repository is the `sagrudd/isONclust3` maintained fork used as the
+upstream clustering-stage dependency for `newONform` transcriptome
+consolidation. Upstream authorship and citation remain unchanged; fork changes
+focus on release hygiene, output-contract evidence, and GB10-aware benchmark
+readiness.
+
 # Table of contents
 1. [Installation](#installation)
 2. [Output](#output)
@@ -26,7 +32,7 @@ When you have installed Rust run  `cargo install isONclust3` to install the bina
 
 ### From GitHub source <a name="installation source"></a>
 ```
-git clone https://github.com/aljpetri/isONclust3.git
+git clone https://github.com/sagrudd/isONclust3.git
 cd isONclust3
 cargo build --release
 ```
@@ -68,6 +74,9 @@ alexander.petri[at]math.su.se
 
 
 ## Credits <a name="credits"></a>
+
+This maintained fork preserves upstream attribution to Alexander J Petri and
+Kristoffer Sahlin.
 
 Please cite this study when using isONclust3:
 
