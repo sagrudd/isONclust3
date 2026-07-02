@@ -47,6 +47,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate output-contract schema path patterns.
 - [x] Gate output-contract register entry ordering.
 - [x] Gate output-contract schema entry count.
+- [x] Gate output-contract schema exact entry count.
 
 ## 2. Output Contract Harmonization
 

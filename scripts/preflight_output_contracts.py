@@ -227,7 +227,7 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
             errors.append(f"{path.relative_to(repo)} properties.{field}.const must be {value}")
     entries = properties.get("entries", {})
     if (
-        entries.get("minItems") != 1
+        entries.get("minItems") != len(REQUIRED_OUTPUT_CONTRACT_ENTRY_IDS)
         or entries.get("maxItems") != len(REQUIRED_OUTPUT_CONTRACT_ENTRY_IDS)
         or entries.get("items", {}).get("$ref") != "#/$defs/entry"
     ):
