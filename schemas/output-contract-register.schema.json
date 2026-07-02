@@ -64,12 +64,14 @@
           "minLength": 1
         },
         "mode": {
+          "type": "string",
           "enum": [
             "ont",
             "pacbio"
           ]
         },
         "benchmark_tier": {
+          "type": "string",
           "const": "toy"
         },
         "run_path": {
@@ -99,9 +101,11 @@
           "minimum": 1
         },
         "status": {
+          "type": "string",
           "const": "resolved"
         },
         "consumer": {
+          "type": "string",
           "const": "newONform"
         }
       }

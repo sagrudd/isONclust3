@@ -49,6 +49,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate output-contract schema entry count.
 - [x] Gate output-contract schema exact entry count.
 - [x] Gate output-contract schema scalar entry constraints.
+- [x] Gate output-contract schema property types.
 
 ## 2. Output Contract Harmonization
 

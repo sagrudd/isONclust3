@@ -227,7 +227,8 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
             errors.append(f"{path.relative_to(repo)} properties.{field}.const must be {value}")
     entries = properties.get("entries", {})
     if (
-        entries.get("minItems") != len(REQUIRED_OUTPUT_CONTRACT_ENTRY_IDS)
+        entries.get("type") != "array"
+        or entries.get("minItems") != len(REQUIRED_OUTPUT_CONTRACT_ENTRY_IDS)
         or entries.get("maxItems") != len(REQUIRED_OUTPUT_CONTRACT_ENTRY_IDS)
         or entries.get("items", {}).get("$ref") != "#/$defs/entry"
     ):
@@ -236,6 +237,8 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
     entry = schema.get("$defs", {}).get("entry", {})
     if not isinstance(entry, dict):
         return errors + [f"{path.relative_to(repo)} $defs.entry must be an object"]
+    if entry.get("type") != "object":
+        errors.append(f"{path.relative_to(repo)} $defs.entry.type must be object")
     if entry.get("additionalProperties") is not False:
         errors.append(f"{path.relative_to(repo)} entry additionalProperties must be false")
     entry_required = entry.get("required")
@@ -244,11 +247,14 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
     entry_properties = entry.get("properties", {})
     if not isinstance(entry_properties, dict):
         return errors + [f"{path.relative_to(repo)} entry properties must be an object"]
-    if entry_properties.get("entry_id", {}).get("minLength") != 1:
+    entry_id_property = entry_properties.get("entry_id", {})
+    if entry_id_property.get("type") != "string" or entry_id_property.get("minLength") != 1:
         errors.append(f"{path.relative_to(repo)} entry_id must be non-empty")
-    if entry_properties.get("mode", {}).get("enum") != ["ont", "pacbio"]:
+    mode_property = entry_properties.get("mode", {})
+    if mode_property.get("type") != "string" or mode_property.get("enum") != ["ont", "pacbio"]:
         errors.append(f"{path.relative_to(repo)} entry mode must be ont or pacbio")
-    if entry_properties.get("benchmark_tier", {}).get("const") != "toy":
+    tier_property = entry_properties.get("benchmark_tier", {})
+    if tier_property.get("type") != "string" or tier_property.get("const") != "toy":
         errors.append(f"{path.relative_to(repo)} entry benchmark_tier must be toy")
     for path_field in ("run_path", "fastq_path"):
         path_property = entry_properties.get(path_field, {})
@@ -258,12 +264,15 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
             errors.append(
                 f"{path.relative_to(repo)} {path_field} must require relative non-escaping paths"
             )
-    if entry_properties.get("status", {}).get("const") != "resolved":
+    status_property = entry_properties.get("status", {})
+    if status_property.get("type") != "string" or status_property.get("const") != "resolved":
         errors.append(f"{path.relative_to(repo)} entry status must be resolved")
-    if entry_properties.get("consumer", {}).get("const") != "newONform":
+    consumer_property = entry_properties.get("consumer", {})
+    if consumer_property.get("type") != "string" or consumer_property.get("const") != "newONform":
         errors.append(f"{path.relative_to(repo)} entry consumer must be newONform")
     for checksum_field in ("sha256", "fastq_sha256"):
-        if entry_properties.get(checksum_field, {}).get("pattern") != "^[0-9a-f]{64}$":
+        checksum_property = entry_properties.get(checksum_field, {})
+        if checksum_property.get("type") != "string" or checksum_property.get("pattern") != "^[0-9a-f]{64}$":
             errors.append(f"{path.relative_to(repo)} {checksum_field} must gate sha256 hex")
     for byte_field in ("bytes", "fastq_bytes"):
         byte_property = entry_properties.get(byte_field, {})
