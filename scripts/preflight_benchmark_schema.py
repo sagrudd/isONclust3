@@ -141,6 +141,17 @@ def _validate_root_properties(
         _validate_schema_property_order(
             path, repo, f"properties.{field}", field_property, expected_order, errors
         )
+    expected_types = {
+        "source": "object",
+        "platform_targets": "array",
+        "files": "array",
+        "command": "object",
+        "acceptance": "object",
+    }
+    for field, expected_type in expected_types.items():
+        _validate_schema_type(
+            path, repo, f"properties.{field}", properties.get(field), expected_type, errors
+        )
     nested_required_fields = {
         "source": ("description",),
         "command": ("container_image", "args"),
@@ -199,6 +210,7 @@ def _validate_checksum_definition(
     if not isinstance(definition, dict):
         errors.append(f"{path.relative_to(repo)} $defs.checksum must be an object")
         return
+    _validate_schema_type(path, repo, "$defs.checksum", definition, "object", errors)
     properties = definition.get("properties", {})
     _validate_additional_properties(
         path, repo, "$defs.checksum", definition, False, errors
@@ -223,6 +235,7 @@ def _validate_file_definition(
     if not isinstance(definition, dict):
         errors.append(f"{path.relative_to(repo)} $defs.file must be an object")
         return
+    _validate_schema_type(path, repo, "$defs.file", definition, "object", errors)
     _validate_required_fields(
         path, repo, "$defs.file", definition, ("path", "role", "checksum"), errors
     )
@@ -245,6 +258,7 @@ def _validate_profiling_plan_definition(
     if not isinstance(definition, dict):
         errors.append(f"{path.relative_to(repo)} $defs.profiling_plan must be an object")
         return
+    _validate_schema_type(path, repo, "$defs.profiling_plan", definition, "object", errors)
     properties = definition.get("properties", {})
     _validate_additional_properties(
         path, repo, "$defs.profiling_plan", definition, False, errors
@@ -280,6 +294,9 @@ def _validate_downstream_handoff_definition(
     if not isinstance(definition, dict):
         errors.append(f"{path.relative_to(repo)} $defs.downstream_handoff must be an object")
         return
+    _validate_schema_type(
+        path, repo, "$defs.downstream_handoff", definition, "object", errors
+    )
     properties = definition.get("properties", {})
     _validate_additional_properties(
         path, repo, "$defs.downstream_handoff", definition, False, errors
@@ -443,6 +460,20 @@ def _validate_additional_properties(
         errors.append(
             f"{path.relative_to(repo)} {field}.additionalProperties must be {expected}"
         )
+
+
+def _validate_schema_type(
+    path: Path,
+    repo: Path,
+    field: str,
+    schema_object: object,
+    expected_type: str,
+    errors: list[str],
+) -> None:
+    if not isinstance(schema_object, dict):
+        return
+    if schema_object.get("type") != expected_type:
+        errors.append(f"{path.relative_to(repo)} {field}.type must be {expected_type}")
 
 
 def _validate_schema_property_order(
