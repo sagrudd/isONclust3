@@ -565,6 +565,19 @@ def validate_optimization_evidence(repo: Path) -> list[str]:
                     f"OPTIMIZATION_EVIDENCE.md entry {sha} does not resolve "
                     "to a commit"
                 )
+            else:
+                ancestor = subprocess.run(
+                    ["git", "merge-base", "--is-ancestor", sha, "HEAD"],
+                    cwd=repo,
+                    check=False,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+                if ancestor.returncode != 0:
+                    errors.append(
+                        f"OPTIMIZATION_EVIDENCE.md entry {sha} is not reachable "
+                        "from HEAD"
+                    )
         for marker in REQUIRED_OPTIMIZATION_ENTRY_MARKERS:
             if marker not in entry_text:
                 errors.append(f"OPTIMIZATION_EVIDENCE.md entry {sha} missing {marker}")
