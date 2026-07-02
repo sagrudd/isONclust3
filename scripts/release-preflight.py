@@ -220,6 +220,16 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
     if not isinstance(platform_targets, list) or "linux/arm64" not in platform_targets:
         errors.append(f"{path.relative_to(repo)} platform_targets must include linux/arm64")
 
+    source = manifest.get("source")
+    if not isinstance(source, dict):
+        errors.append(f"{path.relative_to(repo)} source must be an object")
+        source = {}
+    description = source.get("description")
+    if not isinstance(description, str) or not description.strip():
+        errors.append(f"{path.relative_to(repo)} source.description must be populated")
+    if manifest.get("benchmark_tier") == "toy" and source.get("license") != "GPL-3.0-only":
+        errors.append(f"{path.relative_to(repo)} toy source.license must be GPL-3.0-only")
+
     acceptance = manifest.get("acceptance", {})
     if acceptance.get("requires_gb10_report") is not True:
         errors.append(f"{path.relative_to(repo)} must require a GB10 report")
@@ -261,18 +271,14 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
 
     manifest_id = manifest.get("manifest_id")
     if manifest_id in REQUIRED_BLOCKED_EXTERNAL_MANIFESTS:
-        source = manifest.get("source", {})
-        if not isinstance(source, dict):
-            errors.append(f"{path.relative_to(repo)} source must be an object")
-        else:
-            if source.get("availability") != "external_pending":
-                errors.append(
-                    f"{path.relative_to(repo)} source.availability must be external_pending"
-                )
-            if source.get("blocker_id") != "ISOCLUST-BLOCK-002":
-                errors.append(
-                    f"{path.relative_to(repo)} source.blocker_id must be ISOCLUST-BLOCK-002"
-                )
+        if source.get("availability") != "external_pending":
+            errors.append(
+                f"{path.relative_to(repo)} source.availability must be external_pending"
+            )
+        if source.get("blocker_id") != "ISOCLUST-BLOCK-002":
+            errors.append(
+                f"{path.relative_to(repo)} source.blocker_id must be ISOCLUST-BLOCK-002"
+            )
         if acceptance.get("status") != "blocked_pending_data":
             errors.append(
                 f"{path.relative_to(repo)} acceptance.status must be blocked_pending_data"

@@ -42,6 +42,8 @@ Every accepted Dockerized or GB10 report must include:
   benchmark tiers: `toy`, `medium`, or `phanerognostikon`.
 - Benchmark manifests must keep filename-derived IDs, remain unique, and stay
   inside the release-known manifest set.
+- Benchmark manifests must include populated source descriptions; committed toy
+  sources must record the `GPL-3.0-only` fixture license.
 - Toy benchmark manifests must include checksum-backed `input-fastq` and
   `expected-final-clusters` file roles pointing at the canonical toy
   `reads.fastq` and `expected/final_clusters.tsv` paths.
