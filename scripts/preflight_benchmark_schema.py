@@ -92,6 +92,7 @@ def validate_benchmark_schema(repo: Path) -> list[str]:
     _validate_downstream_handoff_definition(
         path, repo, definitions.get("downstream_handoff"), errors
     )
+    errors.extend(_validate_manifest_keys_against_schema(repo, schema))
     return errors
 
 
@@ -200,3 +201,116 @@ def _validate_downstream_handoff_definition(
     generated_input = properties.get("generated_input_id", {})
     if generated_input.get("enum") != list(BENCHMARK_DOWNSTREAM_IDS):
         errors.append(f"{path.relative_to(repo)} downstream generated IDs are incomplete")
+
+
+def _validate_manifest_keys_against_schema(repo: Path, schema: dict[str, object]) -> list[str]:
+    errors: list[str] = []
+    properties = schema.get("properties", {})
+    definitions = schema.get("$defs", {})
+    if not isinstance(properties, dict) or not isinstance(definitions, dict):
+        return errors
+
+    manifest_paths = sorted((repo / "fixtures" / "manifests").glob("*.json"))
+    allowed_root_keys = set(properties)
+    required_root_keys = set(BENCHMARK_REQUIRED_FIELDS)
+    for manifest_path in manifest_paths:
+        relative = manifest_path.relative_to(repo)
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except OSError as exc:
+            errors.append(f"{relative} is not readable: {exc}")
+            continue
+        except json.JSONDecodeError as exc:
+            errors.append(f"{relative} is invalid JSON: {exc}")
+            continue
+        if not isinstance(manifest, dict):
+            errors.append(f"{relative} root must be a JSON object")
+            continue
+
+        missing = required_root_keys - set(manifest)
+        if missing:
+            errors.append(f"{relative} missing schema-required keys: {', '.join(sorted(missing))}")
+        unexpected = set(manifest) - allowed_root_keys
+        if unexpected:
+            errors.append(f"{relative} has keys outside benchmark schema: {', '.join(sorted(unexpected))}")
+        _validate_nested_object_keys(relative, "source", manifest.get("source"), properties, errors)
+        _validate_nested_object_keys(relative, "command", manifest.get("command"), properties, errors)
+        _validate_nested_object_keys(
+            relative, "acceptance", manifest.get("acceptance"), properties, errors
+        )
+        if "profiling_plan" in manifest:
+            _validate_definition_object_keys(
+                relative,
+                "profiling_plan",
+                manifest.get("profiling_plan"),
+                definitions.get("profiling_plan"),
+                errors,
+            )
+        if "downstream_handoff" in manifest:
+            _validate_definition_object_keys(
+                relative,
+                "downstream_handoff",
+                manifest.get("downstream_handoff"),
+                definitions.get("downstream_handoff"),
+                errors,
+            )
+        file_definition = definitions.get("file")
+        files = manifest.get("files")
+        if isinstance(files, list):
+            for index, entry in enumerate(files):
+                _validate_definition_object_keys(
+                    relative, f"files[{index}]", entry, file_definition, errors
+                )
+    return errors
+
+
+def _validate_nested_object_keys(
+    manifest_path: Path,
+    field: str,
+    value: object,
+    properties: dict[str, object],
+    errors: list[str],
+) -> None:
+    schema_property = properties.get(field)
+    if not isinstance(schema_property, dict):
+        return
+    allowed = _schema_property_keys(schema_property)
+    required = set(schema_property.get("required", []))
+    _validate_key_set(manifest_path, field, value, allowed, required, errors)
+
+
+def _validate_definition_object_keys(
+    manifest_path: Path,
+    field: str,
+    value: object,
+    definition: object,
+    errors: list[str],
+) -> None:
+    if not isinstance(definition, dict):
+        return
+    allowed = _schema_property_keys(definition)
+    required = set(definition.get("required", []))
+    _validate_key_set(manifest_path, field, value, allowed, required, errors)
+
+
+def _schema_property_keys(schema_object: dict[str, object]) -> set[str]:
+    properties = schema_object.get("properties", {})
+    return set(properties) if isinstance(properties, dict) else set()
+
+
+def _validate_key_set(
+    manifest_path: Path,
+    field: str,
+    value: object,
+    allowed: set[str],
+    required: set[str],
+    errors: list[str],
+) -> None:
+    if not isinstance(value, dict):
+        return
+    missing = required - set(value)
+    if missing:
+        errors.append(f"{manifest_path} {field} missing schema-required keys: {', '.join(sorted(missing))}")
+    unexpected = set(value) - allowed
+    if unexpected:
+        errors.append(f"{manifest_path} {field} has keys outside benchmark schema: {', '.join(sorted(unexpected))}")

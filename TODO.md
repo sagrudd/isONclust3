@@ -156,6 +156,7 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Gate benchmark manifest schema path markers.
   - [x] Gate benchmark manifest schema contract markers.
   - [x] Gate benchmark manifest schema structural constraints.
+  - [x] Gate benchmark manifest keys against the benchmark schema.
   - [x] Gate benchmark manifest filename-to-ID identity and uniqueness.
   - [x] Gate benchmark manifest readability and object root.
   - [x] Gate toy benchmark manifest file-role coverage.

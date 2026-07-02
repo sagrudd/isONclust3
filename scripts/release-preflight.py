@@ -171,6 +171,7 @@ REQUIRED_TEXT = {
         "Gate benchmark manifest schema path markers.",
         "Gate benchmark manifest schema contract markers.",
         "Gate benchmark manifest schema structural constraints.",
+        "Gate benchmark manifest keys against the benchmark schema.",
         "Gate release-checklist downstream handoff artifact markers.",
         "Gate blocker waiver rules for upstream producer evidence.",
         "Gate Sphinx waiver-boundary release-readiness markers.",
