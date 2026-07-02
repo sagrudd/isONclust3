@@ -79,15 +79,11 @@ fn create_final_ds(
     cluster_map: &mut FxHashMap<i32, Vec<FastqRecordIsonclInit>>,
 ) {
     let fastq_file = File::open(fastq).unwrap();
-    let mut fastq_vec = vec![];
-    //parse the fastq file to store the data in fastq_vec
-    file_actions::parse_fastq(fastq_file, &mut fastq_vec);
-    //iterate over fastq_vec and add the reads to cluster_map
-    for read in fastq_vec {
+    file_actions::parse_fastq_records(fastq_file, |read| {
         if let Some(cluster_id) = header_cluster_map.get(read.header.as_str()) {
             cluster_map.entry(*cluster_id).or_default().push(read);
         }
-    }
+    });
 }
 
 fn write_fastq_files(

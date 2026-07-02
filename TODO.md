@@ -58,6 +58,8 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [ ] Reduce unnecessary FASTQ record cloning.
   - [x] Avoid cloning the full cluster and read-ID maps while writing
         `final_clusters.tsv`.
+  - [x] Stream parsed FASTQ records into the per-cluster output map without an
+        intermediate all-record vector.
 - [ ] Reduce repeated minimizer/syncmer allocation.
 - [ ] Replace ad hoc tuple merge bookkeeping with named structs.
 - [ ] Stream cluster FASTQ output where possible.
