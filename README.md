@@ -73,6 +73,37 @@ ordering fixture gate is complete.
 See [`OUTPUT_CONTRACTS.md`](OUTPUT_CONTRACTS.md) for the maintained
 `final_clusters.tsv` contract consumed by `newONform`.
 
+# End-To-End newONform Workflow
+
+`isONclust3` is the cluster-table producer in the maintained transcriptome
+consolidation workflow. The handoff to `newONform` uses the original FASTQ and
+the emitted `final_clusters.tsv` without an adapter step:
+
+```sh
+isONclust3 \
+  --fastq reads.fastq \
+  --mode ont \
+  --outfolder isonclust3_out \
+  --seeding minimizer \
+  --no-fastq
+
+newONform \
+  --fastq reads.fastq \
+  --final-clusters isonclust3_out/clustering/final_clusters.tsv \
+  --outfolder newonform_out \
+  --iso_abundance 5
+```
+
+For PacBio input, switch the first command to `--mode pacbio`; the handoff path
+and `newONform` command are unchanged. Tiny ONT and PacBio fixtures in
+`fixtures/tiny/*` prove this interface in two directions: this repository
+regenerates the committed `final_clusters.tsv` outputs, and `newONform` consumes
+those committed outputs directly through its `external/isONclust3` submodule.
+
+Release evidence for medium and Phanerognostikon-scale workloads must use the
+same handoff and must publish the generated `final_clusters.tsv` checksums for
+`newONform` before those runs can be accepted.
+
 # Release And Benchmark Evidence
 
 This maintained fork gates release-candidate evidence through:

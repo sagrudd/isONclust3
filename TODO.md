@@ -71,7 +71,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 ## 7. newONform Product Integration
 
 - [x] Track `sagrudd/isONclust3` as a `newONform` submodule.
-- [ ] Document the end-to-end `isONclust3 -> newONform` transcriptome
+- [x] Document the end-to-end `isONclust3 -> newONform` transcriptome
       consolidation workflow.
 - [x] Add a shared fixture path that lets `newONform` validate `isONclust3`
       output directly.

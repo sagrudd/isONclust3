@@ -140,4 +140,5 @@ Acceptance criteria:
 
 Status: active. `newONform` tracks this fork as `external/isONclust3` and now
 directly consumes the committed tiny ONT and PacBio output-contract fixtures.
-Accepted upstream producer evidence for larger workloads remains outstanding.
+The README documents the end-to-end handoff command sequence. Accepted upstream
+producer evidence for larger workloads remains outstanding.
