@@ -39,8 +39,8 @@ shape, no-header behavior, read-accession semantics, downstream consumer
 expectations, and the current row-ordering limitation. Tiny ONT/PacBio
 checksum fixtures now regenerate and exact-compare expected
 `final_clusters.tsv` outputs through `scripts/check-output-contract-fixtures.sh`.
-`newONform` now has a downstream consumer fixture that uses committed
-`isONclust3` tiny ONT output without manual transformation.
+`newONform` now has downstream consumer fixtures that use committed
+`isONclust3` tiny ONT and PacBio output without manual transformation.
 
 ## Milestone 2: Code Hygiene And Modularity
 
@@ -139,5 +139,5 @@ Acceptance criteria:
   evidence gates.
 
 Status: active. `newONform` tracks this fork as `external/isONclust3` and now
-directly consumes the committed tiny ONT output-contract fixture. Accepted
-upstream producer evidence for larger workloads remains outstanding.
+directly consumes the committed tiny ONT and PacBio output-contract fixtures.
+Accepted upstream producer evidence for larger workloads remains outstanding.

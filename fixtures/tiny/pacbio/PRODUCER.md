@@ -18,4 +18,6 @@ fixtures/tiny/pacbio/expected/final_clusters.tsv
 ```
 
 The SHA-256 checksums in `checksums.sha256` cover the input FASTQ and expected
-`final_clusters.tsv`.
+`final_clusters.tsv`. The FASTQ fixture is intentionally strict-valid: every
+sequence and quality string has identical length so downstream consumers can
+parse the original datatype without repair.

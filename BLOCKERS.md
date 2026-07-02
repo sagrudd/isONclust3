@@ -15,5 +15,5 @@ upstream evidence.
   pass for the current crate surface.
 - Tiny ONT and PacBio output-contract fixtures regenerate deterministic
   `final_clusters.tsv` outputs and verify expected checksums.
-- `ISOCLUST-BLOCK-004`: `newONform` directly consumes the committed tiny ONT `isONclust3`
-  `final_clusters.tsv` fixture without transformation.
+- `ISOCLUST-BLOCK-004`: `newONform` directly consumes committed tiny ONT and
+  PacBio `isONclust3` `final_clusters.tsv` fixtures without transformation.
