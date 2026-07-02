@@ -12,6 +12,7 @@ import sys
 from pathlib import Path
 
 from preflight_artifacts import validate_tracked_artifacts
+from preflight_output_contracts import validate_output_contract_register
 
 try:
     import tomllib
@@ -38,6 +39,8 @@ REQUIRED_FILES = [
     "scripts/run-local-profiling.sh",
     "scripts/run-gb10-benchmark.sh",
     "scripts/preflight_artifacts.py",
+    "scripts/preflight_output_contracts.py",
+    "fixtures/output-contracts/final-clusters-register.json",
     "docs/requirements.txt",
     "docs/conf.py",
     "docs/index.rst",
@@ -100,7 +103,10 @@ REQUIRED_TEXT = {
         "ISOCLUST-BLOCK-001",
         "ISOCLUST-BLOCK-003",
     ],
-    "OUTPUT_CONTRACTS.md": ["<outfolder>/clustering/final_clusters.tsv"],
+    "OUTPUT_CONTRACTS.md": [
+        "<outfolder>/clustering/final_clusters.tsv",
+        "fixtures/output-contracts/final-clusters-register.json",
+    ],
     "README.md": [
         "Release And Benchmark Evidence",
         "scripts/release-preflight.py --expected-version 0.3.0",
@@ -167,6 +173,7 @@ REQUIRED_TEXT = {
         "Gate expanded tracked-artifact hygiene markers.",
         "Gate .gitignore generated-artifact markers.",
         "Split tracked-artifact hygiene into a focused preflight module.",
+        "Gate a machine-readable tiny `final_clusters.tsv` output-contract",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",
@@ -868,6 +875,7 @@ def main() -> int:
     errors.extend(validate_benchmark_acceptance(repo))
     errors.extend(validate_package_version(repo, args.expected_version))
     errors.extend(validate_file_sizes(repo, args.max_lines))
+    errors.extend(validate_output_contract_register(repo))
     errors.extend(validate_manifests(repo))
     errors.extend(validate_ci(repo))
     errors.extend(validate_optimization_evidence(repo))
@@ -885,7 +893,8 @@ def main() -> int:
         f"{len(REQUIRED_FILES)} required file(s), "
         f"{manifests} benchmark manifest(s), "
         "package version passed, file-size limits passed, "
-        "manifest checksums passed, CI markers passed, artifact hygiene passed"
+        "output contract register passed, manifest checksums passed, "
+        "CI markers passed, artifact hygiene passed"
     )
     return 0
 

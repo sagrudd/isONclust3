@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "manifest_kind": "isonclust3-output-contract-register",
+  "manifest_id": "isonclust3-final-clusters-contract-v1",
+  "project": "isONclust3",
+  "contract": "final_clusters.tsv",
+  "entries": [
+    {
+      "entry_id": "isonclust3-tiny-ont-final-clusters",
+      "mode": "ont",
+      "benchmark_tier": "toy",
+      "run_path": "fixtures/tiny/ont/expected/final_clusters.tsv",
+      "fastq_path": "fixtures/tiny/ont/reads.fastq",
+      "sha256": "e28ef900515871b0da07f0f10a2bccc7d35323b087ffd4633878bb372ada2538",
+      "bytes": 52,
+      "status": "resolved",
+      "consumer": "newONform"
+    },
+    {
+      "entry_id": "isonclust3-gff-tiny-ont-final-clusters",
+      "mode": "ont",
+      "benchmark_tier": "toy",
+      "run_path": "fixtures/tiny/ont/expected/gff_final_clusters.tsv",
+      "fastq_path": "fixtures/tiny/ont/reads.fastq",
+      "sha256": "e28ef900515871b0da07f0f10a2bccc7d35323b087ffd4633878bb372ada2538",
+      "bytes": 52,
+      "status": "resolved",
+      "consumer": "newONform"
+    },
+    {
+      "entry_id": "isonclust3-tiny-pacbio-final-clusters",
+      "mode": "pacbio",
+      "benchmark_tier": "toy",
+      "run_path": "fixtures/tiny/pacbio/expected/final_clusters.tsv",
+      "fastq_path": "fixtures/tiny/pacbio/reads.fastq",
+      "sha256": "8ff2dce95bd4cec748cb8ef1bab58d5f027bbaad2e6477a2bd8deb744393f48f",
+      "bytes": 64,
+      "status": "resolved",
+      "consumer": "newONform"
+    },
+    {
+      "entry_id": "isonclust3-gff-tiny-pacbio-final-clusters",
+      "mode": "pacbio",
+      "benchmark_tier": "toy",
+      "run_path": "fixtures/tiny/pacbio/expected/gff_final_clusters.tsv",
+      "fastq_path": "fixtures/tiny/pacbio/reads.fastq",
+      "sha256": "3b8112e34b5366a9caf722281b80ee08d5a0a9530c75190a661f25eb3a3445df",
+      "bytes": 64,
+      "status": "resolved",
+      "consumer": "newONform"
+    }
+  ]
+}

@@ -47,6 +47,9 @@ Compatibility notes:
 - Row ordering is exact-regression checked for the committed tiny ONT and
   PacBio fixtures. GB10 release evidence must still record generated output
   checksums for larger workloads.
+- Resolved tiny fixture output checksums are recorded in
+  `fixtures/output-contracts/final-clusters-register.json` for downstream
+  `newONform` producer evidence.
 - Regenerate and verify committed tiny fixtures with:
 
   ```sh

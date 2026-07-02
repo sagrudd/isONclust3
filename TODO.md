@@ -38,6 +38,8 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate expanded tracked-artifact hygiene markers.
 - [x] Gate .gitignore generated-artifact markers.
 - [x] Split tracked-artifact hygiene into a focused preflight module.
+- [x] Gate a machine-readable tiny `final_clusters.tsv` output-contract
+      register.
 
 ## 2. Output Contract Harmonization
 
