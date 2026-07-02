@@ -185,6 +185,7 @@ REQUIRED_TEXT = {
         "Gate output-contract schema exact entry count.",
         "Gate output-contract schema scalar entry constraints.",
         "Gate output-contract schema property types.",
+        "Gate output-contract schema required field ordering.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",

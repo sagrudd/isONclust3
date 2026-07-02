@@ -42,7 +42,7 @@ OUTPUT_CONTRACT_IDENTITY = {
     "project": "isONclust3",
     "contract": "final_clusters.tsv",
 }
-OUTPUT_CONTRACT_SCHEMA_REQUIRED_FIELDS = {
+OUTPUT_CONTRACT_SCHEMA_REQUIRED_FIELDS = (
     "$schema",
     "schema_version",
     "manifest_kind",
@@ -50,8 +50,8 @@ OUTPUT_CONTRACT_SCHEMA_REQUIRED_FIELDS = {
     "project",
     "contract",
     "entries",
-}
-OUTPUT_CONTRACT_SCHEMA_ENTRY_FIELDS = {
+)
+OUTPUT_CONTRACT_SCHEMA_ENTRY_FIELDS = (
     "entry_id",
     "mode",
     "benchmark_tier",
@@ -63,7 +63,7 @@ OUTPUT_CONTRACT_SCHEMA_ENTRY_FIELDS = {
     "bytes",
     "status",
     "consumer",
-}
+)
 
 
 def sha256(path: Path) -> str:
@@ -212,7 +212,7 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
             errors.append(f"{path.relative_to(repo)} {key} must be {value}")
 
     required = schema.get("required")
-    if not isinstance(required, list) or set(required) != OUTPUT_CONTRACT_SCHEMA_REQUIRED_FIELDS:
+    if required != list(OUTPUT_CONTRACT_SCHEMA_REQUIRED_FIELDS):
         errors.append(f"{path.relative_to(repo)} required fields are incomplete")
 
     properties = schema.get("properties", {})
@@ -242,7 +242,7 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
     if entry.get("additionalProperties") is not False:
         errors.append(f"{path.relative_to(repo)} entry additionalProperties must be false")
     entry_required = entry.get("required")
-    if not isinstance(entry_required, list) or set(entry_required) != OUTPUT_CONTRACT_SCHEMA_ENTRY_FIELDS:
+    if entry_required != list(OUTPUT_CONTRACT_SCHEMA_ENTRY_FIELDS):
         errors.append(f"{path.relative_to(repo)} entry required fields are incomplete")
     entry_properties = entry.get("properties", {})
     if not isinstance(entry_properties, dict):
