@@ -208,6 +208,8 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
         return [f"{path.relative_to(repo)} is not readable: {exc}"]
     except json.JSONDecodeError as exc:
         return [f"{path.relative_to(repo)} is invalid JSON: {exc}"]
+    if not isinstance(schema, dict):
+        return [f"{path.relative_to(repo)} root must be a JSON object"]
 
     expected_root = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",

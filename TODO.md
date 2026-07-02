@@ -57,6 +57,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate output-contract schema unique entry rows.
 - [x] Gate output-contract schema definition keys.
 - [x] Gate output-contract schema root property types.
+- [x] Gate output-contract schema readability and object root.
 - [x] Gate output-contract register root key ordering.
 - [x] Gate output-contract register entry key ordering.
 - [x] Gate output-contract register readability and object root.
