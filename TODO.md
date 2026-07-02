@@ -68,6 +68,8 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Replace ad hoc tuple merge bookkeeping with named structs.
 - [x] Stream cluster FASTQ output where possible.
 - [ ] Add benchmark evidence before and after every algorithmic optimization.
+  - [x] Add a preflight-validated optimization evidence ledger for local
+        before/after profiling notes.
 
 ## 6. Dockerized GB10 Evidence
 

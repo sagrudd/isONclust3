@@ -23,6 +23,7 @@ REQUIRED_FILES = [
     "BLOCKERS.md",
     "Dockerfile",
     "MILESTONES.md",
+    "OPTIMIZATION_EVIDENCE.md",
     "OUTPUT_CONTRACTS.md",
     "PERFORMANCE_DEEP_DIVE.md",
     "README.md",
@@ -52,6 +53,12 @@ REQUIRED_TEXT = {
         "ISOCLUST-BLOCK-004",
     ],
     "MILESTONES.md": ["Dockerized GB10 Benchmarking"],
+    "OPTIMIZATION_EVIDENCE.md": [
+        "Raw local reports must not be committed",
+        "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff",
+        "ISOCLUST-BLOCK-001",
+        "ISOCLUST-BLOCK-003",
+    ],
     "OUTPUT_CONTRACTS.md": ["<outfolder>/clustering/final_clusters.tsv"],
     "PERFORMANCE_DEEP_DIVE.md": [
         "local-profiling",

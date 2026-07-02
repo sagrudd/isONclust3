@@ -10,6 +10,8 @@ Use this checklist before a release-candidate tag or before updating
 - [ ] `cargo clippy --all-targets -- -D warnings`
 - [ ] `scripts/check-output-contract-fixtures.sh`
 - [ ] `scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff`
+- [ ] Confirm `OPTIMIZATION_EVIDENCE.md` cites before/after local profiling
+      for optimization commits without committing raw reports.
 - [ ] `scripts/release-preflight.py --expected-version 0.3.0`
 - [ ] `scripts/check-docker-toy-benchmarks.sh`
 - [ ] `git diff --check`

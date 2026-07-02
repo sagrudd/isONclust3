@@ -16,7 +16,8 @@ The harness builds the release binary, runs the tiny ONT and PacBio fixtures,
 records wall time, peak resident set size when the host exposes it, input and
 `final_clusters.tsv` checksums, and exact contract-match status against the
 committed expected outputs. Reports are written under `target/` by default and
-must not be committed.
+must not be committed. Summarize accepted local before/after optimization
+evidence in `OPTIMIZATION_EVIDENCE.md` instead of committing raw reports.
 
 Use `--include-fastq-output` when profiling per-cluster FASTQ materialization,
 `--include-post-cluster` when profiling merge refinement behavior, and
@@ -80,8 +81,8 @@ default `newONform` handoff, which uses `--no-fastq`.
 ## Optimization Rules
 
 - Preserve `clustering/final_clusters.tsv` compatibility for every change.
-- Commit before/after local profiling reports outside Git, and cite their paths
-  in review notes or release evidence.
+- Keep before/after local profiling reports outside Git, and cite their paths
+  in `OPTIMIZATION_EVIDENCE.md`, review notes, or release evidence.
 - Run `scripts/check-output-contract-fixtures.sh` after every hot-path change.
 - Run Docker toy smoke before accepting any algorithmic optimization as
   candidate release work.
