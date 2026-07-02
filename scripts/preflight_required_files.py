@@ -27,6 +27,7 @@ REQUIRED_FILES = [
     "scripts/preflight_ci.py",
     "scripts/preflight_gb10_runner.py",
     "scripts/preflight_governance.py",
+    "scripts/preflight_manifests.py",
     "scripts/preflight_output_contracts.py",
     "scripts/preflight_optimization_evidence.py",
     "scripts/preflight_release_checklist.py",
