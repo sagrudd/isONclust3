@@ -162,6 +162,7 @@ REQUIRED_TEXT = {
         "Record accepted GB10 benchmark reports",
         "Expose generated `final_clusters.tsv` checksums",
         "Keep `newONform` generated-input registers aligned",
+        "Gate benchmark manifest readability and object root.",
         "Gate release-checklist downstream handoff artifact markers.",
         "Gate blocker waiver rules for upstream producer evidence.",
         "Gate Sphinx waiver-boundary release-readiness markers.",
@@ -459,8 +460,12 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
     errors: list[str] = []
     try:
         manifest = json.loads(path.read_text(encoding="utf-8"))
+    except OSError as exc:
+        return [f"{path.relative_to(repo)} is not readable: {exc}"]
     except json.JSONDecodeError as exc:
         return [f"{path.relative_to(repo)} is invalid JSON: {exc}"]
+    if not isinstance(manifest, dict):
+        return [f"{path.relative_to(repo)} root must be a JSON object"]
 
     required = [
         "schema_version",

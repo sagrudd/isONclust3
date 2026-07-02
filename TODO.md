@@ -154,6 +154,7 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Gate benchmark manifest kind and seeding metadata.
   - [x] Gate benchmark manifest schema version and tier vocabulary.
   - [x] Gate benchmark manifest filename-to-ID identity and uniqueness.
+  - [x] Gate benchmark manifest readability and object root.
   - [x] Gate toy benchmark manifest file-role coverage.
   - [x] Gate toy benchmark manifest file-role paths.
   - [x] Gate benchmark manifest file-entry structure.
