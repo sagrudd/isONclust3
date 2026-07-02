@@ -121,6 +121,14 @@ Run the local release preflight with:
 scripts/release-preflight.py --expected-version 0.3.0
 ```
 
+Build the Sphinx governance and release-readiness documentation with warnings
+as errors:
+
+```sh
+python -m pip install -r docs/requirements.txt
+sphinx-build -W -b html docs target/sphinx-html
+```
+
 Build the benchmark image from a clean checkout with:
 
 ```sh

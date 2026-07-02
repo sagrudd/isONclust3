@@ -72,6 +72,14 @@ REQUIRED_TEXT = {
         "ISOCLUST-BLOCK-003",
     ],
     "OUTPUT_CONTRACTS.md": ["<outfolder>/clustering/final_clusters.tsv"],
+    "README.md": [
+        "Release And Benchmark Evidence",
+        "scripts/release-preflight.py --expected-version 0.3.0",
+        "python -m pip install -r docs/requirements.txt",
+        "sphinx-build -W -b html docs target/sphinx-html",
+        "scripts/check-docker-toy-benchmarks.sh",
+        "scripts/run-local-profiling.sh --output-dir target/local-profile",
+    ],
     "PERFORMANCE_DEEP_DIVE.md": [
         "local-profiling",
         "Ranked Facets",
