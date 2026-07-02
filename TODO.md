@@ -10,6 +10,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Update package metadata for the maintained fork while preserving upstream
       attribution.
 - [x] Add a release checklist and blocker register.
+- [x] Add release notes for the first maintained fork release-candidate cycle.
 - [x] Gate release-checklist sections and unchecked operator-template status in
       release preflight.
 - [x] Gate active and resolved blocker-register rows in release preflight.
@@ -18,6 +19,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate GB10 milestone active status and unresolved evidence blockers.
 - [x] Gate release-checklist visibility for active benchmark blocker IDs.
 - [x] Gate TODO visibility for unresolved evidence tasks.
+- [x] Gate release-note scope, evidence, known-limit, and no-tag markers.
 
 ## 2. Output Contract Harmonization
 
