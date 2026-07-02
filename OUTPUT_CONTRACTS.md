@@ -39,14 +39,20 @@ Semantics:
 - Read accessions must match the corresponding FASTQ identifiers consumed by
   downstream tools.
 - Consumers, including `newONform`, must group rows by cluster ID and must not
-  infer transcript ordering from row order.
+  infer biological ordering from row order.
 
 Compatibility notes:
 
 - The two-column tab-separated shape is stable for `newONform`.
-- Row ordering is not yet a release guarantee. Deterministic ordering remains a
-  tracked fixture requirement before GB10 release evidence can cite generated
-  cluster tables.
+- Row ordering is exact-regression checked for the committed tiny ONT and
+  PacBio fixtures. GB10 release evidence must still record generated output
+  checksums for larger workloads.
+- Regenerate and verify committed tiny fixtures with:
+
+  ```sh
+  scripts/check-output-contract-fixtures.sh
+  ```
+
 - Any change to path, column count, delimiter, header behavior, cluster ID
   encoding, or read accession encoding is an output-contract change and must
   update `newONform` fixtures and documentation in the same release train.

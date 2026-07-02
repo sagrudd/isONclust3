@@ -36,7 +36,10 @@ Status: active. `OUTPUT_CONTRACTS.md` now defines the
 `<outfolder>/clustering/final_clusters.tsv` path, two-column tab-separated
 shape, no-header behavior, read-accession semantics, downstream consumer
 expectations, and the current row-ordering limitation. Tiny ONT/PacBio
-checksum fixtures and deterministic ordering checks remain outstanding.
+checksum fixtures now regenerate and exact-compare expected
+`final_clusters.tsv` outputs through `scripts/check-output-contract-fixtures.sh`.
+The remaining contract gap is a downstream `newONform` consumer fixture that
+uses committed `isONclust3` output without manual transformation.
 
 ## Milestone 2: Code Hygiene And Modularity
 

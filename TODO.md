@@ -16,9 +16,9 @@ Tasks are ordered to improve the fork without breaking the upstream
 ## 2. Output Contract Harmonization
 
 - [x] Document `final_clusters.tsv` as the stable `newONform` input contract.
-- [ ] Add tiny ONT fixture output with checksum-backed `final_clusters.tsv`.
-- [ ] Add tiny PacBio fixture output with checksum-backed `final_clusters.tsv`.
-- [ ] Add deterministic ordering checks for cluster table output.
+- [x] Add tiny ONT fixture output with checksum-backed `final_clusters.tsv`.
+- [x] Add tiny PacBio fixture output with checksum-backed `final_clusters.tsv`.
+- [x] Add deterministic ordering checks for cluster table output.
 - [ ] Add a consumer fixture in `newONform` that reads committed `isONclust3`
       output without manual transformation.
 
