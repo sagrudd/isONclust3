@@ -14,6 +14,8 @@ Use this checklist before a release-candidate tag or before updating
 - [ ] Confirm `OPTIMIZATION_EVIDENCE.md` cites before/after local profiling
       for optimization commits without committing raw reports.
 - [ ] `scripts/release-preflight.py --expected-version 0.3.0`
+- [ ] Confirm release preflight covers the GB10 runner checksum-handoff report
+      fields.
 - [ ] `scripts/check-docker-toy-benchmarks.sh`
 - [ ] `git diff --check`
 
