@@ -16,6 +16,8 @@ Use this checklist before a release-candidate tag or before updating
 - [ ] `scripts/release-preflight.py --expected-version 0.3.0`
 - [ ] Confirm release preflight covers the GB10 runner checksum-handoff report
       fields.
+- [ ] Confirm release preflight covers the local profiling report contract as
+      non-release evidence.
 - [ ] `scripts/check-docker-toy-benchmarks.sh`
 - [ ] `git diff --check`
 

@@ -125,6 +125,8 @@ REQUIRED_TEXT = {
         "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff",
         "sphinx-build -W -b html docs target/sphinx-html",
         "GB10 runner checksum-handoff report",
+        "local profiling report contract as",
+        "non-release evidence",
         "explicitly waived without claiming accepted producer",
         "Update `newONform` submodule, generated-input registers, release notes,",
         "blockers, and Sphinx documentation in the same release train.",
