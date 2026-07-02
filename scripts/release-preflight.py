@@ -93,6 +93,10 @@ REQUIRED_MANIFEST_STEMS = {
     "tiny-ont",
     "tiny-pacbio",
 }
+REQUIRED_PLATFORM_TARGETS = {
+    "linux/amd64",
+    "linux/arm64",
+}
 REQUIRED_FILE_ROLES = {
     "expected-final-clusters",
     "input-fastq",
@@ -219,6 +223,16 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
     platform_targets = manifest.get("platform_targets")
     if not isinstance(platform_targets, list) or "linux/arm64" not in platform_targets:
         errors.append(f"{path.relative_to(repo)} platform_targets must include linux/arm64")
+    elif not all(isinstance(target, str) for target in platform_targets):
+        errors.append(f"{path.relative_to(repo)} platform_targets must be a string list")
+    else:
+        unexpected_targets = set(platform_targets) - REQUIRED_PLATFORM_TARGETS
+        if unexpected_targets:
+            expected_targets = ", ".join(sorted(REQUIRED_PLATFORM_TARGETS))
+            errors.append(
+                f"{path.relative_to(repo)} platform_targets must be one of "
+                f"{expected_targets}"
+            )
 
     source = manifest.get("source")
     if not isinstance(source, dict):

@@ -35,6 +35,8 @@ Every accepted Dockerized or GB10 report must include:
 - Toy ONT and toy PacBio fixtures must pass checksum-backed regeneration.
 - Every benchmark manifest must include `linux/arm64` in `platform_targets` so
   Dockerized GB10 execution remains an explicit release requirement.
+- Benchmark `platform_targets` must use the supported Linux target vocabulary:
+  `linux/arm64` for GB10 and `linux/amd64` for local toy smoke where needed.
 - Benchmark manifests must identify themselves as
   `isonclust3-benchmark-fixture` and record the seeding mode used by the
   command.
