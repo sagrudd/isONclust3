@@ -202,6 +202,21 @@ def _validate_root_properties(
             errors.append(f"{path.relative_to(repo)} command image must be isonclust3:gb10")
         if args.get("type") != "array" or args.get("minItems") != 9:
             errors.append(f"{path.relative_to(repo)} command args must be a populated array")
+        _validate_string_field(
+            path, repo, "properties.command.args.items", args.get("items"), errors
+        )
+    source = properties.get("source", {})
+    if isinstance(source, dict):
+        source_properties = source.get("properties", {})
+        if isinstance(source_properties, dict):
+            for field in ("description", "license"):
+                _validate_string_field(
+                    path,
+                    repo,
+                    f"properties.source.{field}",
+                    source_properties.get(field),
+                    errors,
+                )
 
 
 def _validate_checksum_definition(
@@ -246,6 +261,7 @@ def _validate_file_definition(
     )
     role = properties.get("role", {})
     checksum = properties.get("checksum", {})
+    _validate_string_field(path, repo, "$defs.file.path", properties.get("path"), errors)
     if role.get("enum") != list(BENCHMARK_FILE_ROLES):
         errors.append(f"{path.relative_to(repo)} file role enum is incomplete")
     if checksum.get("$ref") != "#/$defs/checksum":
@@ -474,6 +490,20 @@ def _validate_schema_type(
         return
     if schema_object.get("type") != expected_type:
         errors.append(f"{path.relative_to(repo)} {field}.type must be {expected_type}")
+
+
+def _validate_string_field(
+    path: Path,
+    repo: Path,
+    field: str,
+    schema_object: object,
+    errors: list[str],
+) -> None:
+    if not isinstance(schema_object, dict):
+        errors.append(f"{path.relative_to(repo)} {field} must be a string schema")
+        return
+    if schema_object.get("type") != "string" or schema_object.get("minLength") != 1:
+        errors.append(f"{path.relative_to(repo)} {field} must require non-empty strings")
 
 
 def _validate_schema_property_order(
