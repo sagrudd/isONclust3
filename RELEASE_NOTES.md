@@ -19,7 +19,8 @@ downstream generated-input checksums are complete.
   preserving performance work.
 - Release preflight validation for governance files, blocker visibility,
   benchmark acceptance markers, TODO evidence markers, file-size limits,
-  manifest checksums, CI markers, and tracked-artifact hygiene.
+  manifest checksums, Sphinx documentation build markers, CI markers, and
+  tracked-artifact hygiene.
 
 ## Evidence Required Before RC Acceptance
 

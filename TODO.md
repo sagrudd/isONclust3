@@ -21,6 +21,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate TODO visibility for unresolved evidence tasks.
 - [x] Gate release-note scope, evidence, known-limit, and no-tag markers.
 - [x] Add Sphinx governance and release-readiness source pages.
+- [x] Add Sphinx warning-as-error build to CI and release checklist.
 
 ## 2. Output Contract Harmonization
 

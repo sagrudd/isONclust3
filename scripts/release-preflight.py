@@ -34,6 +34,7 @@ REQUIRED_FILES = [
     "scripts/check-docker-toy-benchmarks.sh",
     "scripts/run-local-profiling.sh",
     "scripts/run-gb10-benchmark.sh",
+    "docs/requirements.txt",
     "docs/conf.py",
     "docs/index.rst",
     "docs/project-governance.rst",
@@ -80,6 +81,7 @@ REQUIRED_TEXT = {
     "RELEASE_CHECKLIST.md": [
         "scripts/release-preflight.py --expected-version",
         "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff",
+        "sphinx-build -W -b html docs target/sphinx-html",
         "newONform",
     ],
     "RELEASE_NOTES.md": [
@@ -87,6 +89,7 @@ REQUIRED_TEXT = {
         "## Intended Scope",
         "Preserved `final_clusters.tsv` handoff contract",
         "Dockerized benchmark runner",
+        "Sphinx documentation build markers",
         "## Evidence Required Before RC Acceptance",
         "Accepted GB10 benchmark reports",
         "generated `final_clusters.tsv` checksums",
@@ -674,11 +677,14 @@ def validate_ci(repo: Path) -> list[str]:
         return ["missing .github/workflows/ci.yml"]
     text = workflow.read_text(encoding="utf-8")
     markers = [
+        "actions/setup-python@v5",
+        "python -m pip install -r docs/requirements.txt",
         "cargo fmt --check",
         "cargo test",
         "cargo clippy --all-targets -- -D warnings",
         "scripts/check-output-contract-fixtures.sh",
         "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff",
+        "sphinx-build -W -b html docs target/sphinx-html",
         "scripts/release-preflight.py",
     ]
     return [f"CI workflow missing marker: {marker}" for marker in markers if marker not in text]
