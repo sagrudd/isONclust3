@@ -7,7 +7,6 @@ import argparse
 import hashlib
 import json
 import re
-import subprocess
 import sys
 from pathlib import Path
 
@@ -15,6 +14,7 @@ from preflight_artifacts import validate_tracked_artifacts
 from preflight_benchmark_schema import validate_benchmark_schema
 from preflight_gb10_runner import validate_gb10_runner
 from preflight_output_contracts import validate_output_contract_register
+from preflight_optimization_evidence import validate_optimization_evidence
 from preflight_release_checklist import validate_release_checklist
 
 try:
@@ -45,6 +45,7 @@ REQUIRED_FILES = [
     "scripts/preflight_benchmark_schema.py",
     "scripts/preflight_gb10_runner.py",
     "scripts/preflight_output_contracts.py",
+    "scripts/preflight_optimization_evidence.py",
     "scripts/preflight_release_checklist.py",
     "fixtures/output-contracts/final-clusters-register.json",
     "schemas/benchmark-fixture.schema.json",
@@ -320,26 +321,6 @@ REQUIRED_EXTERNAL_PROFILING_FACETS = {
     "quality-filtering",
     "seed-generation",
 }
-REQUIRED_OPTIMIZATION_ENTRY_MARKERS = (
-    "- Date:",
-    "- Optimized facet:",
-    "- Compatibility risk:",
-    "- Before command:",
-    "- Before report path:",
-    "- After command:",
-    "- After report path:",
-    "- Contract checks run:",
-    "- GB10 or larger-workload status:",
-)
-REQUIRED_OPTIMIZATION_CONTRACT_MARKERS = (
-    "cargo fmt --check",
-    "cargo test --quiet",
-    "cargo clippy --all-targets -- -D warnings",
-    "scripts/check-output-contract-fixtures.sh",
-    "scripts/release-preflight.py --expected-version 0.3.0",
-)
-REQUIRED_OPTIMIZATION_COMMAND_MARKER = "scripts/run-local-profiling.sh"
-REQUIRED_OPTIMIZATION_REPORT_PATH_MARKER = "`target/local-profile/`"
 REQUIRED_BENCHMARK_TIERS = {
     "medium",
     "phanerognostikon",
@@ -841,75 +822,6 @@ def validate_ci(repo: Path) -> list[str]:
         "scripts/release-preflight.py",
     ]
     return [f"CI workflow missing marker: {marker}" for marker in markers if marker not in text]
-
-
-def validate_optimization_evidence(repo: Path) -> list[str]:
-    path = repo / "OPTIMIZATION_EVIDENCE.md"
-    text = path.read_text(encoding="utf-8")
-    entry_matches = list(re.finditer(r"^### (?P<title>.+)$", text, flags=re.MULTILINE))
-    if not entry_matches:
-        return ["OPTIMIZATION_EVIDENCE.md must include at least one evidence entry"]
-
-    errors: list[str] = []
-    for index, match in enumerate(entry_matches):
-        title = match.group("title")
-        start = match.end()
-        end = entry_matches[index + 1].start() if index + 1 < len(entry_matches) else len(text)
-        entry_text = text[start:end]
-        sha = title.split(" ", 1)[0]
-        if not re.fullmatch(r"[0-9a-f]{40}", sha):
-            errors.append(
-                f"OPTIMIZATION_EVIDENCE.md entry {title!r} must start with a "
-                "40-character lowercase Git SHA"
-            )
-        else:
-            result = subprocess.run(
-                ["git", "cat-file", "-e", f"{sha}^{{commit}}"],
-                cwd=repo,
-                check=False,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-            if result.returncode != 0:
-                errors.append(
-                    f"OPTIMIZATION_EVIDENCE.md entry {sha} does not resolve "
-                    "to a commit"
-                )
-            else:
-                ancestor = subprocess.run(
-                    ["git", "merge-base", "--is-ancestor", sha, "HEAD"],
-                    cwd=repo,
-                    check=False,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                )
-                if ancestor.returncode != 0:
-                    errors.append(
-                        f"OPTIMIZATION_EVIDENCE.md entry {sha} is not reachable "
-                        "from HEAD"
-                    )
-        for marker in REQUIRED_OPTIMIZATION_ENTRY_MARKERS:
-            if marker not in entry_text:
-                errors.append(f"OPTIMIZATION_EVIDENCE.md entry {sha} missing {marker}")
-        for marker in REQUIRED_OPTIMIZATION_CONTRACT_MARKERS:
-            if marker not in entry_text:
-                errors.append(
-                    f"OPTIMIZATION_EVIDENCE.md entry {sha} missing contract "
-                    f"check marker: {marker}"
-                )
-        command_count = entry_text.count(REQUIRED_OPTIMIZATION_COMMAND_MARKER)
-        if command_count < 2:
-            errors.append(
-                f"OPTIMIZATION_EVIDENCE.md entry {sha} must cite before and "
-                "after local profiling commands"
-            )
-        report_path_count = entry_text.count(REQUIRED_OPTIMIZATION_REPORT_PATH_MARKER)
-        if report_path_count < 2:
-            errors.append(
-                f"OPTIMIZATION_EVIDENCE.md entry {sha} must cite ignored "
-                "before and after target/local-profile/ report paths"
-            )
-    return errors
 
 
 def parse_args() -> argparse.Namespace:
