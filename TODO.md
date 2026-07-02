@@ -65,7 +65,7 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Avoid copying the PHRED lookup table and unused quality-probability
         vector during seed-quality filtering.
   - [x] Use fixed PHRED count storage during FASTQ sorting quality scoring.
-- [ ] Replace ad hoc tuple merge bookkeeping with named structs.
+- [x] Replace ad hoc tuple merge bookkeeping with named structs.
 - [ ] Stream cluster FASTQ output where possible.
 - [ ] Add benchmark evidence before and after every algorithmic optimization.
 
