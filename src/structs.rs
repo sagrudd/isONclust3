@@ -53,13 +53,7 @@ impl fmt::Display for Coord_obj {
 }
 impl Coord_obj {
     pub fn overlaps_with(&self, other: &Coord_obj) -> bool {
-        let mut overlaps = false;
-        if (self.startpos <= other.endpos && self.endpos >= other.startpos)
-            || (other.startpos <= self.endpos && other.endpos >= self.startpos)
-        {
-            overlaps = true;
-        }
-        overlaps
+        self.startpos <= other.endpos && self.endpos >= other.startpos
     }
 }
 

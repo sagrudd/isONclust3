@@ -1,7 +1,6 @@
 use crate::clustering::reverse_complement;
 use crate::structs::Minimizer_hashed;
 use log::debug;
-use rayon::prelude::*;
 use std::borrow::Cow;
 use std::collections::hash_map::DefaultHasher;
 use std::collections::VecDeque;
@@ -17,11 +16,11 @@ pub fn calculate_hash<T: Hash + ?Sized>(t: &T) -> u64 {
 pub fn compute_d_no_min() -> [f64; 128] {
     let mut d = [0.0; 128];
 
-    for i in 0..128 {
+    for (i, value) in d.iter_mut().enumerate() {
         let chr_i = i as u8 as char;
         let ord_i = chr_i as i8;
         let exponent = -(ord_i - 33) as f64 / 10.0;
-        d[i] = (10.0_f64).powf(exponent);
+        *value = (10.0_f64).powf(exponent);
     }
     d
 }
@@ -40,14 +39,13 @@ pub fn get_canonical_kmer_minimizers_hashed(
     this_minimizers: &mut Vec<Minimizer_hashed>,
 ) {
     //make sure that we have suitable values for k_size and w_size (w_size should be larger)
-    let w;
-    if w_size > k_size {
-        w = w_size - k_size + 1;
+    let w = if w_size > k_size {
+        w_size - k_size + 1
     }
     //k_size was chosen larger than w_size. To not fail we use every k-mer as minimizer (maybe have an error message?)
     else {
-        w = 1;
-    }
+        1
+    };
     //let mut rc_vec=VecDeque::with_capacity(w+1);
     let mut window_kmers: VecDeque<(u64, usize)> = VecDeque::with_capacity(w + 1);
     let mut k_mer_str: &str;
@@ -144,14 +142,13 @@ pub fn get_kmer_minimizers_hashed(
     this_minimizers: &mut Vec<Minimizer_hashed>,
 ) {
     //make sure that we have suitable values for k_size and w_size (w_size should be larger)
-    let w;
-    if w_size > k_size {
-        w = w_size - k_size + 1;
+    let w = if w_size > k_size {
+        w_size - k_size + 1
     }
     //k_size was chosen larger than w_size. To not fail we use every k-mer as minimizer (maybe have an error message?)
     else {
-        w = 1;
-    }
+        1
+    };
     //let mut rc_vec=VecDeque::with_capacity(w+1);
     let mut window_kmers: VecDeque<(u64, usize)> = VecDeque::with_capacity(w + 1);
     let mut k_mer_str: &str;

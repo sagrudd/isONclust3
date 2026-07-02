@@ -14,7 +14,7 @@ pub(crate) fn parse_fasta(file_path: &str) -> Result<Vec<FastaRecord>, std::io::
 
     for line in reader.lines() {
         let line = line?;
-        if line.starts_with('>') {
+        if let Some(header) = line.strip_prefix('>') {
             // New header line
             if !current_header.is_empty() {
                 // Store the previous sequence
@@ -24,7 +24,7 @@ pub(crate) fn parse_fasta(file_path: &str) -> Result<Vec<FastaRecord>, std::io::
                 });
                 current_sequence.clear();
             }
-            current_header = line[1..].trim().to_string(); // Remove '>'
+            current_header = header.trim().to_string(); // Remove '>'
         } else {
             // Sequence line
             current_sequence.push(line);
@@ -80,7 +80,6 @@ pub(crate) fn parse_fastq_hashmap(
         if quality_header_read == 0 {
             break;
         }
-        quality_header = quality_header.trim().to_owned();
 
         let mut quality = String::new();
         let quality_read = reader.read_line(&mut quality).expect("Should be contained");
@@ -134,7 +133,6 @@ pub(crate) fn parse_fastq(file: File, records: &mut Vec<structs::FastqRecord_iso
         if quality_header_read == 0 {
             break;
         }
-        quality_header = quality_header.trim().to_owned();
 
         let mut quality = String::new();
         let quality_read = reader.read_line(&mut quality).expect("Should be contained");

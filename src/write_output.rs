@@ -2,7 +2,6 @@ use crate::structs::FastqRecord_isoncl_init;
 use crate::{file_actions, Cluster_ID_Map};
 use log::debug;
 use log::info;
-use rayon::prelude::*;
 use rustc_hash::FxHashMap;
 use std::fs;
 use std::fs::File;
@@ -89,7 +88,7 @@ fn create_final_ds(
         if header_cluster_map.contains_key(&id) {
             let cluster_id = header_cluster_map.get(&id).unwrap();
             if cluster_map.contains_key(cluster_id) {
-                let mut id_vec: &mut Vec<FastqRecord_isoncl_init> =
+                let id_vec: &mut Vec<FastqRecord_isoncl_init> =
                     cluster_map.get_mut(cluster_id).unwrap();
                 id_vec.push(read)
             } else {

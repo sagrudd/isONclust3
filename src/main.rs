@@ -27,7 +27,6 @@ use std::collections::VecDeque;
 use std::time::Instant;
 
 use std::convert::TryFrom;
-use std::io::Read;
 use std::path::Path;
 
 use memory_stats::memory_stats;
@@ -45,11 +44,11 @@ type Cluster_ID_Map = FxHashMap<i32, Vec<i32>>; //  Change here to any other has
 fn compute_d() -> [f64; 128] {
     let mut d = [0.0; 128];
 
-    for i in 0..128 {
+    for (i, value) in d.iter_mut().enumerate() {
         let chr_i = i as u8 as char;
         let ord_i = chr_i as i8;
         let exponent = -(ord_i - 33) as f64 / 10.0;
-        d[i] = (10.0_f64).powf(exponent).min(0.79433);
+        *value = (10.0_f64).powf(exponent).min(0.79433);
     }
     d
 }
@@ -246,7 +245,7 @@ fn main() {
     let mut t;
     let mut quality_threshold;
     let mut min_shared_minis;
-    let mut cm_mini;
+    let cm_mini;
     //right now we only have two modes( custom settings for variables k, w, s, and t: 'ont' for reads with  3% error rate or more and 'pacbio' for reads with less than 3% error rate)
     if mode == "ont" {
         k = 13;
@@ -264,26 +263,21 @@ fn main() {
         cm_mini = 0.8;
         s = 9;
         t = 3;
-    } else {
-        if cli.cm_mini.is_some() {
-            let cm_mini = cli.cm_mini;
-        }
-        if cli.quality_threshold.is_some() {
-            let qt = cli.quality_threshold.unwrap();
-            if cli.k.is_some() {
-                k = cli.k.unwrap();
-            } else {
-                panic!("Please set k")
-            }
-            w = 0;
-            t = 0;
-            s = 0;
-            quality_threshold = qt.powi(k as i32);
-            min_shared_minis = 0.5;
-            cm_mini = 0.5;
+    } else if cli.quality_threshold.is_some() {
+        let qt = cli.quality_threshold.unwrap();
+        if cli.k.is_some() {
+            k = cli.k.unwrap();
         } else {
-            panic!("Please set the quality_threshold")
+            panic!("Please set k")
         }
+        w = 0;
+        t = 0;
+        s = 0;
+        quality_threshold = qt.powi(k as i32);
+        min_shared_minis = 0.5;
+        cm_mini = 0.5;
+    } else {
+        panic!("Please set the quality_threshold")
     }
     let verbose = cli.verbose;
     /*let mut verbose = false;
@@ -336,14 +330,12 @@ fn main() {
                 panic!("Please set k,s and t to fulfill (k-s)/2=t")
             }
         }
-    } else if seeding == "minimizer" {
-        if cli.w.is_some() {
-            w = cli.w.unwrap();
-            if w < k {
-                panic!("Please set w greater than k")
-            } else if w % 2 == 0 {
-                panic!("Please choose w to be odd")
-            }
+    } else if seeding == "minimizer" && cli.w.is_some() {
+        w = cli.w.unwrap();
+        if w < k {
+            panic!("Please set w greater than k")
+        } else if w % 2 == 0 {
+            panic!("Please choose w to be odd")
         }
     }
 
@@ -358,7 +350,6 @@ fn main() {
     let mut id_map = FxHashMap::default();
     let mut clusters: Cluster_ID_Map = HashMap::default(); //FxHashMap<i32, Vec<i32>> = FxHashMap::default();
 
-    let mut annotation_based = false;
     let filename = outfolder.clone() + "/clustering/sorted.fastq";
 
     // info or debug?
@@ -389,7 +380,6 @@ fn main() {
                 now1.elapsed().as_secs()
             );
             info!("{:?}", clusters);
-            annotation_based = true;
         }
 
         if verbose {
@@ -447,7 +437,6 @@ fn main() {
             } else {
                 info!("Couldn't get the current memory usage :(");
             }
-            let now3 = Instant::now();
             info!("initial clusters {:?}", clusters);
         }
         //#################################################################################################
@@ -487,7 +476,7 @@ fn main() {
                         for (minimizer, position) in min_iter {
                             let mini = Minimizer_hashed {
                                 sequence: minimizer,
-                                position: position,
+                                position,
                             };
                             this_minimizers.push(mini);
                         }
@@ -500,7 +489,7 @@ fn main() {
                         for (minimizer, position, _) in min_iter {
                             let mini = Minimizer_hashed {
                                 sequence: minimizer,
-                                position: position,
+                                position,
                             };
                             this_minimizers.push(mini);
                         }
@@ -548,10 +537,8 @@ fn main() {
                     &mut shared_seed_infos_norm_vec,
                 );
                 read_id += 1;
-                if verbose {
-                    if read_id % 1000000 == 0 {
-                        info!("{} reads processed", read_id);
-                    }
+                if verbose && read_id % 1000000 == 0 {
+                    info!("{} reads processed", read_id);
                 }
             }
             info!("Generated {} clusters from clustering", clusters.len());

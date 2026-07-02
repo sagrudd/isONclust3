@@ -3,7 +3,6 @@ use crate::structs::{FastqRecord_isoncl_init, Minimizer_hashed};
 use crate::write_output;
 use crate::write_output::path_exists;
 use rayon::prelude::*;
-use std::collections::HashSet;
 use std::collections::VecDeque;
 use std::path::Path;
 use std::time::Instant;
@@ -79,11 +78,11 @@ fn calculate_error_rate(qual: &[u8], d_no_min: &[f64; 128]) -> f64 {
 
 fn compute_d() -> [f64; 128] {
     let mut d = [0.0; 128];
-    for i in 0..128 {
+    for (i, value) in d.iter_mut().enumerate() {
         let chr_i = i as u8 as char;
         let ord_i = chr_i as i8;
         let exponent = -(ord_i - 33) as f64 / 10.0;
-        d[i] = (10.0_f64).powf(exponent).min(0.79433);
+        *value = (10.0_f64).powf(exponent).min(0.79433);
     }
     d
 }
@@ -92,11 +91,11 @@ fn compute_d() -> [f64; 128] {
 fn compute_d_no_min() -> [f64; 128] {
     let mut d = [0.0; 128];
 
-    for i in 0..128 {
+    for (i, value) in d.iter_mut().enumerate() {
         let chr_i = i as u8 as char;
         let ord_i = chr_i as i8;
         let exponent = -(ord_i - 33) as f64 / 10.0;
-        d[i] = (10.0_f64).powf(exponent);
+        *value = (10.0_f64).powf(exponent);
     }
     d
 }
@@ -122,7 +121,7 @@ fn analyse_fastq_and_sort(
     //read_id holds the internal id we appoint to a read
     let mut read_id = 0;
     //generate a Reader object that parses the fastq-file (taken from rust-bio)
-    let mut reader =
+    let reader =
         fastq::Reader::from_file(Path::new(&in_file_path)).expect("We expect the file to exist");
     //make sure that we have suitable values for k_size and w_size (w_size should be larger)
     let mut w;
@@ -155,7 +154,7 @@ fn analyse_fastq_and_sort(
                     for (minimizer, position) in min_iter {
                         let mini = Minimizer_hashed {
                             sequence: minimizer,
-                            position: position,
+                            position,
                         };
                         this_minimizers.push(mini);
                     }
@@ -168,7 +167,7 @@ fn analyse_fastq_and_sort(
                     for (minimizer, position, _) in min_iter {
                         let mini = Minimizer_hashed {
                             sequence: minimizer,
-                            position: position,
+                            position,
                         };
                         this_minimizers.push(mini);
                     }

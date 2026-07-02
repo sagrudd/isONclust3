@@ -26,11 +26,11 @@ Tasks are ordered to improve the fork without breaking the upstream
 
 - [x] Apply repository-wide `cargo fmt` normalization.
 - [ ] Make `cargo clippy --all-targets -- -D warnings` pass.
-  - [ ] Remove unused imports.
+  - [x] Remove unused imports.
   - [ ] Remove or justify dead code.
   - [ ] Rename non-camel-case types and variants without changing output.
-  - [ ] Remove avoidable mutable bindings and late initialization.
-  - [ ] Replace redundant struct field initializers.
+  - [x] Remove avoidable mutable bindings and late initialization.
+  - [x] Replace redundant struct field initializers.
   - [ ] Triage high-argument functions into typed configuration structs.
 - [ ] Add `cargo fmt --check`, `cargo test`, and clippy to CI.
 
