@@ -1,9 +1,8 @@
 use crate::seeding_and_filtering_seeds;
-use crate::structs::{FastqRecordIsonclInit, MinimizerHashed};
+use crate::structs::MinimizerHashed;
 use crate::write_output;
 use crate::write_output::path_exists;
 use rayon::prelude::*;
-use std::collections::VecDeque;
 use std::path::Path;
 use std::time::Instant;
 //use crate::bio_rust_file_read;
@@ -29,36 +28,6 @@ fn compress_sequence(seq: &[u8]) -> String {
     seq_hpol_comp
 }
 
-fn expected_number_errornous_kmers(quality_string: &str, k: usize, d: &[f64; 128]) -> f64 {
-    //computes the expected number of errornous kmers for a read by analysing the quality entry
-    let prob_error: Vec<f64> = quality_string
-        .chars()
-        .map(|char_| d[char_ as u8 as usize])
-        .collect();
-    let mut sum_of_expectations = 0.0;
-    let mut current_prob_no_error = 1.0;
-    //holds k nucleotides to represent a kmer
-    let mut window: VecDeque<f64> = VecDeque::with_capacity(k);
-    //iterates over the quality values
-    for (i, &p_e) in prob_error.iter().enumerate() {
-        //the probability that we do not have an error is multiplied by the probability that we did not have an error at position p_e
-        current_prob_no_error *= 1.0 - p_e;
-
-        if i >= k {
-            let p_to_leave = window.pop_front().unwrap();
-            current_prob_no_error /= p_to_leave;
-        }
-
-        sum_of_expectations += current_prob_no_error;
-
-        if i >= k - 1 {
-            window.push_back(1.0 - p_e);
-        }
-    }
-    //
-    (quality_string.len() - k + 1) as f64 - sum_of_expectations
-}
-
 fn calculate_error_rate(qual: &[u8], d_no_min: &[f64; 128]) -> f64 {
     let mut counts = vec![0; 128];
     let mut total_count = 0;
@@ -74,17 +43,6 @@ fn calculate_error_rate(qual: &[u8], d_no_min: &[f64; 128]) -> f64 {
     }
 
     poisson_mean / total_count as f64
-}
-
-fn compute_d() -> [f64; 128] {
-    let mut d = [0.0; 128];
-    for (i, value) in d.iter_mut().enumerate() {
-        let chr_i = i as u8 as char;
-        let ord_i = chr_i as i8;
-        let exponent = -(ord_i - 33) as f64 / 10.0;
-        *value = (10.0_f64).powf(exponent).min(0.79433);
-    }
-    d
 }
 
 //D_no_min = {chr(i) : 10**( - (ord(chr(i)) - 33)/10.0 )  for i in range(128)}
@@ -227,18 +185,6 @@ fn analyse_fastq_and_sort(
 
     info!("{} reads accepted", score_vec.len());
     debug!("{:?}", score_vec.pop());
-}
-
-fn print_statistics(fastq_records: &[FastqRecordIsonclInit]) {
-    /*
-    Prints the statistics for the resulting file TODO: add median and mean
-     */
-    let min_e = fastq_records[0].get_err_rate();
-    let max_e = fastq_records[fastq_records.len() - 1].get_err_rate();
-    info!("Lowest read error rate: {}", min_e);
-    info!("Highest read error rate: {}", max_e);
-    //logfile.write("Median read error rate:{0}\n".format(median_e))
-    //logfile.write("Mean read error rate:{0}\n".format(mean_e))
 }
 
 pub(crate) fn sort_fastq_for_cluster(

@@ -18,20 +18,17 @@ mod parallelization_side;
 
 //mod isONclust;
 use crate::clustering::cluster_merging;
-use crate::structs::{FastqRecordIsonclInit, MinimizerHashed};
+use crate::structs::MinimizerHashed;
 use std::collections::HashMap;
 
 use clap::Parser;
-use rayon::prelude::*;
-use std::collections::VecDeque;
 use std::time::Instant;
 
-use std::convert::TryFrom;
 use std::path::Path;
 
 use memory_stats::memory_stats;
 
-use rustc_hash::{FxHashMap, FxHashSet};
+use rustc_hash::FxHashMap;
 
 use bio::io::fastq;
 use log::info;
@@ -40,107 +37,6 @@ use simple_logger::SimpleLogger;
 
 type SeedMap = FxHashMap<u64, Vec<i32>>; // Change here to any other hash table implementation, e.g.,  HashMap<u64, Vec<i32>, nohash_hasher::BuildNoHashHasher<u64>>;
 type ClusterIdMap = FxHashMap<i32, Vec<i32>>; //  Change here to any other hash table implementation, e.g., HashMap<i32, Vec<i32>,nohash_hasher::BuildNoHashHasher<i32>>;
-
-fn compute_d() -> [f64; 128] {
-    let mut d = [0.0; 128];
-
-    for (i, value) in d.iter_mut().enumerate() {
-        let chr_i = i as u8 as char;
-        let ord_i = chr_i as i8;
-        let exponent = -(ord_i - 33) as f64 / 10.0;
-        *value = (10.0_f64).powf(exponent).min(0.79433);
-    }
-    d
-}
-
-fn expected_number_errornous_kmers(quality_string: &str, k: usize, d: &[f64; 128]) -> f64 {
-    //computes the expeced number of errornous kmers for a read by analysing the quality entry
-    let prob_error: Vec<f64> = quality_string
-        .chars()
-        .map(|char_| d[char_ as u8 as usize])
-        .collect();
-    let mut sum_of_expectations = 0.0;
-    let mut qurrent_prob_no_error = 1.0;
-    let mut window: VecDeque<f64> = VecDeque::with_capacity(k);
-
-    for (i, &p_e) in prob_error.iter().enumerate() {
-        qurrent_prob_no_error *= 1.0 - p_e;
-
-        if i >= k {
-            let p_to_leave = window.pop_front().unwrap();
-            qurrent_prob_no_error /= p_to_leave;
-        }
-
-        sum_of_expectations += qurrent_prob_no_error;
-
-        if i >= k - 1 {
-            window.push_back(1.0 - p_e);
-        }
-    }
-    info!("Quality string: {}", (quality_string.len() - k + 1) as f64);
-    info!("SoE: {}", sum_of_expectations);
-    (quality_string.len() - k + 1) as f64 - sum_of_expectations
-}
-
-fn calculate_error_rate(qual: &str, d_no_min: &[f64; 128]) -> f64 {
-    let mut poisson_mean = 0.0;
-    let mut total_count = 0;
-
-    for char_ in qual.chars().collect::<FxHashSet<_>>() {
-        let count = qual.chars().filter(|&c| c == char_).count();
-        let index = char_ as usize;
-        poisson_mean += count as f64 * d_no_min[index];
-        total_count += count;
-    }
-
-    poisson_mean / total_count as f64
-}
-
-fn get_sorted_entries(
-    mini_map_filtered: FxHashMap<i32, Vec<structs::MinimizerHashed>>,
-) -> Vec<(i32, Vec<structs::MinimizerHashed>)> {
-    // Sort by the length of vectors in descending order
-    let mut sorted_entries: Vec<(i32, Vec<structs::MinimizerHashed>)> =
-        mini_map_filtered.into_iter().collect();
-    sorted_entries.sort_by(|a, b| b.1.len().cmp(&a.1.len()).then_with(|| a.0.cmp(&b.0)));
-
-    sorted_entries
-}
-
-fn filter_fastq_records(
-    mut fastq_records: Vec<FastqRecordIsonclInit>,
-    d_no_min: [f64; 128],
-    q_threshold: f64,
-    k: usize,
-    d: [f64; 128],
-) -> Vec<FastqRecordIsonclInit> {
-    fastq_records.par_iter_mut().for_each(|fastq_record| {
-        //calculate the error rate and store it in vector errors
-        if fastq_record.sequence.len() > k {
-            fastq_record
-                .set_error_rate(calculate_error_rate(fastq_record.get_quality(), &d_no_min));
-            let exp_errors_in_kmers =
-                expected_number_errornous_kmers(fastq_record.get_quality(), k, &d);
-            let p_no_error_in_kmers =
-                1.0 - exp_errors_in_kmers / (fastq_record.get_sequence().len() - k + 1) as f64;
-            //calculate the final score and add it to fastq_record (we have a dedicated field for that that was initialized with 0.0)
-            fastq_record.set_score(
-                p_no_error_in_kmers * ((fastq_record.get_sequence().len() - k + 1) as f64),
-            )
-        }
-    });
-    //filter out records that have a too high error rate
-    fastq_records.retain(|record| 10.0_f64 * -record.get_err_rate().log(10.0_f64) > q_threshold);
-    info!(
-        "Nr of records that passed the filtering: {}",
-        fastq_records.len()
-    );
-    fastq_records
-}
-
-fn convert_cl_id(v: usize) -> Option<i32> {
-    i32::try_from(v).ok()
-}
 
 #[derive(Parser, Debug)]
 #[command(name = "isONclust3")]

@@ -56,7 +56,10 @@ several iterator warnings, reducing strict clippy from 95 inherited errors to
 43 remaining errors. The naming-normalization pass then converted internal
 types, enum variants, helper names, and the parallelization module to idiomatic
 Rust naming without changing the output contract, reducing strict clippy to 33
-remaining errors. The remaining work is dead-code triage and typed
+remaining errors. The first dead-code pass removed isolated legacy helpers from
+the active CLI, clustering, FASTQ sorting, and seed-filtering code, reducing
+strict clippy to 20 remaining errors. The remaining work is fixture-backed
+GFF/FASTA dead-code triage, compatibility struct decisions, and typed
 configuration structs for high-argument APIs.
 
 ## Milestone 3: Performance Profiling

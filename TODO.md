@@ -28,6 +28,11 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [ ] Make `cargo clippy --all-targets -- -D warnings` pass.
   - [x] Remove unused imports.
   - [ ] Remove or justify dead code.
+    - [x] Remove isolated legacy helpers from `main.rs`, clustering, and
+          seed-filtering code that were not reachable from the active CLI.
+    - [ ] Preserve or fixture-test dormant GFF/FASTA helpers before removal.
+    - [ ] Decide whether unused compatibility structs should become fixture
+          API types or be removed.
   - [x] Rename non-camel-case types and variants without changing output.
   - [x] Remove avoidable mutable bindings and late initialization.
   - [x] Replace redundant struct field initializers.

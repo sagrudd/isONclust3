@@ -1,7 +1,6 @@
 use crate::clustering::reverse_complement;
 use crate::structs::MinimizerHashed;
 use log::debug;
-use std::borrow::Cow;
 use std::collections::hash_map::DefaultHasher;
 use std::collections::VecDeque;
 use std::hash::{Hash, Hasher};
@@ -23,13 +22,6 @@ pub fn compute_d_no_min() -> [f64; 128] {
         *value = (10.0_f64).powf(exponent);
     }
     d
-}
-
-fn cow_to_string(cow: Cow<'_, [u8]>) -> String {
-    String::from_utf8(cow.into_owned()).unwrap_or_else(|e| {
-        e.utf8_error().to_string()
-        // Handle the error if the conversion fails
-    })
 }
 
 pub fn get_canonical_kmer_minimizers_hashed(
@@ -306,11 +298,6 @@ pub(crate) fn syncmers_canonical(
             });
         }
     }
-}
-
-//calculates the average of  a list of f64s and returns it as f64
-fn average(numbers: &[f64]) -> f64 {
-    numbers.iter().sum::<f64>() / numbers.len() as f64
 }
 
 ///Used to detect significant minimizers by checking the read qualities and estimating the overall quality of the area of the read

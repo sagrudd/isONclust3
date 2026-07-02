@@ -25,41 +25,6 @@ fn calculate_shared_perc(nr_sign_minis: usize, value: i32) -> f64 {
     value as f64 / nr_sign_minis as f64
 }
 
-fn new_fx_hashset() -> FxHashSet<i32> {
-    let return_set: FxHashSet<i32> = FxHashSet::default();
-    return_set
-}
-
-fn detect_whether_shared(
-    min_shared_minis: f64,
-    shared_seed_infos: &FxHashMap<i32, i32>,
-    minimizers: &[MinimizerHashed],
-) -> (bool, i32) {
-    let mut most_shared = 0.0;
-    let mut shared = false;
-    let mut most_shared_cluster = -1;
-    let nr_minis = minimizers.len();
-    let mut shared_perc: f64;
-    for (key, nr_shared) in shared_seed_infos {
-        //TODO: test whether into_par_iter works here
-        //we have more shared minis with the cluster than our threshold and this is the cluster we share the most minimizers with
-        shared_perc = calculate_shared_perc(nr_minis, *nr_shared);
-        debug!(
-            "shared percentage between read and cluster {} : {}",
-            key, shared_perc
-        );
-        if shared_perc > min_shared_minis && shared_perc > most_shared {
-            //} && *nr_shared >=0 {
-            most_shared = shared_perc;
-            most_shared_cluster = *key;
-            if !shared {
-                shared = true;
-            }
-        }
-    }
-    (shared, most_shared_cluster)
-}
-
 //shared_seed_infos: hashmap that holds read_id->nr shared minimizers with clusters->not updated when cluster changes!
 //clustering method for the case that we do not have any annotation to compare the reads against
 //shared_seed_infos: hashmap that holds read_id->nr shared minimizers with clusters->not updated when cluster changes!
