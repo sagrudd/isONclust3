@@ -12,6 +12,7 @@ import sys
 from pathlib import Path
 
 from preflight_artifacts import validate_tracked_artifacts
+from preflight_benchmark_schema import validate_benchmark_schema
 from preflight_output_contracts import validate_output_contract_register
 
 try:
@@ -39,6 +40,7 @@ REQUIRED_FILES = [
     "scripts/run-local-profiling.sh",
     "scripts/run-gb10-benchmark.sh",
     "scripts/preflight_artifacts.py",
+    "scripts/preflight_benchmark_schema.py",
     "scripts/preflight_output_contracts.py",
     "fixtures/output-contracts/final-clusters-register.json",
     "schemas/benchmark-fixture.schema.json",
@@ -168,6 +170,7 @@ REQUIRED_TEXT = {
         "Gate benchmark manifest duplicate file paths.",
         "Gate benchmark manifest schema path markers.",
         "Gate benchmark manifest schema contract markers.",
+        "Gate benchmark manifest schema structural constraints.",
         "Gate release-checklist downstream handoff artifact markers.",
         "Gate blocker waiver rules for upstream producer evidence.",
         "Gate Sphinx waiver-boundary release-readiness markers.",
@@ -936,6 +939,7 @@ def main() -> int:
     errors.extend(validate_benchmark_acceptance(repo))
     errors.extend(validate_package_version(repo, args.expected_version))
     errors.extend(validate_file_sizes(repo, args.max_lines))
+    errors.extend(validate_benchmark_schema(repo))
     errors.extend(validate_output_contract_register(repo))
     errors.extend(validate_manifests(repo))
     errors.extend(validate_ci(repo))
@@ -954,7 +958,8 @@ def main() -> int:
         f"{len(REQUIRED_FILES)} required file(s), "
         f"{manifests} benchmark manifest(s), "
         "package version passed, file-size limits passed, "
-        "output contract register passed, manifest checksums passed, "
+        "benchmark schema passed, output contract register passed, "
+        "manifest checksums passed, "
         "CI markers passed, artifact hygiene passed"
     )
     return 0
