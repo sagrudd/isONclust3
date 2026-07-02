@@ -16,7 +16,8 @@ tight integration with `newONform`.
 - Avoid source files over 1000 lines.
 - Prefer behavior-preserving cleanup before algorithmic changes.
 - Preserve `final_clusters.tsv` semantics unless a documented compatibility
-  waiver exists.
+  waiver exists; a waiver does not claim accepted producer evidence or
+  `newONform` checksum readiness.
 - Do not commit raw sequencing data or large generated outputs.
 - Keep fixtures tiny unless an external manifest records their source and
   checksum.

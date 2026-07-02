@@ -46,6 +46,8 @@ REQUIRED_TEXT = {
         "Maintain semantic versioning",
         "GB10 benchmark evidence",
         "Do not commit raw sequencing data",
+        "waiver does not claim accepted producer evidence",
+        "`newONform` checksum readiness",
         "## Documentation Rules",
         "Sphinx governance and release-readiness documentation",
         "sphinx-build -W -b html docs target/sphinx-html",
@@ -146,6 +148,7 @@ REQUIRED_TEXT = {
         "Gate benchmark acceptance waiver-scope status markers.",
         "Gate Sphinx index generated-checksum waiver-scope markers.",
         "Gate release-checklist waiver-scope evidence markers.",
+        "Gate AGENTS compatibility-waiver evidence markers.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",
