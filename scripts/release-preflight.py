@@ -171,6 +171,7 @@ REQUIRED_TEXT = {
         "Gate benchmark manifest schema path markers.",
         "Gate benchmark manifest schema contract markers.",
         "Gate benchmark manifest schema structural constraints.",
+        "Gate benchmark manifest schema root key ordering.",
         "Gate benchmark manifest schema property ordering.",
         "Gate benchmark manifest schema additionalProperties policy.",
         "Gate benchmark manifest schema nested required field ordering.",

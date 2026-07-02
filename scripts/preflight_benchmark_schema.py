@@ -8,6 +8,16 @@ from pathlib import Path
 
 BENCHMARK_SCHEMA = Path("schemas/benchmark-fixture.schema.json")
 BENCHMARK_SCHEMA_REFERENCE = "../../schemas/benchmark-fixture.schema.json"
+BENCHMARK_SCHEMA_ROOT_KEYS = (
+    "$schema",
+    "$id",
+    "title",
+    "type",
+    "additionalProperties",
+    "required",
+    "properties",
+    "$defs",
+)
 BENCHMARK_REQUIRED_FIELDS = (
     "$schema",
     "schema_version",
@@ -58,6 +68,8 @@ def validate_benchmark_schema(repo: Path) -> list[str]:
         return [f"{path.relative_to(repo)} is invalid JSON: {exc}"]
     if not isinstance(schema, dict):
         return [f"{path.relative_to(repo)} root must be a JSON object"]
+    if list(schema) != list(BENCHMARK_SCHEMA_ROOT_KEYS):
+        errors.append(f"{path.relative_to(repo)} root keys must follow schema order")
 
     expected_root = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
