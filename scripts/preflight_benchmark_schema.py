@@ -23,6 +23,7 @@ BENCHMARK_REQUIRED_FIELDS = (
     "command",
     "acceptance",
 )
+BENCHMARK_OPTIONAL_FIELDS = ("profiling_plan", "downstream_handoff")
 BENCHMARK_MODES = ("ont", "pacbio")
 BENCHMARK_TIERS = ("toy", "medium", "phanerognostikon")
 BENCHMARK_SEEDING = ("minimizer", "syncmer")
@@ -74,6 +75,9 @@ def validate_benchmark_schema(repo: Path) -> list[str]:
     properties = schema.get("properties")
     if not isinstance(properties, dict):
         return errors + [f"{path.relative_to(repo)} properties must be an object"]
+    expected_property_order = list(BENCHMARK_REQUIRED_FIELDS) + list(BENCHMARK_OPTIONAL_FIELDS)
+    if list(properties) != expected_property_order:
+        errors.append(f"{path.relative_to(repo)} properties keys must follow schema order")
     for field in BENCHMARK_REQUIRED_FIELDS:
         if field not in properties:
             errors.append(f"{path.relative_to(repo)} properties missing {field}")
@@ -109,6 +113,22 @@ def _validate_root_properties(
         field_property = properties.get(field)
         if not isinstance(field_property, dict) or field_property.get("const") != value:
             errors.append(f"{path.relative_to(repo)} properties.{field}.const must be {value}")
+    nested_orders = {
+        "source": ("description", "license", "availability", "blocker_id"),
+        "command": ("container_image", "args"),
+        "acceptance": (
+            "requires_gb10_report",
+            "requires_container_digest",
+            "requires_output_checksums",
+            "status",
+            "blocker_id",
+        ),
+    }
+    for field, expected_order in nested_orders.items():
+        field_property = properties.get(field)
+        _validate_schema_property_order(
+            path, repo, f"properties.{field}", field_property, expected_order, errors
+        )
     expected_enums = {
         "benchmark_tier": list(BENCHMARK_TIERS),
         "mode": list(BENCHMARK_MODES),
@@ -146,6 +166,9 @@ def _validate_checksum_definition(
         errors.append(f"{path.relative_to(repo)} $defs.checksum must be an object")
         return
     properties = definition.get("properties", {})
+    _validate_schema_property_order(
+        path, repo, "$defs.checksum", definition, ("algorithm", "value"), errors
+    )
     algorithm = properties.get("algorithm", {})
     value = properties.get("value", {})
     if algorithm.get("const") != "sha256":
@@ -163,6 +186,9 @@ def _validate_file_definition(
     if definition.get("required") != ["path", "role", "checksum"]:
         errors.append(f"{path.relative_to(repo)} file required fields are incomplete")
     properties = definition.get("properties", {})
+    _validate_schema_property_order(
+        path, repo, "$defs.file", definition, ("path", "role", "checksum"), errors
+    )
     role = properties.get("role", {})
     checksum = properties.get("checksum", {})
     if role.get("enum") != list(BENCHMARK_FILE_ROLES):
@@ -178,6 +204,14 @@ def _validate_profiling_plan_definition(
         errors.append(f"{path.relative_to(repo)} $defs.profiling_plan must be an object")
         return
     properties = definition.get("properties", {})
+    _validate_schema_property_order(
+        path,
+        repo,
+        "$defs.profiling_plan",
+        definition,
+        ("scope", "status", "blocker_id", "required_facets"),
+        errors,
+    )
     if properties.get("scope", {}).get("const") != "smallest-accepted-larger-workload":
         errors.append(f"{path.relative_to(repo)} profiling scope must be fixed")
     if properties.get("status", {}).get("const") != "blocked_pending_data":
@@ -194,6 +228,19 @@ def _validate_downstream_handoff_definition(
         errors.append(f"{path.relative_to(repo)} $defs.downstream_handoff must be an object")
         return
     properties = definition.get("properties", {})
+    _validate_schema_property_order(
+        path,
+        repo,
+        "$defs.downstream_handoff",
+        definition,
+        (
+            "consumer",
+            "generated_input_register",
+            "generated_input_id",
+            "consumer_blocker_id",
+        ),
+        errors,
+    )
     if properties.get("consumer", {}).get("const") != "newONform":
         errors.append(f"{path.relative_to(repo)} downstream consumer must be newONform")
     if properties.get("consumer_blocker_id", {}).get("const") != "NOF-BLOCK-006":
@@ -311,6 +358,22 @@ def _validate_definition_object_keys(
 def _schema_property_order(schema_object: dict[str, object]) -> list[str]:
     properties = schema_object.get("properties", {})
     return list(properties) if isinstance(properties, dict) else []
+
+
+def _validate_schema_property_order(
+    path: Path,
+    repo: Path,
+    field: str,
+    schema_object: object,
+    expected_order: tuple[str, ...],
+    errors: list[str],
+) -> None:
+    if not isinstance(schema_object, dict):
+        return
+    if _schema_property_order(schema_object) != list(expected_order):
+        errors.append(
+            f"{path.relative_to(repo)} {field}.properties keys must follow schema order"
+        )
 
 
 def _validate_key_set(
