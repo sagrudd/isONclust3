@@ -77,7 +77,15 @@ REQUIRED_TEXT = {
         "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff",
         "newONform",
     ],
-    "TODO.md": ["Dockerized GB10 Evidence", "local profiling harness"],
+    "TODO.md": [
+        "Dockerized GB10 Evidence",
+        "local profiling harness",
+        "Profile seed generation and minimizer/syncmer extraction",
+        "Add benchmark evidence before and after every algorithmic optimization",
+        "Record accepted GB10 benchmark reports",
+        "Expose generated `final_clusters.tsv` checksums",
+        "Keep `newONform` generated-input registers aligned",
+    ],
 }
 
 REQUIRED_DOWNSTREAM_HANDOFFS = {

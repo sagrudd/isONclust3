@@ -17,6 +17,7 @@ Tasks are ordered to improve the fork without breaking the upstream
       hygiene, and documentation markers.
 - [x] Gate GB10 milestone active status and unresolved evidence blockers.
 - [x] Gate release-checklist visibility for active benchmark blocker IDs.
+- [x] Gate TODO visibility for unresolved evidence tasks.
 
 ## 2. Output Contract Harmonization
 
