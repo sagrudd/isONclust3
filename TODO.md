@@ -12,6 +12,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Add a release checklist and blocker register.
 - [x] Gate release-checklist sections and unchecked operator-template status in
       release preflight.
+- [x] Gate active and resolved blocker-register rows in release preflight.
 - [x] Add preflight checks for version syntax, file-size limits, fixture
       hygiene, and documentation markers.
 

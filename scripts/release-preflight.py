@@ -78,6 +78,14 @@ REQUIRED_DOWNSTREAM_HANDOFFS = {
     "isonclust3-medium-ont-cdna": "drr138512-final-clusters",
     "isonclust3-phanerognostikon-ont-cdna": "drr178488-final-clusters",
 }
+REQUIRED_ACTIVE_BLOCKERS = {
+    "ISOCLUST-BLOCK-001",
+    "ISOCLUST-BLOCK-002",
+    "ISOCLUST-BLOCK-003",
+}
+REQUIRED_RESOLVED_BLOCKERS = {
+    "ISOCLUST-BLOCK-004",
+}
 REQUIRED_BLOCKED_EXTERNAL_MANIFESTS = {
     "isonclust3-medium-ont-cdna",
     "isonclust3-phanerognostikon-ont-cdna",
@@ -172,6 +180,41 @@ def validate_required_files(repo: Path) -> list[str]:
         for marker in markers:
             if marker not in text:
                 errors.append(f"{relative} missing marker: {marker}")
+    return errors
+
+
+def validate_blockers(repo: Path) -> list[str]:
+    path = repo / "BLOCKERS.md"
+    text = path.read_text(encoding="utf-8")
+    active_rows = {
+        columns[0]
+        for line in text.splitlines()
+        if line.startswith("| ISOCLUST-BLOCK-")
+        for columns in [[column.strip() for column in line.strip("|").split("|")]]
+        if columns
+    }
+
+    errors: list[str] = []
+    missing_active = REQUIRED_ACTIVE_BLOCKERS - active_rows
+    if missing_active:
+        errors.append(
+            f"BLOCKERS.md missing active blocker row(s): "
+            f"{', '.join(sorted(missing_active))}"
+        )
+    resolved_in_active = REQUIRED_RESOLVED_BLOCKERS & active_rows
+    if resolved_in_active:
+        errors.append(
+            f"BLOCKERS.md resolved blocker(s) must not appear active: "
+            f"{', '.join(sorted(resolved_in_active))}"
+        )
+
+    resolved_section = text.split("## Resolved Blockers", 1)
+    if len(resolved_section) != 2:
+        errors.append("BLOCKERS.md missing resolved blockers section")
+        return errors
+    for blocker in sorted(REQUIRED_RESOLVED_BLOCKERS):
+        if blocker not in resolved_section[1]:
+            errors.append(f"BLOCKERS.md missing resolved blocker marker: {blocker}")
     return errors
 
 
@@ -661,6 +704,7 @@ def main() -> int:
     repo = args.repo.resolve()
     errors: list[str] = []
     errors.extend(validate_required_files(repo))
+    errors.extend(validate_blockers(repo))
     errors.extend(validate_package_version(repo, args.expected_version))
     errors.extend(validate_file_sizes(repo, args.max_lines))
     errors.extend(validate_manifests(repo))
