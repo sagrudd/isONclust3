@@ -273,6 +273,13 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
                     f"{path.relative_to(repo)} command.args missing flags: "
                     f"{', '.join(sorted(missing_flags))}"
                 )
+            observed_flags = {arg for arg in args if arg.startswith("--")}
+            unexpected_flags = observed_flags - REQUIRED_COMMAND_FLAGS
+            if unexpected_flags:
+                errors.append(
+                    f"{path.relative_to(repo)} command.args unexpected flags: "
+                    f"{', '.join(sorted(unexpected_flags))}"
+                )
             expected_values = {
                 **REQUIRED_COMMAND_VALUES,
                 "--mode": str(manifest.get("mode")),
