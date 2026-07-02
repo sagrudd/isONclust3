@@ -244,12 +244,17 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
     entry_properties = entry.get("properties", {})
     if not isinstance(entry_properties, dict):
         return errors + [f"{path.relative_to(repo)} entry properties must be an object"]
+    if entry_properties.get("entry_id", {}).get("minLength") != 1:
+        errors.append(f"{path.relative_to(repo)} entry_id must be non-empty")
     if entry_properties.get("mode", {}).get("enum") != ["ont", "pacbio"]:
         errors.append(f"{path.relative_to(repo)} entry mode must be ont or pacbio")
     if entry_properties.get("benchmark_tier", {}).get("const") != "toy":
         errors.append(f"{path.relative_to(repo)} entry benchmark_tier must be toy")
     for path_field in ("run_path", "fastq_path"):
-        if entry_properties.get(path_field, {}).get("pattern") != OUTPUT_CONTRACT_RELATIVE_PATH_PATTERN:
+        path_property = entry_properties.get(path_field, {})
+        if path_property.get("type") != "string" or path_property.get("minLength") != 1:
+            errors.append(f"{path.relative_to(repo)} {path_field} must be a non-empty string")
+        if path_property.get("pattern") != OUTPUT_CONTRACT_RELATIVE_PATH_PATTERN:
             errors.append(
                 f"{path.relative_to(repo)} {path_field} must require relative non-escaping paths"
             )
@@ -261,6 +266,9 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
         if entry_properties.get(checksum_field, {}).get("pattern") != "^[0-9a-f]{64}$":
             errors.append(f"{path.relative_to(repo)} {checksum_field} must gate sha256 hex")
     for byte_field in ("bytes", "fastq_bytes"):
-        if entry_properties.get(byte_field, {}).get("minimum") != 1:
+        byte_property = entry_properties.get(byte_field, {})
+        if byte_property.get("type") != "integer":
+            errors.append(f"{path.relative_to(repo)} {byte_field} must be an integer")
+        if byte_property.get("minimum") != 1:
             errors.append(f"{path.relative_to(repo)} {byte_field} must be positive")
     return errors
