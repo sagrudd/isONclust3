@@ -82,6 +82,11 @@ REQUIRED_BLOCKED_EXTERNAL_MANIFESTS = {
     "isonclust3-medium-ont-cdna",
     "isonclust3-phanerognostikon-ont-cdna",
 }
+REQUIRED_BENCHMARK_TIERS = {
+    "medium",
+    "phanerognostikon",
+    "toy",
+}
 REQUIRED_COMMAND_FLAGS = {
     "--fastq",
     "--mode",
@@ -176,12 +181,17 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
     for key in required:
         if key not in manifest:
             errors.append(f"{path.relative_to(repo)} missing required key: {key}")
+    if manifest.get("schema_version") != 1:
+        errors.append(f"{path.relative_to(repo)} schema_version must be 1")
     if manifest.get("manifest_kind") != "isonclust3-benchmark-fixture":
         errors.append(
             f"{path.relative_to(repo)} manifest_kind must be isonclust3-benchmark-fixture"
         )
     if manifest.get("project") != "isONclust3":
         errors.append(f"{path.relative_to(repo)} project must be isONclust3")
+    if manifest.get("benchmark_tier") not in REQUIRED_BENCHMARK_TIERS:
+        expected = ", ".join(sorted(REQUIRED_BENCHMARK_TIERS))
+        errors.append(f"{path.relative_to(repo)} benchmark_tier must be one of {expected}")
     if manifest.get("mode") not in {"ont", "pacbio"}:
         errors.append(f"{path.relative_to(repo)} mode must be ont or pacbio")
     if manifest.get("seeding") not in {"minimizer", "syncmer"}:

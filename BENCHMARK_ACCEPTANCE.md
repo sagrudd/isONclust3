@@ -38,6 +38,8 @@ Every accepted Dockerized or GB10 report must include:
 - Benchmark manifests must identify themselves as
   `isonclust3-benchmark-fixture` and record the seeding mode used by the
   command.
+- Benchmark manifests must use schema version 1 and one of the accepted
+  benchmark tiers: `toy`, `medium`, or `phanerognostikon`.
 - Before GB10 execution, toy ONT and toy PacBio manifests must pass the local
   Docker smoke in `scripts/check-docker-toy-benchmarks.sh`; this confirms the
   benchmark image, runner report path, and `final_clusters.tsv` checksums.
