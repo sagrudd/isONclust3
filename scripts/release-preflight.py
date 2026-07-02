@@ -301,8 +301,16 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
                         f"must be {value}"
                     )
 
+    files = manifest.get("files")
+    if not isinstance(files, list):
+        errors.append(f"{path.relative_to(repo)} files must be a list")
+        files = []
+
     file_roles: set[str] = set()
-    for entry in manifest.get("files", []):
+    for entry in files:
+        if not isinstance(entry, dict):
+            errors.append(f"{path.relative_to(repo)} file entry must be an object")
+            continue
         role = entry.get("role")
         if role not in REQUIRED_FILE_ROLES:
             expected_roles = ", ".join(sorted(REQUIRED_FILE_ROLES))
