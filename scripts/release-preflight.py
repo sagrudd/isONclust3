@@ -106,6 +106,8 @@ REQUIRED_OPTIMIZATION_CONTRACT_MARKERS = (
     "scripts/check-output-contract-fixtures.sh",
     "scripts/release-preflight.py --expected-version 0.3.0",
 )
+REQUIRED_OPTIMIZATION_COMMAND_MARKER = "scripts/run-local-profiling.sh"
+REQUIRED_OPTIMIZATION_REPORT_PATH_MARKER = "`target/local-profile/`"
 REQUIRED_BENCHMARK_TIERS = {
     "medium",
     "phanerognostikon",
@@ -559,6 +561,18 @@ def validate_optimization_evidence(repo: Path) -> list[str]:
                     f"OPTIMIZATION_EVIDENCE.md entry {sha} missing contract "
                     f"check marker: {marker}"
                 )
+        command_count = entry_text.count(REQUIRED_OPTIMIZATION_COMMAND_MARKER)
+        if command_count < 2:
+            errors.append(
+                f"OPTIMIZATION_EVIDENCE.md entry {sha} must cite before and "
+                "after local profiling commands"
+            )
+        report_path_count = entry_text.count(REQUIRED_OPTIMIZATION_REPORT_PATH_MARKER)
+        if report_path_count < 2:
+            errors.append(
+                f"OPTIMIZATION_EVIDENCE.md entry {sha} must cite ignored "
+                "before and after target/local-profile/ report paths"
+            )
     return errors
 
 
