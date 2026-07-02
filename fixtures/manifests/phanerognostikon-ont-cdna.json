@@ -34,6 +34,17 @@
     "status": "blocked_pending_data",
     "blocker_id": "ISOCLUST-BLOCK-002"
   },
+  "profiling_plan": {
+    "scope": "smallest-accepted-larger-workload",
+    "status": "blocked_pending_data",
+    "blocker_id": "ISOCLUST-BLOCK-002",
+    "required_facets": [
+      "seed-generation",
+      "minimizer-extraction",
+      "quality-filtering",
+      "final-clusters-contract"
+    ]
+  },
   "downstream_handoff": {
     "consumer": "newONform",
     "generated_input_register": "fixtures/generated-inputs/register.json",

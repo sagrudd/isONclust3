@@ -35,6 +35,10 @@ default `newONform` handoff, which uses `--no-fastq`.
    - Measurement: compare ONT and PacBio local profiling reports with default
      `--no-fastq`, then repeat on the smallest accepted larger workload before
      changing allocation behavior.
+     Medium and Phanerognostikon manifests must keep a preflight-validated
+     `profiling_plan` that covers seed generation, minimizer extraction,
+     quality filtering, and exact `final_clusters.tsv` compatibility before
+     those workloads can become accepted evidence.
    - Output risk: medium. The sorted read order influences cluster IDs and
      therefore `final_clusters.tsv` ordering.
 

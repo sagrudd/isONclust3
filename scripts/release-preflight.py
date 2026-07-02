@@ -82,6 +82,12 @@ REQUIRED_BLOCKED_EXTERNAL_MANIFESTS = {
     "isonclust3-medium-ont-cdna",
     "isonclust3-phanerognostikon-ont-cdna",
 }
+REQUIRED_EXTERNAL_PROFILING_FACETS = {
+    "final-clusters-contract",
+    "minimizer-extraction",
+    "quality-filtering",
+    "seed-generation",
+}
 REQUIRED_BENCHMARK_TIERS = {
     "medium",
     "phanerognostikon",
@@ -334,6 +340,40 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
             errors.append(
                 f"{path.relative_to(repo)} acceptance.blocker_id must be ISOCLUST-BLOCK-002"
             )
+        profiling_plan = manifest.get("profiling_plan")
+        if not isinstance(profiling_plan, dict):
+            errors.append(f"{path.relative_to(repo)} missing profiling_plan")
+        else:
+            if profiling_plan.get("scope") != "smallest-accepted-larger-workload":
+                errors.append(
+                    f"{path.relative_to(repo)} profiling_plan.scope must be "
+                    "smallest-accepted-larger-workload"
+                )
+            if profiling_plan.get("status") != "blocked_pending_data":
+                errors.append(
+                    f"{path.relative_to(repo)} profiling_plan.status must be "
+                    "blocked_pending_data"
+                )
+            if profiling_plan.get("blocker_id") != "ISOCLUST-BLOCK-002":
+                errors.append(
+                    f"{path.relative_to(repo)} profiling_plan.blocker_id must be "
+                    "ISOCLUST-BLOCK-002"
+                )
+            facets = profiling_plan.get("required_facets")
+            if not isinstance(facets, list) or not all(
+                isinstance(facet, str) for facet in facets
+            ):
+                errors.append(
+                    f"{path.relative_to(repo)} profiling_plan.required_facets "
+                    "must be a string list"
+                )
+            else:
+                missing_facets = REQUIRED_EXTERNAL_PROFILING_FACETS - set(facets)
+                if missing_facets:
+                    errors.append(
+                        f"{path.relative_to(repo)} profiling_plan.required_facets "
+                        f"missing: {', '.join(sorted(missing_facets))}"
+                    )
 
     if manifest_id in REQUIRED_DOWNSTREAM_HANDOFFS:
         handoff = manifest.get("downstream_handoff")

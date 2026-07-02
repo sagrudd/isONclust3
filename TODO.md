@@ -45,6 +45,8 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Add a local profiling harness for toy ONT/PacBio runs that records
       wall time, peak RSS, checksums, and output-contract status.
 - [x] Rank optimization candidates by wall-time, memory, and output-risk.
+- [x] Gate larger-workload manifests with seed-generation and minimizer
+      extraction profiling plans before acceptance.
 - [ ] Profile seed generation and minimizer/syncmer extraction on the smallest
       accepted larger workload.
 - [x] Profile clustering merge bookkeeping and shared-seed maps with
