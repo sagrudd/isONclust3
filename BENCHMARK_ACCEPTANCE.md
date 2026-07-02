@@ -36,6 +36,9 @@ Every accepted Dockerized or GB10 report must include:
 - Before GB10 execution, toy ONT and toy PacBio manifests must pass the local
   Docker smoke in `scripts/check-docker-toy-benchmarks.sh`; this confirms the
   benchmark image, runner report path, and `final_clusters.tsv` checksums.
+- Benchmark manifests must keep the file-based handoff command shape:
+  `--fastq`, `--mode`, `--outfolder`, `--seeding`, and `--no-fastq` under the
+  `isonclust3:gb10` image.
 - Medium ONT and Phanerognostikon-scale workloads must not be accepted until
   their source inputs, producer commands, and generated cluster-table checksums
   are recorded.

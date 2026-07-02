@@ -82,6 +82,13 @@ REQUIRED_BLOCKED_EXTERNAL_MANIFESTS = {
     "isonclust3-medium-ont-cdna",
     "isonclust3-phanerognostikon-ont-cdna",
 }
+REQUIRED_COMMAND_FLAGS = {
+    "--fastq",
+    "--mode",
+    "--outfolder",
+    "--seeding",
+    "--no-fastq",
+}
 
 
 def sha256(path: Path) -> str:
@@ -156,6 +163,25 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
         errors.append(f"{path.relative_to(repo)} must require a GB10 report")
     if acceptance.get("requires_output_checksums") is not True:
         errors.append(f"{path.relative_to(repo)} must require output checksums")
+
+    command = manifest.get("command", {})
+    if not isinstance(command, dict):
+        errors.append(f"{path.relative_to(repo)} command must be an object")
+    else:
+        if command.get("container_image") != "isonclust3:gb10":
+            errors.append(
+                f"{path.relative_to(repo)} command.container_image must be isonclust3:gb10"
+            )
+        args = command.get("args")
+        if not isinstance(args, list) or not all(isinstance(arg, str) for arg in args):
+            errors.append(f"{path.relative_to(repo)} command.args must be a string list")
+        else:
+            missing_flags = REQUIRED_COMMAND_FLAGS.difference(args)
+            if missing_flags:
+                errors.append(
+                    f"{path.relative_to(repo)} command.args missing flags: "
+                    f"{', '.join(sorted(missing_flags))}"
+                )
 
     manifest_id = manifest.get("manifest_id")
     if manifest_id in REQUIRED_BLOCKED_EXTERNAL_MANIFESTS:
