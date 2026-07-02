@@ -33,6 +33,13 @@ SHA256_HEX_PATTERN = re.compile(r"[0-9a-f]{64}")
 OUTPUT_CONTRACT_REGISTER = Path("fixtures/output-contracts/final-clusters-register.json")
 OUTPUT_CONTRACT_SCHEMA = Path("schemas/output-contract-register.schema.json")
 OUTPUT_CONTRACT_SCHEMA_REFERENCE = "../../schemas/output-contract-register.schema.json"
+OUTPUT_CONTRACT_IDENTITY = {
+    "schema_version": 1,
+    "manifest_kind": "isonclust3-output-contract-register",
+    "manifest_id": "isonclust3-final-clusters-contract-v1",
+    "project": "isONclust3",
+    "contract": "final_clusters.tsv",
+}
 OUTPUT_CONTRACT_SCHEMA_REQUIRED_FIELDS = {
     "$schema",
     "schema_version",
@@ -78,11 +85,7 @@ def validate_output_contract_register(repo: Path) -> list[str]:
 
     expected_root = {
         "$schema": OUTPUT_CONTRACT_SCHEMA_REFERENCE,
-        "schema_version": 1,
-        "manifest_kind": "isonclust3-output-contract-register",
-        "manifest_id": "isonclust3-final-clusters-contract-v1",
-        "project": "isONclust3",
-        "contract": "final_clusters.tsv",
+        **OUTPUT_CONTRACT_IDENTITY,
     }
     for key, value in expected_root.items():
         if register.get(key) != value:
@@ -187,8 +190,13 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
     properties = schema.get("properties", {})
     if not isinstance(properties, dict):
         return errors + [f"{path.relative_to(repo)} properties must be an object"]
-    if properties.get("$schema", {}).get("const") != OUTPUT_CONTRACT_SCHEMA_REFERENCE:
-        errors.append(f"{path.relative_to(repo)} $schema const must match register")
+    expected_consts = {
+        "$schema": OUTPUT_CONTRACT_SCHEMA_REFERENCE,
+        **OUTPUT_CONTRACT_IDENTITY,
+    }
+    for field, value in expected_consts.items():
+        if properties.get(field, {}).get("const") != value:
+            errors.append(f"{path.relative_to(repo)} properties.{field}.const must be {value}")
     entries = properties.get("entries", {})
     if entries.get("minItems") != 1 or entries.get("items", {}).get("$ref") != "#/$defs/entry":
         errors.append(f"{path.relative_to(repo)} entries must require entry definitions")
@@ -204,6 +212,10 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
     entry_properties = entry.get("properties", {})
     if not isinstance(entry_properties, dict):
         return errors + [f"{path.relative_to(repo)} entry properties must be an object"]
+    if entry_properties.get("mode", {}).get("enum") != ["ont", "pacbio"]:
+        errors.append(f"{path.relative_to(repo)} entry mode must be ont or pacbio")
+    if entry_properties.get("benchmark_tier", {}).get("const") != "toy":
+        errors.append(f"{path.relative_to(repo)} entry benchmark_tier must be toy")
     if entry_properties.get("status", {}).get("const") != "resolved":
         errors.append(f"{path.relative_to(repo)} entry status must be resolved")
     if entry_properties.get("consumer", {}).get("const") != "newONform":
@@ -211,4 +223,7 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
     for checksum_field in ("sha256", "fastq_sha256"):
         if entry_properties.get(checksum_field, {}).get("pattern") != "^[0-9a-f]{64}$":
             errors.append(f"{path.relative_to(repo)} {checksum_field} must gate sha256 hex")
+    for byte_field in ("bytes", "fastq_bytes"):
+        if entry_properties.get(byte_field, {}).get("minimum") != 1:
+            errors.append(f"{path.relative_to(repo)} {byte_field} must be positive")
     return errors

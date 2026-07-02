@@ -177,6 +177,7 @@ REQUIRED_TEXT = {
         "Split tracked-artifact hygiene into a focused preflight module.",
         "Gate a machine-readable tiny `final_clusters.tsv` output-contract",
         "Gate the output-contract register schema.",
+        "Gate output-contract schema entry constraints.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",

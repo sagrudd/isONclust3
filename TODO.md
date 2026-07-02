@@ -42,6 +42,7 @@ Tasks are ordered to improve the fork without breaking the upstream
       register.
 - [x] Gate paired FASTQ checksums in the tiny output-contract register.
 - [x] Gate the output-contract register schema.
+- [x] Gate output-contract schema entry constraints.
 
 ## 2. Output Contract Harmonization
 
