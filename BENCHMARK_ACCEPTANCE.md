@@ -33,6 +33,9 @@ Every accepted Dockerized or GB10 report must include:
 ## Initial Gates
 
 - Toy ONT and toy PacBio fixtures must pass checksum-backed regeneration.
+- Before GB10 execution, toy ONT and toy PacBio manifests must pass the local
+  Docker smoke in `scripts/check-docker-toy-benchmarks.sh`; this confirms the
+  benchmark image, runner report path, and `final_clusters.tsv` checksums.
 - Medium ONT and Phanerognostikon-scale workloads must not be accepted until
   their source inputs, producer commands, and generated cluster-table checksums
   are recorded.

@@ -90,10 +90,11 @@ Acceptance criteria:
 - Bottlenecks are ranked before implementation begins.
 
 Status: active. `Dockerfile`, toy ONT/PacBio manifests, pending medium and
-Phanerognostikon workload manifests, and `scripts/run-gb10-benchmark.sh` now
-define the reproducible Docker/GB10 evidence path. Accepted GB10 reports and
-large-workload `final_clusters.tsv` checksums are still blocked by
-`ISOCLUST-BLOCK-001` and `ISOCLUST-BLOCK-002`.
+Phanerognostikon workload manifests, `scripts/run-gb10-benchmark.sh`, and
+`scripts/check-docker-toy-benchmarks.sh` now define the reproducible
+Docker/GB10 evidence path. Accepted GB10 reports and large-workload
+`final_clusters.tsv` checksums are still blocked by `ISOCLUST-BLOCK-001` and
+`ISOCLUST-BLOCK-002`.
 
 ## Milestone 4: Algorithmic Optimization
 

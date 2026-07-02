@@ -63,6 +63,7 @@ Tasks are ordered to improve the fork without breaking the upstream
       Phanerognostikon-scale ONT workloads.
 - [x] Add a GB10 runner that records command, image, checksums, wall time,
       peak RSS, CPU architecture, and thread count.
+- [x] Add a local Docker toy benchmark smoke for ONT and PacBio manifests.
 - [ ] Record accepted GB10 benchmark reports with command, image, checksums, wall time,
       peak RSS, CPU architecture, and thread count.
 - [ ] Expose generated `final_clusters.tsv` checksums for `newONform` release

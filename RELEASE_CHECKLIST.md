@@ -10,12 +10,14 @@ Use this checklist before a release-candidate tag or before updating
 - [ ] `cargo clippy --all-targets -- -D warnings`
 - [ ] `scripts/check-output-contract-fixtures.sh`
 - [ ] `scripts/release-preflight.py --expected-version 0.3.0`
+- [ ] `scripts/check-docker-toy-benchmarks.sh`
 - [ ] `git diff --check`
 
 ## Required Docker And GB10 Evidence
 
 - [ ] Build the benchmark image from a clean checkout.
-- [ ] Run toy ONT and toy PacBio manifests through `scripts/run-gb10-benchmark.sh`.
+- [ ] Run toy ONT and toy PacBio manifests through
+      `scripts/check-docker-toy-benchmarks.sh`.
 - [ ] Run accepted medium ONT and Phanerognostikon-scale ONT manifests on GB10.
 - [ ] Capture JSON and TSV reports with image identity, command, input checksums,
       output checksums, wall time, peak RSS, CPU architecture, and thread count.

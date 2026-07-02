@@ -131,6 +131,16 @@ Then run toy or externally mounted GB10 workloads through
 `scripts/run-gb10-benchmark.sh`. Generated reports, raw inputs, and bulky output
 directories must remain outside Git.
 
+Before collecting GB10 evidence, run the local Docker toy smoke:
+
+```sh
+scripts/check-docker-toy-benchmarks.sh
+```
+
+The smoke runs both tiny ONT and PacBio manifests through the same benchmark
+runner and exact-compares the generated `final_clusters.tsv` files to the
+committed expected outputs.
+
 ### Clusters
 IsONclust outputs the reads in .fastq file format with each file containing the reads for the respective cluster. The .fastq files are located in the `fastq_files` directory that is created in the given outfolder.
 

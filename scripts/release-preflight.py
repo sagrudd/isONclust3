@@ -28,6 +28,7 @@ REQUIRED_FILES = [
     "RELEASE_CHECKLIST.md",
     "TODO.md",
     "scripts/check-output-contract-fixtures.sh",
+    "scripts/check-docker-toy-benchmarks.sh",
     "scripts/run-gb10-benchmark.sh",
 ]
 
