@@ -18,7 +18,8 @@ tight integration with `newONform`.
 - Preserve `final_clusters.tsv` semantics unless a documented compatibility
   waiver exists; a waiver does not claim accepted producer evidence or
   `newONform` checksum readiness.
-- Do not commit raw sequencing data or large generated outputs.
+- Do not commit raw sequencing data, large generated outputs, Sphinx build
+  output, or Python virtual environments/cache artifacts.
 - Keep fixtures tiny unless an external manifest records their source and
   checksum.
 

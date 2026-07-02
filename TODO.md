@@ -35,6 +35,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate Sphinx index generated-checksum waiver-scope markers.
 - [x] Gate release-checklist waiver-scope evidence markers.
 - [x] Gate AGENTS compatibility-waiver evidence markers.
+- [x] Gate expanded tracked-artifact hygiene markers.
 
 ## 2. Output Contract Harmonization
 

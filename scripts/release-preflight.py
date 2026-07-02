@@ -48,6 +48,8 @@ REQUIRED_TEXT = {
         "Do not commit raw sequencing data",
         "waiver does not claim accepted producer evidence",
         "`newONform` checksum readiness",
+        "Sphinx build",
+        "Python virtual environments/cache artifacts",
         "## Documentation Rules",
         "Sphinx governance and release-readiness documentation",
         "sphinx-build -W -b html docs target/sphinx-html",
@@ -149,6 +151,7 @@ REQUIRED_TEXT = {
         "Gate Sphinx index generated-checksum waiver-scope markers.",
         "Gate release-checklist waiver-scope evidence markers.",
         "Gate AGENTS compatibility-waiver evidence markers.",
+        "Gate expanded tracked-artifact hygiene markers.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",
@@ -841,12 +844,54 @@ def validate_tracked_artifacts(repo: Path) -> list[str]:
         text=True,
         stdout=subprocess.PIPE,
     )
-    forbidden_prefixes = ("target/", "reports/", "gb10-reports/")
-    forbidden_suffixes = (".bam", ".pod5", ".fast5")
+    forbidden_prefixes = (
+        ".mypy_cache/",
+        ".pytest_cache/",
+        ".ruff_cache/",
+        ".tox/",
+        ".venv/",
+        "target/",
+        "venv/",
+        "build/",
+        "dist/",
+        "docs/_build/",
+        "htmlcov/",
+        "scripts/__pycache__/",
+        "__pycache__/",
+        "benchmark-artifacts/",
+        "benchmark-output/",
+        "gb10-output/",
+        "reports/",
+        "gb10-reports/",
+    )
+    forbidden_suffixes = (".pyc", ".pyo")
+    raw_sequence_suffixes = (
+        ".bam",
+        ".cram",
+        ".sam",
+        ".sra",
+        ".pod5",
+        ".fast5",
+        ".fastq",
+        ".fq",
+        ".fasta",
+        ".fa",
+        ".fna",
+        ".fastq.gz",
+        ".fq.gz",
+        ".fasta.gz",
+        ".fa.gz",
+        ".fna.gz",
+    )
+    allowed_sequence_prefixes = ("fixtures/tiny/", "example_data/")
     errors = []
     for tracked in result.stdout.splitlines():
         if tracked.startswith(forbidden_prefixes) or tracked.endswith(forbidden_suffixes):
             errors.append(f"forbidden tracked artifact: {tracked}")
+        if tracked.endswith(raw_sequence_suffixes) and not tracked.startswith(
+            allowed_sequence_prefixes
+        ):
+            errors.append(f"forbidden tracked raw sequencing artifact: {tracked}")
     return errors
 
 
