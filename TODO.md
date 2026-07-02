@@ -72,6 +72,8 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [ ] Add benchmark evidence before and after every algorithmic optimization.
   - [x] Add a preflight-validated optimization evidence ledger for local
         before/after profiling notes.
+  - [x] Gate optimization evidence entry fields and contract-check markers in
+        release preflight.
 
 ## 6. Dockerized GB10 Evidence
 

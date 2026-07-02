@@ -88,6 +88,24 @@ REQUIRED_EXTERNAL_PROFILING_FACETS = {
     "quality-filtering",
     "seed-generation",
 }
+REQUIRED_OPTIMIZATION_ENTRY_MARKERS = (
+    "- Date:",
+    "- Optimized facet:",
+    "- Compatibility risk:",
+    "- Before command:",
+    "- Before report path:",
+    "- After command:",
+    "- After report path:",
+    "- Contract checks run:",
+    "- GB10 or larger-workload status:",
+)
+REQUIRED_OPTIMIZATION_CONTRACT_MARKERS = (
+    "cargo fmt --check",
+    "cargo test --quiet",
+    "cargo clippy --all-targets -- -D warnings",
+    "scripts/check-output-contract-fixtures.sh",
+    "scripts/release-preflight.py --expected-version 0.3.0",
+)
 REQUIRED_BENCHMARK_TIERS = {
     "medium",
     "phanerognostikon",
@@ -513,6 +531,37 @@ def validate_ci(repo: Path) -> list[str]:
     return [f"CI workflow missing marker: {marker}" for marker in markers if marker not in text]
 
 
+def validate_optimization_evidence(repo: Path) -> list[str]:
+    path = repo / "OPTIMIZATION_EVIDENCE.md"
+    text = path.read_text(encoding="utf-8")
+    entry_matches = list(re.finditer(r"^### (?P<title>.+)$", text, flags=re.MULTILINE))
+    if not entry_matches:
+        return ["OPTIMIZATION_EVIDENCE.md must include at least one evidence entry"]
+
+    errors: list[str] = []
+    for index, match in enumerate(entry_matches):
+        title = match.group("title")
+        start = match.end()
+        end = entry_matches[index + 1].start() if index + 1 < len(entry_matches) else len(text)
+        entry_text = text[start:end]
+        sha = title.split(" ", 1)[0]
+        if not re.fullmatch(r"[0-9a-f]{40}", sha):
+            errors.append(
+                f"OPTIMIZATION_EVIDENCE.md entry {title!r} must start with a "
+                "40-character lowercase Git SHA"
+            )
+        for marker in REQUIRED_OPTIMIZATION_ENTRY_MARKERS:
+            if marker not in entry_text:
+                errors.append(f"OPTIMIZATION_EVIDENCE.md entry {sha} missing {marker}")
+        for marker in REQUIRED_OPTIMIZATION_CONTRACT_MARKERS:
+            if marker not in entry_text:
+                errors.append(
+                    f"OPTIMIZATION_EVIDENCE.md entry {sha} missing contract "
+                    f"check marker: {marker}"
+                )
+    return errors
+
+
 def validate_tracked_artifacts(repo: Path) -> list[str]:
     result = subprocess.run(
         ["git", "ls-files"],
@@ -547,6 +596,7 @@ def main() -> int:
     errors.extend(validate_file_sizes(repo, args.max_lines))
     errors.extend(validate_manifests(repo))
     errors.extend(validate_ci(repo))
+    errors.extend(validate_optimization_evidence(repo))
     errors.extend(validate_tracked_artifacts(repo))
 
     if errors:
