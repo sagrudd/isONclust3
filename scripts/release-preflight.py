@@ -755,7 +755,9 @@ def validate_manifests(repo: Path) -> list[str]:
     for manifest in manifests:
         try:
             manifest_data = json.loads(manifest.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(manifest_data, dict):
             continue
         manifest_id = manifest_data.get("manifest_id")
         if not isinstance(manifest_id, str):
