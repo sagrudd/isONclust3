@@ -57,14 +57,22 @@ The `--mode ont` argument means setting `--k 13 --w 21`. The `--mode pacbio` arg
 # Output <a name="output"></a>
 
 ### Clustering information
-The output consists of a tsv file `final_clusters.tsv` present in the specified output folder. In this file, the first column is the cluster ID and the second column is the read accession. For example:
+The stable downstream integration output is
+`<outfolder>/clustering/final_clusters.tsv`. The file has no header and uses
+exactly two tab-separated columns: cluster ID and read accession. For example:
 ```
-0 read_X_acc
-0 read_Y_acc
+0	read_X_acc
+0	read_Y_acc
 ...
-n read_Z_acc
+n	read_Z_acc
 ```
-if there are n reads there will be n rows. Some reads might be singletons.
+Each row assigns one accepted read to one cluster. Some reads might be
+singletons. Consumers must not rely on row ordering until the deterministic
+ordering fixture gate is complete.
+
+See [`OUTPUT_CONTRACTS.md`](OUTPUT_CONTRACTS.md) for the maintained
+`final_clusters.tsv` contract consumed by `newONform`.
+
 ### Clusters
 IsONclust outputs the reads in .fastq file format with each file containing the reads for the respective cluster. The .fastq files are located in the `fastq_files` directory that is created in the given outfolder.
 

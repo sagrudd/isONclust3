@@ -14,11 +14,11 @@ Acceptance criteria:
 - Local `cargo test` passes on the upstream code.
 - Known lint and modularity debt is tracked without claiming release readiness.
 
-Status: active. The fork exists under `sagrudd/isONclust3`; `cargo test`
-passes, repository metadata now points at the maintained fork, and code is
-normalized with `cargo fmt`. Strict clippy currently exposes warning debt that
-must be retired before the fork can act as a release-quality upstream
-dependency.
+Status: active. The fork exists under `sagrudd/isONclust3`; `cargo test`,
+`cargo fmt --check`, and `cargo clippy --all-targets -- -D warnings` pass.
+Repository metadata points at the maintained fork. Remaining release-readiness
+work is centered on output-contract fixtures, deterministic evidence, and
+Dockerized GB10 benchmark gates.
 
 ## Milestone 1: Output Contract Stabilization
 
@@ -32,7 +32,11 @@ Acceptance criteria:
 - `newONform` can consume committed `isONclust3` fixture output without adapter
   ambiguity.
 
-Status: planned.
+Status: active. `OUTPUT_CONTRACTS.md` now defines the
+`<outfolder>/clustering/final_clusters.tsv` path, two-column tab-separated
+shape, no-header behavior, read-accession semantics, downstream consumer
+expectations, and the current row-ordering limitation. Tiny ONT/PacBio
+checksum fixtures and deterministic ordering checks remain outstanding.
 
 ## Milestone 2: Code Hygiene And Modularity
 
