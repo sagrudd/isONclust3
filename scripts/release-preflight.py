@@ -108,6 +108,11 @@ REQUIRED_OPTIMIZATION_CONTRACT_MARKERS = (
 )
 REQUIRED_OPTIMIZATION_COMMAND_MARKER = "scripts/run-local-profiling.sh"
 REQUIRED_OPTIMIZATION_REPORT_PATH_MARKER = "`target/local-profile/`"
+REQUIRED_RELEASE_CHECKLIST_SECTIONS = (
+    "## Required Local Checks",
+    "## Required Docker And GB10 Evidence",
+    "## Required Integration Evidence",
+)
 REQUIRED_BENCHMARK_TIERS = {
     "medium",
     "phanerognostikon",
@@ -602,6 +607,30 @@ def validate_optimization_evidence(repo: Path) -> list[str]:
     return errors
 
 
+def validate_release_checklist(repo: Path) -> list[str]:
+    path = repo / "RELEASE_CHECKLIST.md"
+    text = path.read_text(encoding="utf-8")
+    errors = [
+        f"RELEASE_CHECKLIST.md missing section: {section}"
+        for section in REQUIRED_RELEASE_CHECKLIST_SECTIONS
+        if section not in text
+    ]
+    checked_items = [
+        (line_number, line)
+        for line_number, line in enumerate(text.splitlines(), start=1)
+        if re.match(r"- \[[xX]\]", line)
+    ]
+    for line_number, line in checked_items:
+        errors.append(
+            f"RELEASE_CHECKLIST.md line {line_number} must remain unchecked "
+            f"until release evidence is collected: {line}"
+        )
+    unchecked_items = [line for line in text.splitlines() if line.startswith("- [ ]")]
+    if len(unchecked_items) < 10:
+        errors.append("RELEASE_CHECKLIST.md must keep the operator checklist populated")
+    return errors
+
+
 def validate_tracked_artifacts(repo: Path) -> list[str]:
     result = subprocess.run(
         ["git", "ls-files"],
@@ -637,6 +666,7 @@ def main() -> int:
     errors.extend(validate_manifests(repo))
     errors.extend(validate_ci(repo))
     errors.extend(validate_optimization_evidence(repo))
+    errors.extend(validate_release_checklist(repo))
     errors.extend(validate_tracked_artifacts(repo))
 
     if errors:

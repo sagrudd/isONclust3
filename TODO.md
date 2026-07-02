@@ -10,6 +10,8 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Update package metadata for the maintained fork while preserving upstream
       attribution.
 - [x] Add a release checklist and blocker register.
+- [x] Gate release-checklist sections and unchecked operator-template status in
+      release preflight.
 - [x] Add preflight checks for version syntax, file-size limits, fixture
       hygiene, and documentation markers.
 
