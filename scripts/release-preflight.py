@@ -704,6 +704,9 @@ def validate_release_checklist(repo: Path) -> list[str]:
         for section in REQUIRED_RELEASE_CHECKLIST_SECTIONS
         if section not in text
     ]
+    for blocker in sorted(REQUIRED_ACTIVE_BLOCKERS):
+        if blocker not in text:
+            errors.append(f"RELEASE_CHECKLIST.md missing blocker marker: {blocker}")
     checked_items = [
         (line_number, line)
         for line_number, line in enumerate(text.splitlines(), start=1)

@@ -25,6 +25,10 @@ Use this checklist before a release-candidate tag or before updating
 - [ ] Capture JSON and TSV reports with image identity, command, input checksums,
       output checksums, wall time, peak RSS, CPU architecture, and thread count.
 - [ ] Store bulky reports and generated outputs outside Git.
+- [ ] Keep `ISOCLUST-BLOCK-001`, `ISOCLUST-BLOCK-002`, and
+      `ISOCLUST-BLOCK-003` active until accepted GB10 reports, generated
+      `final_clusters.tsv` checksums, and larger-workload profiling evidence
+      are recorded or waived.
 
 ## Required Integration Evidence
 
