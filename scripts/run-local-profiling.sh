@@ -102,17 +102,22 @@ run_case() {
     extra_args+=(--post-cluster)
   fi
 
-  python3 - \
-    "$binary" \
-    "$fastq" \
-    "$mode" \
-    "$run_dir" \
-    "$expected" \
-    "$report_json" \
-    "$report_tsv" \
-    "$log_file" \
-    "$variant" \
-    "${extra_args[@]}" <<'PY'
+  local -a profiler_args=(
+    "$binary"
+    "$fastq"
+    "$mode"
+    "$run_dir"
+    "$expected"
+    "$report_json"
+    "$report_tsv"
+    "$log_file"
+    "$variant"
+  )
+  if [[ ${#extra_args[@]} -gt 0 ]]; then
+    profiler_args+=("${extra_args[@]}")
+  fi
+
+  python3 - "${profiler_args[@]}" <<'PY'
 import csv
 import hashlib
 import json
@@ -274,4 +279,3 @@ for mode in ont pacbio; do
 done
 
 echo "local profiling passed: $output_dir"
-
