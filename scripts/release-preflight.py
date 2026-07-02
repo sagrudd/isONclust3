@@ -192,6 +192,7 @@ REQUIRED_TEXT = {
         "Gate output-contract schema unique entry rows.",
         "Gate output-contract schema definition keys.",
         "Gate output-contract schema root property types.",
+        "Gate output-contract register root key ordering.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",

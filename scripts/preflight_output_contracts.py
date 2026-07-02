@@ -89,6 +89,8 @@ def validate_output_contract_register(repo: Path) -> list[str]:
         "$schema": OUTPUT_CONTRACT_SCHEMA_REFERENCE,
         **OUTPUT_CONTRACT_IDENTITY,
     }
+    if list(register) != list(OUTPUT_CONTRACT_SCHEMA_REQUIRED_FIELDS):
+        errors.append(f"{path.relative_to(repo)} root keys must follow schema required order")
     for key, value in expected_root.items():
         if register.get(key) != value:
             errors.append(f"{path.relative_to(repo)} {key} must be {value}")
