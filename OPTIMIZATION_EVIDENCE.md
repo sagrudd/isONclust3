@@ -75,7 +75,7 @@ scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-
 - GB10 or larger-workload status: local toy evidence only; larger-workload
   profiling remains blocked pending accepted input access and checksums.
 
-### 152da10adf85d373b49af5c30edab4d92b35aff1 - Use fixed PHRED count storage
+### 152da1023cba096785bf810eb26c4f256a89a6d7 - Use fixed PHRED count storage
 
 - Date: 2026-07-02
 - Optimized facet: FASTQ sorting quality-score storage in

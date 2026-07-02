@@ -552,6 +552,19 @@ def validate_optimization_evidence(repo: Path) -> list[str]:
                 f"OPTIMIZATION_EVIDENCE.md entry {title!r} must start with a "
                 "40-character lowercase Git SHA"
             )
+        else:
+            result = subprocess.run(
+                ["git", "cat-file", "-e", f"{sha}^{{commit}}"],
+                cwd=repo,
+                check=False,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            if result.returncode != 0:
+                errors.append(
+                    f"OPTIMIZATION_EVIDENCE.md entry {sha} does not resolve "
+                    "to a commit"
+                )
         for marker in REQUIRED_OPTIMIZATION_ENTRY_MARKERS:
             if marker not in entry_text:
                 errors.append(f"OPTIMIZATION_EVIDENCE.md entry {sha} missing {marker}")

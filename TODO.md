@@ -75,6 +75,7 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Gate optimization evidence entry fields and contract-check markers in
         release preflight.
   - [x] Gate optimization evidence profiling commands and ignored report paths.
+  - [x] Gate optimization evidence commit SHAs against repository history.
 
 ## 6. Dockerized GB10 Evidence
 
