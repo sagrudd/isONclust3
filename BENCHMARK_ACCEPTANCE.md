@@ -35,6 +35,9 @@ Every accepted Dockerized or GB10 report must include:
 - Toy ONT and toy PacBio fixtures must pass checksum-backed regeneration.
 - Every benchmark manifest must include `linux/arm64` in `platform_targets` so
   Dockerized GB10 execution remains an explicit release requirement.
+- Benchmark manifests must identify themselves as
+  `isonclust3-benchmark-fixture` and record the seeding mode used by the
+  command.
 - Before GB10 execution, toy ONT and toy PacBio manifests must pass the local
   Docker smoke in `scripts/check-docker-toy-benchmarks.sh`; this confirms the
   benchmark image, runner report path, and `final_clusters.tsv` checksums.

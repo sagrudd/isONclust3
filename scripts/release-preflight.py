@@ -164,14 +164,28 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
     except json.JSONDecodeError as exc:
         return [f"{path.relative_to(repo)} is invalid JSON: {exc}"]
 
-    required = ["schema_version", "manifest_id", "project", "benchmark_tier", "mode"]
+    required = [
+        "schema_version",
+        "manifest_kind",
+        "manifest_id",
+        "project",
+        "benchmark_tier",
+        "mode",
+        "seeding",
+    ]
     for key in required:
         if key not in manifest:
             errors.append(f"{path.relative_to(repo)} missing required key: {key}")
+    if manifest.get("manifest_kind") != "isonclust3-benchmark-fixture":
+        errors.append(
+            f"{path.relative_to(repo)} manifest_kind must be isonclust3-benchmark-fixture"
+        )
     if manifest.get("project") != "isONclust3":
         errors.append(f"{path.relative_to(repo)} project must be isONclust3")
     if manifest.get("mode") not in {"ont", "pacbio"}:
         errors.append(f"{path.relative_to(repo)} mode must be ont or pacbio")
+    if manifest.get("seeding") not in {"minimizer", "syncmer"}:
+        errors.append(f"{path.relative_to(repo)} seeding must be minimizer or syncmer")
     platform_targets = manifest.get("platform_targets")
     if not isinstance(platform_targets, list) or "linux/arm64" not in platform_targets:
         errors.append(f"{path.relative_to(repo)} platform_targets must include linux/arm64")
