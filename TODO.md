@@ -52,6 +52,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate output-contract schema property types.
 - [x] Gate output-contract schema required field ordering.
 - [x] Gate output-contract schema property ordering.
+- [x] Gate output-contract schema catalog title.
 
 ## 2. Output Contract Harmonization
 

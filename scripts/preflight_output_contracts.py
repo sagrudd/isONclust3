@@ -204,6 +204,7 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
     expected_root = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "$id": "https://github.com/sagrudd/isONclust3/schemas/output-contract-register.schema.json",
+        "title": "isONclust3 final_clusters.tsv output-contract register",
         "type": "object",
         "additionalProperties": False,
     }
