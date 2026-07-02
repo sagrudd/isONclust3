@@ -37,6 +37,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate AGENTS compatibility-waiver evidence markers.
 - [x] Gate expanded tracked-artifact hygiene markers.
 - [x] Gate .gitignore generated-artifact markers.
+- [x] Split tracked-artifact hygiene into a focused preflight module.
 
 ## 2. Output Contract Harmonization
 

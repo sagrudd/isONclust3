@@ -11,6 +11,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from preflight_artifacts import validate_tracked_artifacts
+
 try:
     import tomllib
 except ModuleNotFoundError:  # pragma: no cover
@@ -35,6 +37,7 @@ REQUIRED_FILES = [
     "scripts/check-docker-toy-benchmarks.sh",
     "scripts/run-local-profiling.sh",
     "scripts/run-gb10-benchmark.sh",
+    "scripts/preflight_artifacts.py",
     "docs/requirements.txt",
     "docs/conf.py",
     "docs/index.rst",
@@ -163,6 +166,7 @@ REQUIRED_TEXT = {
         "Gate AGENTS compatibility-waiver evidence markers.",
         "Gate expanded tracked-artifact hygiene markers.",
         "Gate .gitignore generated-artifact markers.",
+        "Split tracked-artifact hygiene into a focused preflight module.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",
@@ -844,65 +848,6 @@ def validate_release_checklist(repo: Path) -> list[str]:
     unchecked_items = [line for line in text.splitlines() if line.startswith("- [ ]")]
     if len(unchecked_items) < 10:
         errors.append("RELEASE_CHECKLIST.md must keep the operator checklist populated")
-    return errors
-
-
-def validate_tracked_artifacts(repo: Path) -> list[str]:
-    result = subprocess.run(
-        ["git", "ls-files"],
-        cwd=repo,
-        check=True,
-        text=True,
-        stdout=subprocess.PIPE,
-    )
-    forbidden_prefixes = (
-        ".mypy_cache/",
-        ".pytest_cache/",
-        ".ruff_cache/",
-        ".tox/",
-        ".venv/",
-        "target/",
-        "venv/",
-        "build/",
-        "dist/",
-        "docs/_build/",
-        "htmlcov/",
-        "scripts/__pycache__/",
-        "__pycache__/",
-        "benchmark-artifacts/",
-        "benchmark-output/",
-        "gb10-output/",
-        "reports/",
-        "gb10-reports/",
-    )
-    forbidden_suffixes = (".pyc", ".pyo")
-    raw_sequence_suffixes = (
-        ".bam",
-        ".cram",
-        ".sam",
-        ".sra",
-        ".pod5",
-        ".fast5",
-        ".fastq",
-        ".fq",
-        ".fasta",
-        ".fa",
-        ".fna",
-        ".fastq.gz",
-        ".fq.gz",
-        ".fasta.gz",
-        ".fa.gz",
-        ".fna.gz",
-    )
-    allowed_sequence_prefixes = ("fixtures/tiny/", "example_data/")
-    errors = []
-    for tracked in result.stdout.splitlines():
-        if tracked.startswith(forbidden_prefixes) or tracked.endswith(forbidden_suffixes):
-            errors.append(f"forbidden tracked artifact: {tracked}")
-        if tracked.endswith(raw_sequence_suffixes) and not tracked.startswith(
-            allowed_sequence_prefixes
-        ):
-            errors.append(f"forbidden tracked raw sequencing artifact: {tracked}")
     return errors
 
 
