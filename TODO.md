@@ -33,6 +33,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate release-note waiver-scope operator markers.
 - [x] Gate benchmark acceptance waiver-scope status markers.
 - [x] Gate Sphinx index generated-checksum waiver-scope markers.
+- [x] Gate release-checklist waiver-scope evidence markers.
 
 ## 2. Output Contract Harmonization
 

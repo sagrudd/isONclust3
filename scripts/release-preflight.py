@@ -105,6 +105,7 @@ REQUIRED_TEXT = {
         "scripts/release-preflight.py --expected-version",
         "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff",
         "sphinx-build -W -b html docs target/sphinx-html",
+        "explicitly waived without claiming accepted producer",
         "Update `newONform` submodule, generated-input registers, release notes,",
         "blockers, and Sphinx documentation in the same release train.",
     ],
@@ -144,6 +145,7 @@ REQUIRED_TEXT = {
         "Gate release-note waiver-scope operator markers.",
         "Gate benchmark acceptance waiver-scope status markers.",
         "Gate Sphinx index generated-checksum waiver-scope markers.",
+        "Gate release-checklist waiver-scope evidence markers.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",

@@ -29,7 +29,8 @@ Use this checklist before a release-candidate tag or before updating
 - [ ] Keep `ISOCLUST-BLOCK-001`, `ISOCLUST-BLOCK-002`, and
       `ISOCLUST-BLOCK-003` active until accepted GB10 reports, generated
       `final_clusters.tsv` checksums, and larger-workload profiling evidence
-      are recorded or waived.
+      are recorded or explicitly waived without claiming accepted producer
+      evidence.
 
 ## Required Integration Evidence
 
