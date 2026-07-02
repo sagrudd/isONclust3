@@ -133,7 +133,12 @@ Acceptance criteria:
 - `newONform` benchmark manifests can cite accepted `isONclust3` cluster-table
   evidence.
 
-Status: planned.
+Status: active. Dockerfile, toy ONT/PacBio benchmark manifests, pending medium
+and Phanerognostikon manifests, local Docker toy smoke automation, benchmark
+acceptance criteria, and `scripts/run-gb10-benchmark.sh` are in place. Actual
+accepted GB10 reports, container digests, larger-workload input/output
+checksums, and generated `final_clusters.tsv` producer checksums remain blocked
+under `ISOCLUST-BLOCK-001` and `ISOCLUST-BLOCK-002`.
 
 ## Milestone 6: Tight newONform Integration
 

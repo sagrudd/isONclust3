@@ -15,6 +15,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Gate active and resolved blocker-register rows in release preflight.
 - [x] Add preflight checks for version syntax, file-size limits, fixture
       hygiene, and documentation markers.
+- [x] Gate GB10 milestone active status and unresolved evidence blockers.
 
 ## 2. Output Contract Harmonization
 

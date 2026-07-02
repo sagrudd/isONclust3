@@ -52,7 +52,13 @@ REQUIRED_TEXT = {
         "ISOCLUST-BLOCK-003",
         "ISOCLUST-BLOCK-004",
     ],
-    "MILESTONES.md": ["Dockerized GB10 Benchmarking"],
+    "MILESTONES.md": [
+        "Dockerized GB10 Benchmarking",
+        "Status: active. Dockerfile, toy ONT/PacBio benchmark manifests",
+        "scripts/run-gb10-benchmark.sh",
+        "ISOCLUST-BLOCK-001",
+        "ISOCLUST-BLOCK-002",
+    ],
     "OPTIMIZATION_EVIDENCE.md": [
         "Raw local reports must not be committed",
         "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff",
