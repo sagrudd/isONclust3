@@ -105,6 +105,8 @@ def validate_output_contract_register(repo: Path) -> list[str]:
         if not isinstance(entry, dict):
             errors.append(f"{path.relative_to(repo)} entry must be an object")
             continue
+        if list(entry) != list(OUTPUT_CONTRACT_SCHEMA_ENTRY_FIELDS):
+            errors.append(f"{path.relative_to(repo)} entry keys must follow schema order")
         entry_id = entry.get("entry_id")
         if not isinstance(entry_id, str):
             errors.append(f"{path.relative_to(repo)} entry_id must be a string")

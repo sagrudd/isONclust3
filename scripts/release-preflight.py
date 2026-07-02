@@ -193,6 +193,7 @@ REQUIRED_TEXT = {
         "Gate output-contract schema definition keys.",
         "Gate output-contract schema root property types.",
         "Gate output-contract register root key ordering.",
+        "Gate output-contract register entry key ordering.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",
