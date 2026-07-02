@@ -12,6 +12,7 @@ from pathlib import Path
 
 from preflight_artifacts import validate_tracked_artifacts
 from preflight_benchmark_schema import validate_benchmark_schema
+from preflight_ci import validate_ci
 from preflight_gb10_runner import validate_gb10_runner
 from preflight_output_contracts import validate_output_contract_register
 from preflight_optimization_evidence import validate_optimization_evidence
@@ -43,6 +44,7 @@ REQUIRED_FILES = [
     "scripts/run-gb10-benchmark.sh",
     "scripts/preflight_artifacts.py",
     "scripts/preflight_benchmark_schema.py",
+    "scripts/preflight_ci.py",
     "scripts/preflight_gb10_runner.py",
     "scripts/preflight_output_contracts.py",
     "scripts/preflight_optimization_evidence.py",
@@ -803,25 +805,6 @@ def validate_manifests(repo: Path) -> list[str]:
             )
         observed_ids[manifest_id] = manifest
     return errors
-
-
-def validate_ci(repo: Path) -> list[str]:
-    workflow = repo / ".github" / "workflows" / "ci.yml"
-    if not workflow.is_file():
-        return ["missing .github/workflows/ci.yml"]
-    text = workflow.read_text(encoding="utf-8")
-    markers = [
-        "actions/setup-python@v5",
-        "python -m pip install -r docs/requirements.txt",
-        "cargo fmt --check",
-        "cargo test",
-        "cargo clippy --all-targets -- -D warnings",
-        "scripts/check-output-contract-fixtures.sh",
-        "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff",
-        "sphinx-build -W -b html docs target/sphinx-html",
-        "scripts/release-preflight.py",
-    ]
-    return [f"CI workflow missing marker: {marker}" for marker in markers if marker not in text]
 
 
 def parse_args() -> argparse.Namespace:
