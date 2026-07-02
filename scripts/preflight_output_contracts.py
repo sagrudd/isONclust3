@@ -233,6 +233,7 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
         entries.get("type") != "array"
         or entries.get("minItems") != len(REQUIRED_OUTPUT_CONTRACT_ENTRY_IDS)
         or entries.get("maxItems") != len(REQUIRED_OUTPUT_CONTRACT_ENTRY_IDS)
+        or entries.get("uniqueItems") is not True
         or entries.get("items", {}).get("$ref") != "#/$defs/entry"
     ):
         errors.append(f"{path.relative_to(repo)} entries must require entry definitions")

@@ -36,6 +36,7 @@
       "type": "array",
       "minItems": 4,
       "maxItems": 4,
+      "uniqueItems": true,
       "items": {
         "$ref": "#/$defs/entry"
       }
