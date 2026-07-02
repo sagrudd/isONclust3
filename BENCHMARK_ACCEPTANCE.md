@@ -29,6 +29,8 @@ Every accepted Dockerized or GB10 report must include:
   incomplete.
 - `blocked_pending_data`: the source data or generated cluster table is not yet
   available for release evidence.
+- Waived producer gaps remain scoped release limitations and must not be
+  reported as `accepted_contract` or `accepted_calibration` benchmark evidence.
 
 ## Initial Gates
 
@@ -64,6 +66,8 @@ Every accepted Dockerized or GB10 report must include:
 - Medium ONT and Phanerognostikon-scale workloads must not be accepted until
   their source inputs, producer commands, and generated cluster-table checksums
   are recorded.
+- Waived medium or Phanerognostikon producer gaps do not claim accepted GB10
+  producer evidence or generated `final_clusters.tsv` checksum readiness.
 - Medium ONT and Phanerognostikon-scale manifests must record the downstream
   `newONform` generated-input register entry they unblock under `NOF-BLOCK-006`.
 - Any algorithmic optimization must include before/after reports for at least

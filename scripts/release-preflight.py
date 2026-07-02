@@ -54,6 +54,10 @@ REQUIRED_TEXT = {
         "final_clusters.tsv",
         "Container image ID or digest",
         "blocked_pending_data",
+        "Waived producer gaps remain scoped release limitations",
+        "must not be",
+        "reported as `accepted_contract` or `accepted_calibration`",
+        "Waived medium or Phanerognostikon producer gaps do not claim accepted GB10",
     ],
     "BLOCKERS.md": [
         "ISOCLUST-BLOCK-001",
@@ -138,6 +142,7 @@ REQUIRED_TEXT = {
         "Gate Sphinx index waiver-scope status markers.",
         "Gate README waiver-scope release evidence markers.",
         "Gate release-note waiver-scope operator markers.",
+        "Gate benchmark acceptance waiver-scope status markers.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",
