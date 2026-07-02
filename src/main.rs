@@ -486,7 +486,7 @@ fn main() {
     //FILE OUTPUT STEP
     //#################################################################################################
     let now4 = Instant::now();
-    write_output::write_output(outfolder, &clusters, filename, id_map, n, no_fastq);
+    write_output::write_output(outfolder, &clusters, filename, &id_map, n, no_fastq);
     info!("{} s for file output", now4.elapsed().as_secs());
     if let Some(usage) = memory_stats() {
         info!("Current physical memory usage: {}", usage.physical_mem);
