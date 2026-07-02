@@ -9,7 +9,7 @@ Use this checklist before a release-candidate tag or before updating
 - [ ] `cargo test --quiet`
 - [ ] `cargo clippy --all-targets -- -D warnings`
 - [ ] `scripts/check-output-contract-fixtures.sh`
-- [ ] `scripts/run-local-profiling.sh --case ont`
+- [ ] `scripts/run-local-profiling.sh --case all`
 - [ ] `scripts/release-preflight.py --expected-version 0.3.0`
 - [ ] `scripts/check-docker-toy-benchmarks.sh`
 - [ ] `git diff --check`
