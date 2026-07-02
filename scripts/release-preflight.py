@@ -112,6 +112,7 @@ REQUIRED_COMMAND_VALUES = {
     "--fastq": "/work/data/reads.fastq",
     "--outfolder": "/work/out/isonclust3",
 }
+SHA256_HEX_PATTERN = re.compile(r"[0-9a-f]{64}")
 
 
 def sha256(path: Path) -> str:
@@ -335,8 +336,14 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
         if checksum.get("algorithm") != "sha256":
             errors.append(f"{path.relative_to(repo)} {relative} checksum must be sha256")
             continue
-        observed = sha256(file_path)
         expected = checksum.get("value")
+        if not isinstance(expected, str) or not SHA256_HEX_PATTERN.fullmatch(expected):
+            errors.append(
+                f"{path.relative_to(repo)} {relative} checksum value must be "
+                "64 lowercase hex characters"
+            )
+            continue
+        observed = sha256(file_path)
         if observed != expected:
             errors.append(
                 f"{path.relative_to(repo)} {relative} checksum mismatch: "

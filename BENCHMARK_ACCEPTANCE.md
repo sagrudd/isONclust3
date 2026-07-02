@@ -45,6 +45,7 @@ Every accepted Dockerized or GB10 report must include:
 - Toy benchmark manifests must include checksum-backed `input-fastq` and
   `expected-final-clusters` file roles pointing at the canonical toy
   `reads.fastq` and `expected/final_clusters.tsv` paths.
+- Manifest file checksums must use lowercase 64-character SHA-256 hex values.
 - Before GB10 execution, toy ONT and toy PacBio manifests must pass the local
   Docker smoke in `scripts/check-docker-toy-benchmarks.sh`; this confirms the
   benchmark image, runner report path, and `final_clusters.tsv` checksums.
