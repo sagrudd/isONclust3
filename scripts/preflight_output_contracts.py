@@ -29,6 +29,7 @@ REQUIRED_OUTPUT_CONTRACT_ENTRIES = {
         "fastq_path": "fixtures/tiny/pacbio/reads.fastq",
     },
 }
+REQUIRED_OUTPUT_CONTRACT_ENTRY_IDS = tuple(REQUIRED_OUTPUT_CONTRACT_ENTRIES)
 SHA256_HEX_PATTERN = re.compile(r"[0-9a-f]{64}")
 OUTPUT_CONTRACT_REGISTER = Path("fixtures/output-contracts/final-clusters-register.json")
 OUTPUT_CONTRACT_SCHEMA = Path("schemas/output-contract-register.schema.json")
@@ -97,6 +98,7 @@ def validate_output_contract_register(repo: Path) -> list[str]:
         return errors + [f"{path.relative_to(repo)} entries must be a list"]
 
     observed_ids: set[str] = set()
+    observed_order: list[str] = []
     for entry in entries:
         if not isinstance(entry, dict):
             errors.append(f"{path.relative_to(repo)} entry must be an object")
@@ -108,6 +110,7 @@ def validate_output_contract_register(repo: Path) -> list[str]:
         if entry_id in observed_ids:
             errors.append(f"{path.relative_to(repo)} duplicate entry_id: {entry_id}")
         observed_ids.add(entry_id)
+        observed_order.append(entry_id)
         expected = REQUIRED_OUTPUT_CONTRACT_ENTRIES.get(entry_id)
         if expected is None:
             errors.append(f"{path.relative_to(repo)} unexpected entry_id: {entry_id}")
@@ -179,6 +182,11 @@ def validate_output_contract_register(repo: Path) -> list[str]:
     if missing:
         errors.append(
             f"{path.relative_to(repo)} missing entry_id(s): {', '.join(sorted(missing))}"
+        )
+    if observed_order != list(REQUIRED_OUTPUT_CONTRACT_ENTRY_IDS):
+        errors.append(
+            f"{path.relative_to(repo)} entry order must be "
+            f"{', '.join(REQUIRED_OUTPUT_CONTRACT_ENTRY_IDS)}"
         )
     return errors
 
