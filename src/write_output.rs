@@ -11,7 +11,7 @@ use std::path::PathBuf;
 
 pub(crate) fn write_ordered_fastq(
     score_vec: &[(i32, usize)],
-    outfolder: &String,
+    outfolder: &str,
     id_map: &FxHashMap<i32, String>,
     fastq: &str,
 ) {

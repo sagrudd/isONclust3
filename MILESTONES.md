@@ -60,7 +60,10 @@ remaining errors. The first dead-code pass removed isolated legacy helpers from
 the active CLI, clustering, FASTQ sorting, and seed-filtering code, reducing
 strict clippy to 20 remaining errors. The remaining work is fixture-backed
 GFF/FASTA dead-code triage, compatibility struct decisions, and typed
-configuration structs for high-argument APIs.
+configuration structs for high-argument APIs. The configuration pass replaced
+positional FASTQ sorting and GFF clustering arguments with typed module-local
+configuration structs, reducing strict clippy to 17 remaining errors, all of
+which are now dead-code or compatibility-struct decisions.
 
 ## Milestone 3: Performance Profiling
 

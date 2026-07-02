@@ -17,6 +17,17 @@ use crate::{seeding_and_filtering_seeds, ClusterIdMap, SeedMap};
 use log::debug;
 use std::time::Instant;
 
+pub(crate) struct GffClusteringConfig<'a> {
+    pub gff_path: Option<&'a str>,
+    pub fasta_path: Option<&'a str>,
+    pub k: usize,
+    pub w: usize,
+    pub seeding: &'a str,
+    pub s: usize,
+    pub t: usize,
+    pub noncanonical: bool,
+}
+
 //TODO: add overlap detection
 //TODO: remove multiple occasions of minimizers in the same gene if the exons overlap
 //TODO: possibly use the gene id for cluster_identification
@@ -184,23 +195,16 @@ pub(crate) fn resolve_gff(
 }
 
 pub(crate) fn gff_based_clustering(
-    gff_path: Option<&str>,
-    fasta_path: Option<&str>,
+    config: &GffClusteringConfig<'_>,
     clusters: &mut ClusterIdMap,
     cluster_map: &mut SeedMap,
-    k: usize,
-    w: usize,
-    seeding: &str,
-    s: usize,
-    t: usize,
-    noncanonical_bool: bool,
 ) {
     // Read the FASTA file
-    let fasta_reader = File::open(Path::new(fasta_path.unwrap())).unwrap();
+    let fasta_reader = File::open(Path::new(config.fasta_path.unwrap())).unwrap();
     let fasta_buf_reader = BufReader::new(fasta_reader);
     let fasta_records = fasta::Reader::new(fasta_buf_reader).records();
     // Read the GFF file
-    let gff_reader = File::open(Path::new(gff_path.unwrap())).unwrap();
+    let gff_reader = File::open(Path::new(config.gff_path.unwrap())).unwrap();
     let gff_buf_reader = BufReader::new(gff_reader);
     let mut binding = gff::Reader::new(gff_buf_reader, GFF3);
     let mut gff_records = binding.records();
@@ -231,11 +235,11 @@ pub(crate) fn gff_based_clustering(
                     let exon_seq =
                         &sequence[*gff_record.start() as usize..*gff_record.end() as usize];
                     let mut this_minimizers = vec![];
-                    if seeding == "minimizer" {
-                        if noncanonical_bool {
+                    if config.seeding == "minimizer" {
+                        if config.noncanonical {
                             let min_iter = MinimizerBuilder::<u64, _>::new()
-                                .minimizer_size(k)
-                                .width((w) as u16)
+                                .minimizer_size(config.k)
+                                .width((config.w) as u16)
                                 .iter(sequence.as_bytes());
                             for (minimizer, position) in min_iter {
                                 let mini = MinimizerHashed {
@@ -247,8 +251,8 @@ pub(crate) fn gff_based_clustering(
                         } else {
                             let min_iter = MinimizerBuilder::<u64, _>::new()
                                 .canonical()
-                                .minimizer_size(k)
-                                .width((w) as u16)
+                                .minimizer_size(config.k)
+                                .width((config.w) as u16)
                                 .iter(sequence.as_bytes());
                             for (minimizer, position, _) in min_iter {
                                 let mini = MinimizerHashed {
@@ -258,12 +262,12 @@ pub(crate) fn gff_based_clustering(
                                 this_minimizers.push(mini);
                             }
                         }
-                    } else if seeding == "syncmer" && exon_seq.len() > s {
+                    } else if config.seeding == "syncmer" && exon_seq.len() > config.s {
                         seeding_and_filtering_seeds::syncmers_canonical(
                             exon_seq.as_bytes(),
-                            k,
-                            s,
-                            t,
+                            config.k,
+                            config.s,
+                            config.t,
                             &mut this_minimizers,
                         );
                     }

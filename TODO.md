@@ -36,7 +36,7 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Rename non-camel-case types and variants without changing output.
   - [x] Remove avoidable mutable bindings and late initialization.
   - [x] Replace redundant struct field initializers.
-  - [ ] Triage high-argument functions into typed configuration structs.
+  - [x] Triage high-argument functions into typed configuration structs.
 - [ ] Add `cargo fmt --check`, `cargo test`, and clippy to CI.
 
 ## 4. Performance Deep Dive

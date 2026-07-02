@@ -22,6 +22,8 @@ use crate::structs::MinimizerHashed;
 use std::collections::HashMap;
 
 use clap::Parser;
+use generate_sorted_fastq_for_cluster::SortFastqConfig;
+use gff_handling::GffClusteringConfig;
 use std::time::Instant;
 
 use std::path::Path;
@@ -259,18 +261,17 @@ fn main() {
         let mut cluster_map: SeedMap = HashMap::default(); //FxHashMap<u64, Vec<i32>> = FxHashMap::default();
         let initial_clustering_path = cli.init_cl.as_deref();
         if gff_path.is_some() {
-            gff_handling::gff_based_clustering(
+            let gff_config = GffClusteringConfig {
                 gff_path,
-                initial_clustering_path,
-                &mut clusters,
-                &mut cluster_map,
+                fasta_path: initial_clustering_path,
                 k,
                 w,
                 seeding,
                 s,
                 t,
-                noncanonical_bool,
-            );
+                noncanonical: noncanonical_bool,
+            };
+            gff_handling::gff_based_clustering(&gff_config, &mut clusters, &mut cluster_map);
             info!(
                 "{} s used for parsing the annotation information",
                 now1.elapsed().as_secs()
@@ -310,19 +311,20 @@ fn main() {
         let d_no_min = seeding_and_filtering_seeds::compute_d_no_min();
         info!("{}", filename);
         let now2 = Instant::now();
-        generate_sorted_fastq_for_cluster::sort_fastq_for_cluster(
+        let sort_config = SortFastqConfig {
             k,
             q_threshold,
-            &cli.fastq,
-            &outfolder,
-            &quality_threshold,
-            w,
+            in_file_path: &cli.fastq,
+            outfolder: &outfolder,
+            quality_threshold,
+            window_size: w,
             seeding,
             s,
             t,
-            noncanonical_bool,
+            noncanonical: noncanonical_bool,
             verbose,
-        );
+        };
+        generate_sorted_fastq_for_cluster::sort_fastq_for_cluster(&sort_config);
         let now3 = Instant::now();
         if verbose {
             info!("{} s for sorting the fastq file", now2.elapsed().as_secs());
