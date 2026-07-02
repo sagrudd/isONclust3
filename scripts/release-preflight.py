@@ -78,6 +78,10 @@ REQUIRED_DOWNSTREAM_HANDOFFS = {
     "isonclust3-medium-ont-cdna": "drr138512-final-clusters",
     "isonclust3-phanerognostikon-ont-cdna": "drr178488-final-clusters",
 }
+REQUIRED_BLOCKED_EXTERNAL_MANIFESTS = {
+    "isonclust3-medium-ont-cdna",
+    "isonclust3-phanerognostikon-ont-cdna",
+}
 
 
 def sha256(path: Path) -> str:
@@ -154,6 +158,28 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
         errors.append(f"{path.relative_to(repo)} must require output checksums")
 
     manifest_id = manifest.get("manifest_id")
+    if manifest_id in REQUIRED_BLOCKED_EXTERNAL_MANIFESTS:
+        source = manifest.get("source", {})
+        if not isinstance(source, dict):
+            errors.append(f"{path.relative_to(repo)} source must be an object")
+        else:
+            if source.get("availability") != "external_pending":
+                errors.append(
+                    f"{path.relative_to(repo)} source.availability must be external_pending"
+                )
+            if source.get("blocker_id") != "ISOCLUST-BLOCK-002":
+                errors.append(
+                    f"{path.relative_to(repo)} source.blocker_id must be ISOCLUST-BLOCK-002"
+                )
+        if acceptance.get("status") != "blocked_pending_data":
+            errors.append(
+                f"{path.relative_to(repo)} acceptance.status must be blocked_pending_data"
+            )
+        if acceptance.get("blocker_id") != "ISOCLUST-BLOCK-002":
+            errors.append(
+                f"{path.relative_to(repo)} acceptance.blocker_id must be ISOCLUST-BLOCK-002"
+            )
+
     if manifest_id in REQUIRED_DOWNSTREAM_HANDOFFS:
         handoff = manifest.get("downstream_handoff")
         if not isinstance(handoff, dict):
