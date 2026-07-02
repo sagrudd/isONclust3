@@ -225,8 +225,22 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
         "$schema": OUTPUT_CONTRACT_SCHEMA_REFERENCE,
         **OUTPUT_CONTRACT_IDENTITY,
     }
+    expected_types = {
+        "$schema": "string",
+        "schema_version": "integer",
+        "manifest_kind": "string",
+        "manifest_id": "string",
+        "project": "string",
+        "contract": "string",
+    }
     for field, value in expected_consts.items():
-        if properties.get(field, {}).get("const") != value:
+        field_property = properties.get(field, {})
+        if field_property.get("type") != expected_types[field]:
+            errors.append(
+                f"{path.relative_to(repo)} properties.{field}.type must be "
+                f"{expected_types[field]}"
+            )
+        if field_property.get("const") != value:
             errors.append(f"{path.relative_to(repo)} properties.{field}.const must be {value}")
     entries = properties.get("entries", {})
     if (

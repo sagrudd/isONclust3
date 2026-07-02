@@ -15,21 +15,27 @@
   ],
   "properties": {
     "$schema": {
+      "type": "string",
       "const": "../../schemas/output-contract-register.schema.json"
     },
     "schema_version": {
+      "type": "integer",
       "const": 1
     },
     "manifest_kind": {
+      "type": "string",
       "const": "isonclust3-output-contract-register"
     },
     "manifest_id": {
+      "type": "string",
       "const": "isonclust3-final-clusters-contract-v1"
     },
     "project": {
+      "type": "string",
       "const": "isONclust3"
     },
     "contract": {
+      "type": "string",
       "const": "final_clusters.tsv"
     },
     "entries": {
