@@ -31,6 +31,13 @@ tight integration with `newONform`.
   input checksums, output checksums, wall time, peak memory, thread counts, and
   pass/fail status.
 
+## Documentation Rules
+
+- Maintain Sphinx governance and release-readiness documentation when release
+  gates, blockers, benchmark evidence, or downstream handoff rules change.
+- Keep `sphinx-build -W -b html docs target/sphinx-html` passing before
+  claiming release readiness.
+
 ## Git Discipline
 
 - Make surgical commits with focused scope.

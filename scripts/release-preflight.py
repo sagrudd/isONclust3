@@ -46,6 +46,9 @@ REQUIRED_TEXT = {
         "Maintain semantic versioning",
         "GB10 benchmark evidence",
         "Do not commit raw sequencing data",
+        "## Documentation Rules",
+        "Sphinx governance and release-readiness documentation",
+        "sphinx-build -W -b html docs target/sphinx-html",
     ],
     "BENCHMARK_ACCEPTANCE.md": [
         "final_clusters.tsv",
