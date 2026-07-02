@@ -179,6 +179,7 @@ REQUIRED_TEXT = {
         "Gate the output-contract register schema.",
         "Gate output-contract schema entry constraints.",
         "Gate output-contract register paths as relative and non-escaping.",
+        "Gate output-contract schema path patterns.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",

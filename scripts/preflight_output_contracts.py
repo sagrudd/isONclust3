@@ -33,6 +33,7 @@ SHA256_HEX_PATTERN = re.compile(r"[0-9a-f]{64}")
 OUTPUT_CONTRACT_REGISTER = Path("fixtures/output-contracts/final-clusters-register.json")
 OUTPUT_CONTRACT_SCHEMA = Path("schemas/output-contract-register.schema.json")
 OUTPUT_CONTRACT_SCHEMA_REFERENCE = "../../schemas/output-contract-register.schema.json"
+OUTPUT_CONTRACT_RELATIVE_PATH_PATTERN = r"^(?!/)(?!.*(?:^|/)\.\.(?:/|$)).+"
 OUTPUT_CONTRACT_IDENTITY = {
     "schema_version": 1,
     "manifest_kind": "isonclust3-output-contract-register",
@@ -235,6 +236,11 @@ def validate_output_contract_schema(repo: Path) -> list[str]:
         errors.append(f"{path.relative_to(repo)} entry mode must be ont or pacbio")
     if entry_properties.get("benchmark_tier", {}).get("const") != "toy":
         errors.append(f"{path.relative_to(repo)} entry benchmark_tier must be toy")
+    for path_field in ("run_path", "fastq_path"):
+        if entry_properties.get(path_field, {}).get("pattern") != OUTPUT_CONTRACT_RELATIVE_PATH_PATTERN:
+            errors.append(
+                f"{path.relative_to(repo)} {path_field} must require relative non-escaping paths"
+            )
     if entry_properties.get("status", {}).get("const") != "resolved":
         errors.append(f"{path.relative_to(repo)} entry status must be resolved")
     if entry_properties.get("consumer", {}).get("const") != "newONform":
