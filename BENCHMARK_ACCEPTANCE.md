@@ -38,7 +38,8 @@ Every accepted Dockerized or GB10 report must include:
   benchmark image, runner report path, and `final_clusters.tsv` checksums.
 - Benchmark manifests must keep the file-based handoff command shape:
   `--fastq`, `--mode`, `--outfolder`, `--seeding`, and `--no-fastq` under the
-  `isonclust3:gb10` image.
+  `isonclust3:gb10` image, with `--mode` and `--seeding` matching the manifest
+  metadata.
 - Medium ONT and Phanerognostikon-scale workloads must not be accepted until
   their source inputs, producer commands, and generated cluster-table checksums
   are recorded.

@@ -89,6 +89,10 @@ REQUIRED_COMMAND_FLAGS = {
     "--seeding",
     "--no-fastq",
 }
+REQUIRED_COMMAND_VALUES = {
+    "--fastq": "/work/data/reads.fastq",
+    "--outfolder": "/work/out/isonclust3",
+}
 
 
 def sha256(path: Path) -> str:
@@ -142,6 +146,17 @@ def validate_file_sizes(repo: Path, max_lines: int) -> list[str]:
     return errors
 
 
+def command_value(args: list[str], flag: str) -> str | None:
+    try:
+        index = args.index(flag)
+    except ValueError:
+        return None
+    value_index = index + 1
+    if value_index >= len(args):
+        return None
+    return args[value_index]
+
+
 def validate_manifest(repo: Path, path: Path) -> list[str]:
     errors: list[str] = []
     try:
@@ -182,6 +197,18 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
                     f"{path.relative_to(repo)} command.args missing flags: "
                     f"{', '.join(sorted(missing_flags))}"
                 )
+            expected_values = {
+                **REQUIRED_COMMAND_VALUES,
+                "--mode": str(manifest.get("mode")),
+                "--seeding": str(manifest.get("seeding")),
+            }
+            for flag, expected_value in expected_values.items():
+                observed = command_value(args, flag)
+                if observed != expected_value:
+                    errors.append(
+                        f"{path.relative_to(repo)} command.args {flag} "
+                        f"must be followed by {expected_value}"
+                    )
 
     manifest_id = manifest.get("manifest_id")
     if manifest_id in REQUIRED_BLOCKED_EXTERNAL_MANIFESTS:
