@@ -41,6 +41,7 @@ REQUIRED_FILES = [
     "scripts/preflight_artifacts.py",
     "scripts/preflight_output_contracts.py",
     "fixtures/output-contracts/final-clusters-register.json",
+    "schemas/output-contract-register.schema.json",
     "docs/requirements.txt",
     "docs/conf.py",
     "docs/index.rst",
@@ -106,6 +107,7 @@ REQUIRED_TEXT = {
     "OUTPUT_CONTRACTS.md": [
         "<outfolder>/clustering/final_clusters.tsv",
         "fixtures/output-contracts/final-clusters-register.json",
+        "schemas/output-contract-register.schema.json",
     ],
     "README.md": [
         "Release And Benchmark Evidence",
@@ -174,6 +176,7 @@ REQUIRED_TEXT = {
         "Gate .gitignore generated-artifact markers.",
         "Split tracked-artifact hygiene into a focused preflight module.",
         "Gate a machine-readable tiny `final_clusters.tsv` output-contract",
+        "Gate the output-contract register schema.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",

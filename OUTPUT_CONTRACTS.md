@@ -49,7 +49,8 @@ Compatibility notes:
   checksums for larger workloads.
 - Resolved tiny fixture output and paired FASTQ checksums are recorded in
   `fixtures/output-contracts/final-clusters-register.json` for downstream
-  `newONform` producer evidence.
+  `newONform` producer evidence. The register must point at and conform to
+  `schemas/output-contract-register.schema.json`.
 - Regenerate and verify committed tiny fixtures with:
 
   ```sh

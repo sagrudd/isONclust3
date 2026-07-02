@@ -30,6 +30,31 @@ REQUIRED_OUTPUT_CONTRACT_ENTRIES = {
     },
 }
 SHA256_HEX_PATTERN = re.compile(r"[0-9a-f]{64}")
+OUTPUT_CONTRACT_REGISTER = Path("fixtures/output-contracts/final-clusters-register.json")
+OUTPUT_CONTRACT_SCHEMA = Path("schemas/output-contract-register.schema.json")
+OUTPUT_CONTRACT_SCHEMA_REFERENCE = "../../schemas/output-contract-register.schema.json"
+OUTPUT_CONTRACT_SCHEMA_REQUIRED_FIELDS = {
+    "$schema",
+    "schema_version",
+    "manifest_kind",
+    "manifest_id",
+    "project",
+    "contract",
+    "entries",
+}
+OUTPUT_CONTRACT_SCHEMA_ENTRY_FIELDS = {
+    "entry_id",
+    "mode",
+    "benchmark_tier",
+    "run_path",
+    "fastq_path",
+    "fastq_sha256",
+    "fastq_bytes",
+    "sha256",
+    "bytes",
+    "status",
+    "consumer",
+}
 
 
 def sha256(path: Path) -> str:
@@ -43,14 +68,16 @@ def sha256(path: Path) -> str:
 
 
 def validate_output_contract_register(repo: Path) -> list[str]:
-    path = repo / "fixtures" / "output-contracts" / "final-clusters-register.json"
+    path = repo / OUTPUT_CONTRACT_REGISTER
     errors: list[str] = []
+    errors.extend(validate_output_contract_schema(repo))
     try:
         register = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
         return [f"{path.relative_to(repo)} is invalid JSON: {exc}"]
 
     expected_root = {
+        "$schema": OUTPUT_CONTRACT_SCHEMA_REFERENCE,
         "schema_version": 1,
         "manifest_kind": "isonclust3-output-contract-register",
         "manifest_id": "isonclust3-final-clusters-contract-v1",
@@ -130,4 +157,58 @@ def validate_output_contract_register(repo: Path) -> list[str]:
         errors.append(
             f"{path.relative_to(repo)} missing entry_id(s): {', '.join(sorted(missing))}"
         )
+    return errors
+
+
+def validate_output_contract_schema(repo: Path) -> list[str]:
+    path = repo / OUTPUT_CONTRACT_SCHEMA
+    errors: list[str] = []
+    try:
+        schema = json.loads(path.read_text(encoding="utf-8"))
+    except OSError as exc:
+        return [f"{path.relative_to(repo)} is not readable: {exc}"]
+    except json.JSONDecodeError as exc:
+        return [f"{path.relative_to(repo)} is invalid JSON: {exc}"]
+
+    expected_root = {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/sagrudd/isONclust3/schemas/output-contract-register.schema.json",
+        "type": "object",
+        "additionalProperties": False,
+    }
+    for key, value in expected_root.items():
+        if schema.get(key) != value:
+            errors.append(f"{path.relative_to(repo)} {key} must be {value}")
+
+    required = schema.get("required")
+    if not isinstance(required, list) or set(required) != OUTPUT_CONTRACT_SCHEMA_REQUIRED_FIELDS:
+        errors.append(f"{path.relative_to(repo)} required fields are incomplete")
+
+    properties = schema.get("properties", {})
+    if not isinstance(properties, dict):
+        return errors + [f"{path.relative_to(repo)} properties must be an object"]
+    if properties.get("$schema", {}).get("const") != OUTPUT_CONTRACT_SCHEMA_REFERENCE:
+        errors.append(f"{path.relative_to(repo)} $schema const must match register")
+    entries = properties.get("entries", {})
+    if entries.get("minItems") != 1 or entries.get("items", {}).get("$ref") != "#/$defs/entry":
+        errors.append(f"{path.relative_to(repo)} entries must require entry definitions")
+
+    entry = schema.get("$defs", {}).get("entry", {})
+    if not isinstance(entry, dict):
+        return errors + [f"{path.relative_to(repo)} $defs.entry must be an object"]
+    if entry.get("additionalProperties") is not False:
+        errors.append(f"{path.relative_to(repo)} entry additionalProperties must be false")
+    entry_required = entry.get("required")
+    if not isinstance(entry_required, list) or set(entry_required) != OUTPUT_CONTRACT_SCHEMA_ENTRY_FIELDS:
+        errors.append(f"{path.relative_to(repo)} entry required fields are incomplete")
+    entry_properties = entry.get("properties", {})
+    if not isinstance(entry_properties, dict):
+        return errors + [f"{path.relative_to(repo)} entry properties must be an object"]
+    if entry_properties.get("status", {}).get("const") != "resolved":
+        errors.append(f"{path.relative_to(repo)} entry status must be resolved")
+    if entry_properties.get("consumer", {}).get("const") != "newONform":
+        errors.append(f"{path.relative_to(repo)} entry consumer must be newONform")
+    for checksum_field in ("sha256", "fastq_sha256"):
+        if entry_properties.get(checksum_field, {}).get("pattern") != "^[0-9a-f]{64}$":
+            errors.append(f"{path.relative_to(repo)} {checksum_field} must gate sha256 hex")
     return errors
