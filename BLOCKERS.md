@@ -19,3 +19,12 @@ upstream evidence.
   PacBio `isONclust3` `final_clusters.tsv` fixtures without transformation.
 - Local profiling automation and the static optimization ranking are tracked in
   `PERFORMANCE_DEEP_DIVE.md`; they do not resolve GB10 evidence requirements.
+
+## Waiver Rules
+
+- Waivers must name the blocker ID, affected workload, evidence available,
+  downstream `newONform` impact, and expiry condition.
+- A waiver narrows release scope; it does not claim accepted GB10 producer
+  evidence or generated `final_clusters.tsv` checksum readiness.
+- Release notes and the downstream `newONform` release train must list active
+  waivers before any waived producer output is cited.

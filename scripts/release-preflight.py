@@ -60,6 +60,11 @@ REQUIRED_TEXT = {
         "ISOCLUST-BLOCK-002",
         "ISOCLUST-BLOCK-003",
         "ISOCLUST-BLOCK-004",
+        "## Waiver Rules",
+        "Waivers must name the blocker ID, affected workload, evidence available,",
+        "downstream `newONform` impact, and expiry condition.",
+        "does not claim accepted GB10 producer",
+        "downstream `newONform` release train must list active",
     ],
     "MILESTONES.md": [
         "Dockerized GB10 Benchmarking",
@@ -122,6 +127,7 @@ REQUIRED_TEXT = {
         "Expose generated `final_clusters.tsv` checksums",
         "Keep `newONform` generated-input registers aligned",
         "Gate release-checklist downstream handoff artifact markers.",
+        "Gate blocker waiver rules for upstream producer evidence.",
     ],
     "docs/index.rst": [
         "isONclust3 Maintained Fork",
