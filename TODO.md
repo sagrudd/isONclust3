@@ -55,12 +55,12 @@ Tasks are ordered to improve the fork without breaking the upstream
 
 ## 5. Optimizations
 
-- [ ] Reduce unnecessary FASTQ record cloning.
+- [x] Reduce unnecessary FASTQ record cloning.
   - [x] Avoid cloning the full cluster and read-ID maps while writing
         `final_clusters.tsv`.
   - [x] Stream parsed FASTQ records into the per-cluster output map without an
         intermediate all-record vector.
-- [ ] Reduce repeated minimizer/syncmer allocation.
+- [x] Reduce repeated minimizer/syncmer allocation.
   - [x] Make seed records copyable and avoid cloning filtered minimizer records.
   - [x] Avoid copying the PHRED lookup table and unused quality-probability
         vector during seed-quality filtering.

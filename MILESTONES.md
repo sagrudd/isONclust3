@@ -112,9 +112,13 @@ Candidate facets:
 - Stream cluster FASTQ output without holding avoidable intermediate state.
 - Make thread scheduling and shared-map mutation costs measurable.
 
-Status: planned. Optimization candidates are ranked in
-`PERFORMANCE_DEEP_DIVE.md`; implementation remains blocked until before/after
-profiling evidence is collected for the relevant path.
+Status: active. Local optimization passes have reduced avoidable output-map,
+FASTQ-record, seed-record, PHRED-table, and FASTQ-quality-count copying while
+preserving the committed `final_clusters.tsv` fixtures. Merge bookkeeping now
+uses explicit named structures, and per-cluster FASTQ output streams eligible
+records without building an intermediate all-record cluster map. Before/after
+local evidence is tracked in `OPTIMIZATION_EVIDENCE.md`; accepted
+larger-workload and GB10 evidence remain blocked under the benchmark blockers.
 
 ## Milestone 5: Dockerized GB10 Benchmarking
 
