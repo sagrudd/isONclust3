@@ -19,6 +19,9 @@ Optional:
   --run-id ID           Immutable run ID. Default: UTC timestamp.
   --threads N           Thread count recorded in report metadata. Default: 1.
   --container-name NAME Docker container name. Default: derived from run ID.
+  --stats-hold-seconds N
+                       Seconds to keep the container alive after isONclust3 exits
+                       so short toy runs can emit Docker stats. Default: 3.
   --write-fastq         Allow per-cluster FASTQ output by omitting --no-fastq.
   -h, --help            Show this help.
 USAGE
@@ -37,6 +40,7 @@ mode="ont"
 seeding="minimizer"
 run_id="$(date -u +"%Y%m%dT%H%M%SZ")"
 threads="1"
+stats_hold_seconds="3"
 container_name=""
 input_dir=""
 output_dir=""
@@ -60,6 +64,7 @@ while [[ $# -gt 0 ]]; do
     --seeding) seeding="$2"; seeding_set="true"; shift 2 ;;
     --run-id) run_id="$2"; shift 2 ;;
     --threads) threads="$2"; shift 2 ;;
+    --stats-hold-seconds) stats_hold_seconds="$2"; shift 2 ;;
     --container-name) container_name="$2"; shift 2 ;;
     --write-fastq) write_fastq="true"; shift ;;
     -h|--help) usage; exit 0 ;;
@@ -136,7 +141,11 @@ cmd=(
   --platform "$platform"
   --volume "$input_dir:/work/data:ro"
   --volume "$output_dir:/work/out"
+  --env "ISONCLUST3_STATS_HOLD_SECONDS=$stats_hold_seconds"
+  --entrypoint "/bin/sh"
   "$image"
+  -c 'isONclust3 "$@"; status=$?; sleep "$ISONCLUST3_STATS_HOLD_SECONDS"; exit "$status"'
+  isONclust3
   --fastq "/work/data/$fastq_name"
   --mode "$mode"
   --outfolder "/work/out/isonclust3"
@@ -160,6 +169,15 @@ start_time="$(python3 -c 'import time; print(time.time())')"
 set +e
 "${cmd[@]}" >"$run_log" 2>&1 &
 docker_pid=$!
+for _ in $(seq 1 50); do
+  if docker inspect "$container_name" >/dev/null 2>&1; then
+    break
+  fi
+  if ! kill -0 "$docker_pid" 2>/dev/null; then
+    break
+  fi
+  sleep 0.05
+done
 while kill -0 "$docker_pid" 2>/dev/null; do
   mem_usage="$(docker stats --no-stream --format '{{.MemUsage}}' "$container_name" 2>/dev/null | awk -F/ 'NR==1 {gsub(/^ +| +$/, "", $1); print $1}')"
   if [[ -n "$mem_usage" ]]; then
@@ -184,7 +202,7 @@ PY
       peak_rss_bytes="$mem_bytes"
     fi
   fi
-  sleep 1
+  sleep 0.1
 done
 wait "$docker_pid"
 exit_code=$?
