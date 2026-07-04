@@ -93,6 +93,9 @@ Tasks are ordered to improve the fork without breaking the upstream
 
 - [x] Add a local profiling harness for toy ONT/PacBio runs that records
       wall time, peak RSS, checksums, and output-contract status.
+- [x] Add a larger-workload profiling harness for accepted external manifests
+      that records wall time, peak RSS, checksums, and output-contract status
+      without committing raw reports.
 - [x] Gate the local profiling harness report contract as non-release evidence.
 - [x] Rank optimization candidates by wall-time, memory, and output-risk.
 - [x] Gate larger-workload manifests with seed-generation and minimizer

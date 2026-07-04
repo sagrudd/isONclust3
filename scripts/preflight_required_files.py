@@ -21,6 +21,7 @@ REQUIRED_FILES = [
     "scripts/check-output-contract-fixtures.sh",
     "scripts/check-docker-toy-benchmarks.sh",
     "scripts/run-local-profiling.sh",
+    "scripts/run-larger-workload-profiling.sh",
     "scripts/run-gb10-benchmark.sh",
     "scripts/stage-ena-fastq.sh",
     "scripts/preflight_artifacts.py",
@@ -120,6 +121,8 @@ REQUIRED_TEXT = {
     ],
     "PERFORMANCE_DEEP_DIVE.md": [
         "local-profiling",
+        "larger-workload-profiling",
+        "scripts/run-larger-workload-profiling.sh",
         "Ranked Facets",
         "Seed extraction and filtering",
         "Do not mark GB10 blockers resolved",
@@ -127,6 +130,7 @@ REQUIRED_TEXT = {
     "RELEASE_CHECKLIST.md": [
         "scripts/release-preflight.py --expected-version",
         "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff",
+        "scripts/run-larger-workload-profiling.sh --manifest fixtures/manifests/medium-ont-cdna.json",
         "sphinx-build -W -b html docs target/sphinx-html",
         "GB10 runner checksum-handoff report",
         "local profiling report contract as",

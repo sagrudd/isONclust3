@@ -25,6 +25,23 @@ Use `--include-fastq-output` when profiling per-cluster FASTQ materialization,
 are intentionally opt-in because they measure different code paths than the
 default `newONform` handoff, which uses `--no-fastq`.
 
+Run accepted larger-workload profiling with:
+
+```sh
+scripts/run-larger-workload-profiling.sh \
+  --manifest fixtures/manifests/medium-ont-cdna.json \
+  --fastq /home/stephen/gb10-verification-20260704/data/DRR138512/reads.fastq \
+  --expected-final-clusters /home/stephen/gb10-verification-20260704/data/newonform-medium-drr138512/final_clusters.tsv \
+  --output-dir target/larger-profile/drr138512 \
+  --variant default-no-fastq
+```
+
+The larger-workload-profiling harness records the accepted manifest metadata,
+profiling plan, wall time, peak RSS, input checksum, generated
+`final_clusters.tsv` checksum, and exact contract status. Reports are still
+non-release evidence and must remain under ignored `target/` paths unless
+release owners explicitly move summaries into a reviewed evidence register.
+
 ## Ranked Facets
 
 1. Seed extraction and filtering in the sorting pass.
@@ -39,6 +56,8 @@ default `newONform` handoff, which uses `--no-fastq`.
      `profiling_plan` that covers seed generation, minimizer extraction,
      quality filtering, and exact `final_clusters.tsv` compatibility before
      those workloads can become accepted evidence.
+     Use `scripts/run-larger-workload-profiling.sh` against the medium
+     DRR138512 manifest as the smallest accepted larger workload.
    - Output risk: medium. The sorted read order influences cluster IDs and
      therefore `final_clusters.tsv` ordering.
 

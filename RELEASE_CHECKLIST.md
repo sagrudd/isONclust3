@@ -10,6 +10,7 @@ Use this checklist before a release-candidate tag or before updating
 - [ ] `cargo clippy --all-targets -- -D warnings`
 - [ ] `scripts/check-output-contract-fixtures.sh`
 - [ ] `scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff`
+- [ ] `scripts/run-larger-workload-profiling.sh --manifest fixtures/manifests/medium-ont-cdna.json --fastq /home/stephen/gb10-verification-20260704/data/DRR138512/reads.fastq --expected-final-clusters /home/stephen/gb10-verification-20260704/data/newonform-medium-drr138512/final_clusters.tsv --output-dir target/larger-profile/drr138512 --variant default-no-fastq`
 - [ ] `sphinx-build -W -b html docs target/sphinx-html`
 - [ ] Confirm `OPTIMIZATION_EVIDENCE.md` cites before/after local profiling
       for optimization commits without committing raw reports.
