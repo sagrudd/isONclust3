@@ -137,6 +137,12 @@ Build the benchmark image from a clean checkout with:
 docker build --platform linux/arm64 -t isonclust3:gb10 .
 ```
 
+Current GB10/DGX Spark verification access is `stephen@192.168.1.48` using
+the local private key at `/Users/stephen/.ssh/dgx_spark.pem`. Do not copy the
+PEM into this repository or generated benchmark artifacts. The July 2026 probe
+identified the host as `spark-964a`, running ARM64 Linux with Docker and
+`nvidia-smi` available for GB10 evidence collection.
+
 Then run toy or externally mounted GB10 workloads through
 `scripts/run-gb10-benchmark.sh`. Generated reports, raw inputs, and bulky output
 directories must remain outside Git.
