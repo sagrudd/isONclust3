@@ -55,6 +55,18 @@ Every accepted Dockerized or GB10 report must include:
   `a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7`,
   16,380,513 output bytes, 167.691568 seconds wall time, and 1939.456 MiB
   peak RSS. Bulky reports remain outside Git.
+- Phanerognostikon DRR178488 ONT GB10 evidence for source commit
+  `e5d63a87a8a265166e606e525e12f6c0aab7a7c5` and tool version `0.3.0` is
+  accepted contract evidence under
+  `/home/stephen/gb10-verification-20260704/results/isONclust3-phanerognostikon-drr178488-producer-e5d63a8/`.
+  It records container digest
+  `sha256:65d2628dbef727f9dd307a7a13cf48506d8225ff7cff187baeea07552d215502`,
+  input FASTQ checksum
+  `e7cd1d32dd01851c8fc4f9f8780674bf2cec4c92058dc4bd48b10bd088580728`,
+  generated `final_clusters.tsv` checksum
+  `08a627f907ca387edae66fad9f5384a55d7a7228377bf3d8669a4f2d041f211c`,
+  104,692,828 output bytes, 6313.03955 seconds wall time, and 15544.32 MiB
+  peak RSS. Bulky reports remain outside Git.
 - Every benchmark manifest must include `linux/arm64` in `platform_targets` so
   Dockerized GB10 execution remains an explicit release requirement.
 - Benchmark `platform_targets` must use the supported Linux target vocabulary:
@@ -85,7 +97,7 @@ Every accepted Dockerized or GB10 report must include:
   exactly once in the canonical file-based handoff sequence.
 - Phanerognostikon-scale workloads must not be accepted until their source
   inputs, producer commands, and generated cluster-table checksums are
-  recorded.
+  recorded; DRR178488 now satisfies that producer contract.
 - Waived medium or Phanerognostikon producer gaps do not claim accepted GB10
   producer evidence or generated `final_clusters.tsv` checksum readiness.
 - Medium ONT and Phanerognostikon-scale manifests must record the downstream

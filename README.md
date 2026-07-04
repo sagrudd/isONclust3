@@ -106,7 +106,10 @@ same handoff and must publish the generated `final_clusters.tsv` checksums for
 under `/home/stephen/gb10-verification-20260704/results/isONclust3-medium-drr138512/`
 with final cluster checksum
 `a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7`;
-Phanerognostikon remains pending.
+Phanerognostikon DRR178488 is accepted under
+`/home/stephen/gb10-verification-20260704/results/isONclust3-phanerognostikon-drr178488-producer-e5d63a8/`
+with final cluster checksum
+`08a627f907ca387edae66fad9f5384a55d7a7228377bf3d8669a4f2d041f211c`.
 
 # Release And Benchmark Evidence
 

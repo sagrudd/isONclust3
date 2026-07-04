@@ -6,8 +6,6 @@ upstream evidence.
 
 | ID | Area | Blocker | Required Resolution |
 | --- | --- | --- | --- |
-| ISOCLUST-BLOCK-001 | GB10 evidence | Phanerognostikon-scale ONT GB10 producer evidence has not been collected. Toy ONT, toy PacBio, and medium DRR138512 GB10 contract reports are accepted and archived outside Git. | Run `scripts/run-gb10-benchmark.sh` for the accepted Phanerognostikon manifest on GB10 and archive JSON/TSV reports outside Git. |
-| ISOCLUST-BLOCK-002 | Generated inputs | The Phanerognostikon-scale `final_clusters.tsv` output does not yet have an accepted producer checksum for `newONform`; medium DRR138512 now has an accepted checksum. | Generate the Phanerognostikon cluster table with the accepted container image, record input and output checksums, and update `newONform` generated-input registers. |
 | ISOCLUST-BLOCK-003 | Performance profile | Local toy profiling automation and optimization ranking now exist, but seed extraction, clustering merge bookkeeping, cluster FASTQ output, and GFF-assisted clustering have not yet been profiled on accepted larger workloads. | Use `scripts/run-local-profiling.sh` for toy before/after checks, then rank larger-workload wall time, peak RSS, mode, read count, and output-risk notes before algorithmic changes. |
 ## Resolved Blockers
 
@@ -29,6 +27,15 @@ upstream evidence.
   `0.3.0`, final cluster checksum
   `a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7`, and
   16,380,513 output bytes.
+- `ISOCLUST-BLOCK-001`: Phanerognostikon DRR178488 ONT GB10 contract evidence
+  is accepted under
+  `/home/stephen/gb10-verification-20260704/results/isONclust3-phanerognostikon-drr178488-producer-e5d63a8/`
+  for source commit `e5d63a87a8a265166e606e525e12f6c0aab7a7c5`, tool version
+  `0.3.0`, wall time 6313.03955 seconds, and peak RSS 15544.32 MiB.
+- `ISOCLUST-BLOCK-002`: the Phanerognostikon `final_clusters.tsv` producer
+  checksum is accepted for downstream `newONform` handoff:
+  `08a627f907ca387edae66fad9f5384a55d7a7228377bf3d8669a4f2d041f211c`
+  with 104,692,828 output bytes.
 
 ## Waiver Rules
 

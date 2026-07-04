@@ -188,6 +188,8 @@ Tasks are ordered to improve the fork without breaking the upstream
         architecture, and thread count.
   - [x] Record accepted medium ONT GB10 reports after generated input and
         output checksums are available.
+  - [x] Record accepted Phanerognostikon DRR178488 ONT GB10 reports after
+        generated input and output checksums are available.
   - [ ] Record accepted Phanerognostikon-scale ONT GB10 reports after generated
         input and output checksums are available.
 - [x] Expose generated `final_clusters.tsv` checksums for `newONform` release

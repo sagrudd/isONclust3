@@ -11,9 +11,7 @@ REQUIRED_DOWNSTREAM_HANDOFFS = {
     "isonclust3-medium-ont-cdna": "drr138512-final-clusters",
     "isonclust3-phanerognostikon-ont-cdna": "drr178488-final-clusters",
 }
-REQUIRED_PENDING_EXTERNAL_MANIFESTS = {
-    "isonclust3-phanerognostikon-ont-cdna",
-}
+REQUIRED_PENDING_EXTERNAL_MANIFESTS: set[str] = set()
 REQUIRED_ACCEPTED_EXTERNAL_MANIFESTS = {
     "isonclust3-medium-ont-cdna": {
         "source_commit": "8ca0a8ddb8a7250765cb3e6b11e8463c476196b6",
@@ -29,6 +27,21 @@ REQUIRED_ACCEPTED_EXTERNAL_MANIFESTS = {
             "a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7"
         ),
         "final_clusters_bytes": 16380513,
+    },
+    "isonclust3-phanerognostikon-ont-cdna": {
+        "source_commit": "e5d63a87a8a265166e606e525e12f6c0aab7a7c5",
+        "tool_version": "0.3.0",
+        "run_id": "gb10-phanerognostikon-drr178488-e5d63a8-20260704",
+        "container_digest": (
+            "sha256:65d2628dbef727f9dd307a7a13cf48506d8225ff7cff187baeea07552d215502"
+        ),
+        "input_fastq_sha256": (
+            "e7cd1d32dd01851c8fc4f9f8780674bf2cec4c92058dc4bd48b10bd088580728"
+        ),
+        "final_clusters_sha256": (
+            "08a627f907ca387edae66fad9f5384a55d7a7228377bf3d8669a4f2d041f211c"
+        ),
+        "final_clusters_bytes": 104692828,
     },
 }
 REQUIRED_EXTERNAL_PROFILING_FACETS = {

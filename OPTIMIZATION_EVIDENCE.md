@@ -93,5 +93,7 @@ scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-
   `cargo clippy --all-targets -- -D warnings`,
   `scripts/check-output-contract-fixtures.sh`, and
   `scripts/release-preflight.py --expected-version 0.3.0`.
-- GB10 or larger-workload status: local toy evidence only; accepted GB10
-  benchmark reports are still required.
+- GB10 or larger-workload status: local toy profiling evidence only; accepted
+  GB10 producer reports are recorded separately for toy, medium, and
+  Phanerognostikon workloads and do not by themselves resolve
+  `ISOCLUST-BLOCK-003`.

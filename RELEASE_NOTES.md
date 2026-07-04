@@ -13,7 +13,7 @@ downstream generated-input checksums are complete.
 - Strict `cargo fmt --check`, `cargo test --quiet`, and
   `cargo clippy --all-targets -- -D warnings` hygiene for the current crate
   surface.
-- Dockerized benchmark runner, toy ONT/PacBio manifests, pending medium and
+- Dockerized benchmark runner, toy ONT/PacBio manifests, accepted medium and
   Phanerognostikon-scale manifests, and local Docker toy smoke automation.
 - Local profiling harness and optimization evidence ledger for behavior
   preserving performance work.
@@ -40,10 +40,10 @@ downstream generated-input checksums are complete.
 
 ## Known Limits
 
-- `ISOCLUST-BLOCK-001`: accepted Phanerognostikon GB10 benchmark reports have
-  not yet been collected.
+- `ISOCLUST-BLOCK-001`: Phanerognostikon GB10 producer evidence is accepted
+  and archived outside Git for DRR178488.
 - `ISOCLUST-BLOCK-002`: the generated Phanerognostikon `final_clusters.tsv`
-  output does not yet have an accepted producer checksum.
+  output has an accepted producer checksum for downstream `newONform`.
 - `ISOCLUST-BLOCK-003`: accepted larger-workload profiling evidence is still
   pending.
 - Local toy profiling and Docker smoke automation are readiness gates, not
