@@ -65,6 +65,13 @@ evidence remains pending under `ISOCLUST-BLOCK-003`.
   but `final_clusters.tsv` changed to
   `cab07475f8e3559187191f86f50a5c7534658ad960cb881dd837b5305f3ad547`; this is
   rejected handoff evidence, not accepted contract evidence.
+- Tiny ONT GFF-assisted GB10 harness smoke is archived under
+  `/home/stephen/gb10-verification-20260704/results/isONclust3-gff-harness-smoke-2a859a1/`
+  with exit code 0, 0.003554 seconds wall time, 15.246 MiB peak RSS, exact
+  final-clusters contract match, and checksum
+  `e28ef900515871b0da07f0f10a2bccc7d35323b087ffd4633878bb372ada2538`; this
+  verifies the harness interface only and is not accepted larger-workload GFF
+  evidence.
 - Local toy profiling and Docker smoke automation are readiness gates, not
   GB10 release evidence.
 

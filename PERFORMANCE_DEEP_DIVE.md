@@ -88,6 +88,22 @@ Treat this as rejected handoff evidence for the accepted medium workload until
 release owners either define a separate post-cluster compatibility class or
 approve a scoped waiver.
 
+GB10 GFF-assisted harness smoke evidence is archived outside Git under:
+
+```text
+/home/stephen/gb10-verification-20260704/results/isONclust3-gff-harness-smoke-2a859a1/reports/tiny-ont-gff-assisted-2a859a1.json
+```
+
+The tiny ONT GFF-assisted run used source commit
+`2a859a13f92738703ee92b75bfb75c2f7579217c`, completed with exit code 0,
+0.003554 seconds wall time, 15.246 MiB peak RSS, and exact
+`final_clusters.tsv` contract match with checksum
+`e28ef900515871b0da07f0f10a2bccc7d35323b087ffd4633878bb372ada2538`.
+It verifies the GB10 harness interface records `input_fastq`,
+`reference_fasta`, `annotation_gff3`, and the `gff-assisted` facet, but it is
+not release evidence for `ISOCLUST-BLOCK-003` because it is a tiny fixture
+smoke rather than an accepted larger workload.
+
 ## Ranked Facets
 
 1. Seed extraction and filtering in the sorting pass.
@@ -150,7 +166,8 @@ approve a scoped waiver.
      repeat with `scripts/run-larger-workload-profiling.sh --variant
      gff-assisted --reference-fasta <reference.fa> --annotation-gff
      <annotation.gff3>` against an approved external profiling input before
-     making release-evidence claims.
+     making release-evidence claims. The GB10 tiny GFF harness smoke listed
+     above validates the interface only.
    - Output risk: medium. This is an optional path, but it shares clustering
      internals with the default mode.
 

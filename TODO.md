@@ -112,6 +112,8 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [ ] Capture accepted larger-workload GFF-assisted profiling evidence under
       `ISOCLUST-BLOCK-003` before making GFF optimization claims.
   - [x] Add GFF-assisted variants to `scripts/run-larger-workload-profiling.sh`.
+  - [x] Run GB10 tiny GFF-assisted harness smoke as non-release interface
+        evidence.
   - [ ] Run an approved larger workload with staged reference FASTA and GFF3
         inputs and preserve the exact `final_clusters.tsv` contract status.
 
