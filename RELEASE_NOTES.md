@@ -1,8 +1,8 @@
 # isONclust3 0.3.0-rc Planning Draft
 
 This draft records the maintained `sagrudd/isONclust3` release-candidate scope.
-It is not a release announcement until Dockerized GB10 producer evidence and
-downstream generated-input checksums are complete.
+It is not a release announcement while accepted larger-workload profiling
+evidence remains pending under `ISOCLUST-BLOCK-003`.
 
 ## Intended Scope
 
@@ -24,8 +24,8 @@ downstream generated-input checksums are complete.
 
 ## Evidence Required Before RC Acceptance
 
-- Accepted GB10 benchmark reports for toy ONT, toy PacBio, and medium ONT are
-  recorded; Phanerognostikon-scale ONT remains required.
+- Accepted GB10 benchmark reports for toy ONT, toy PacBio, medium ONT, and
+  Phanerognostikon-scale ONT are recorded.
 - Container image identity, command lines, input checksums, generated
   output checksums, generated `final_clusters.tsv` checksums, wall time, peak
   RSS, CPU architecture, and thread count for each accepted run.

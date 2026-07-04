@@ -181,7 +181,7 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Add an ENA FASTQ staging helper for Phanerognostikon DRR178488 GB10
       producer evidence.
 - [x] Add a local Docker toy benchmark smoke for ONT and PacBio manifests.
-- [ ] Record accepted GB10 benchmark reports with command, image, checksums,
+- [x] Record accepted GB10 benchmark reports with command, image, checksums,
       wall time, peak RSS, CPU architecture, and thread count.
   - [x] Record accepted toy ONT and toy PacBio GB10 reports with source commit,
         tool version, image digest, checksums, wall time, peak RSS, CPU
@@ -190,7 +190,7 @@ Tasks are ordered to improve the fork without breaking the upstream
         output checksums are available.
   - [x] Record accepted Phanerognostikon DRR178488 ONT GB10 reports after
         generated input and output checksums are available.
-  - [ ] Record accepted Phanerognostikon-scale ONT GB10 reports after generated
+  - [x] Record accepted Phanerognostikon-scale ONT GB10 reports after generated
         input and output checksums are available.
 - [x] Expose generated `final_clusters.tsv` checksums for `newONform` release
       evidence.
