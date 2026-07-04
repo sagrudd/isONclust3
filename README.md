@@ -169,6 +169,22 @@ The staging helper verifies the ENA MD5, writes the decompressed
 SHA-256/byte metadata in `staging-checksums.json` and
 `staging-checksums.tsv`.
 
+Stage approved reference FASTA and GFF3 assets outside Git before accepted
+GFF-assisted larger-workload profiling:
+
+```sh
+scripts/stage-gff-assets.sh \
+  --reference <approved-reference.fa[.gz]> \
+  --annotation <approved-annotation.gff3[.gz]> \
+  --output-dir /home/stephen/gb10-verification-20260704/data/<approved-gff-workload>
+```
+
+The GFF staging helper writes plain files for
+`scripts/run-larger-workload-profiling.sh --variant gff-assisted` and records
+SHA-256/byte metadata in `gff-asset-checksums.json` and
+`gff-asset-checksums.tsv`. Larger reference and annotation assets must not be
+committed.
+
 Before collecting GB10 evidence, run the local Docker toy smoke:
 
 ```sh

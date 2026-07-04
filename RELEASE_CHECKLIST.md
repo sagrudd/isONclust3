@@ -11,6 +11,7 @@ Use this checklist before a release-candidate tag or before updating
 - [ ] `scripts/check-output-contract-fixtures.sh`
 - [ ] `scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff`
 - [ ] `scripts/run-larger-workload-profiling.sh --manifest fixtures/manifests/medium-ont-cdna.json --fastq /home/stephen/gb10-verification-20260704/data/DRR138512/reads.fastq --expected-final-clusters /home/stephen/gb10-verification-20260704/data/newonform-medium-drr138512/final_clusters.tsv --output-dir target/larger-profile/drr138512 --variant default-no-fastq`
+- [ ] `scripts/stage-gff-assets.sh --reference <approved-reference.fa[.gz]> --annotation <approved-annotation.gff3[.gz]> --output-dir /home/stephen/gb10-verification-20260704/data/<approved-gff-workload>`
 - [ ] `sphinx-build -W -b html docs target/sphinx-html`
 - [ ] Confirm `OPTIMIZATION_EVIDENCE.md` cites before/after local profiling
       for optimization commits without committing raw reports.
@@ -31,6 +32,9 @@ Use this checklist before a release-candidate tag or before updating
 - [ ] Stage the DRR178488 Phanerognostikon FASTQ with
       `scripts/stage-ena-fastq.sh`, verify the ENA MD5, and retain
       `staging-checksums.json` outside Git.
+- [ ] Stage approved GFF-assisted reference FASTA and GFF3 assets with
+      `scripts/stage-gff-assets.sh` and retain `gff-asset-checksums.json`
+      outside Git before accepted larger-workload GFF profiling.
 - [ ] Run accepted Phanerognostikon-scale ONT manifest on GB10.
 - [ ] Capture JSON and TSV reports with image identity, command, input checksums,
       output checksums, wall time, peak RSS, CPU architecture, and thread count.

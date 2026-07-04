@@ -168,6 +168,9 @@ smoke rather than an accepted larger workload.
      <annotation.gff3>` against an approved external profiling input before
      making release-evidence claims. The GB10 tiny GFF harness smoke listed
      above validates the interface only.
+     Stage approved reference and annotation assets first with
+     `scripts/stage-gff-assets.sh` so `gff-asset-checksums.json` records exact
+     file checksums outside Git.
    - Output risk: medium. This is an optional path, but it shares clustering
      internals with the default mode.
 

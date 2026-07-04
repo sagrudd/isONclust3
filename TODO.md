@@ -114,6 +114,7 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Add GFF-assisted variants to `scripts/run-larger-workload-profiling.sh`.
   - [x] Run GB10 tiny GFF-assisted harness smoke as non-release interface
         evidence.
+  - [x] Stage approved reference FASTA and GFF3 assets with checksum metadata.
   - [ ] Run an approved larger workload with staged reference FASTA and GFF3
         inputs and preserve the exact `final_clusters.tsv` contract status.
 
