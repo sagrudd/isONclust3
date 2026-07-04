@@ -4,6 +4,15 @@ Release Readiness
 ``isONclust3`` release readiness is controlled by the root governance files and
 the Dockerized GB10 benchmark evidence path.
 
+Current GB10 Access
+-------------------
+
+The available GB10/DGX Spark host for release-candidate verification is
+``stephen@192.168.1.48`` using the local private key at
+``/Users/stephen/.ssh/dgx_spark.pem``. Do not copy the PEM into this repository
+or generated benchmark artifacts. Current GB10 verification artifacts are
+stored outside Git under ``/home/stephen/gb10-verification-20260704/``.
+
 Minimum Local Checks
 --------------------
 
@@ -12,6 +21,7 @@ Minimum Local Checks
 - ``cargo clippy --all-targets -- -D warnings``
 - ``scripts/check-output-contract-fixtures.sh``
 - ``scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff``
+- ``scripts/stage-gff-assets.sh --reference <approved-reference.fa[.gz]> --annotation <approved-annotation.gff3[.gz]> --output-dir /home/stephen/gb10-verification-20260704/data/<approved-gff-workload>``
 - ``sphinx-build -W -b html docs target/sphinx-html``
 - ``scripts/release-preflight.py --expected-version 0.3.0``
 - ``scripts/check-docker-toy-benchmarks.sh``
