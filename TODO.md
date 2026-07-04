@@ -178,6 +178,8 @@ Tasks are ordered to improve the fork without breaking the upstream
       peak RSS, CPU architecture, and thread count.
 - [x] Gate GB10 runner report fields for generated `final_clusters.tsv`
       checksum handoff.
+- [x] Add an ENA FASTQ staging helper for Phanerognostikon DRR178488 GB10
+      producer evidence.
 - [x] Add a local Docker toy benchmark smoke for ONT and PacBio manifests.
 - [ ] Record accepted GB10 benchmark reports with command, image, checksums,
       wall time, peak RSS, CPU architecture, and thread count.

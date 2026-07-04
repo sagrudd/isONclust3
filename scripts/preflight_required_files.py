@@ -22,6 +22,7 @@ REQUIRED_FILES = [
     "scripts/check-docker-toy-benchmarks.sh",
     "scripts/run-local-profiling.sh",
     "scripts/run-gb10-benchmark.sh",
+    "scripts/stage-ena-fastq.sh",
     "scripts/preflight_artifacts.py",
     "scripts/preflight_benchmark_schema.py",
     "scripts/preflight_ci.py",
@@ -113,6 +114,9 @@ REQUIRED_TEXT = {
         "generated `final_clusters.tsv` checksum",
         "scripts/check-docker-toy-benchmarks.sh",
         "scripts/run-local-profiling.sh --output-dir target/local-profile",
+        "scripts/stage-ena-fastq.sh",
+        "DRR178488",
+        "staging-checksums.json",
     ],
     "PERFORMANCE_DEEP_DIVE.md": [
         "local-profiling",
@@ -130,6 +134,8 @@ REQUIRED_TEXT = {
         "explicitly waived without claiming accepted producer",
         "Update `newONform` submodule, generated-input registers, release notes,",
         "blockers, and Sphinx documentation in the same release train.",
+        "scripts/stage-ena-fastq.sh",
+        "staging-checksums.json",
     ],
     "RELEASE_NOTES.md": [
         "isONclust3 0.3.0-rc Planning Draft",
@@ -210,6 +216,7 @@ REQUIRED_TEXT = {
         "Gate output-contract register root key ordering.",
         "Gate output-contract register entry key ordering.",
         "Gate output-contract register readability and object root.",
+        "Add an ENA FASTQ staging helper for Phanerognostikon DRR178488 GB10",
     ],
     "schemas/benchmark-fixture.schema.json": [
         "isONclust3 benchmark fixture manifest",
@@ -266,6 +273,14 @@ REQUIRED_TEXT = {
         "REQUIRED_TSV_FIELDS",
         "final_clusters_sha256",
         "accepted_contract",
+    ],
+    "scripts/stage-ena-fastq.sh": [
+        "Stage an ENA FASTQ for isONclust3 GB10 evidence.",
+        "curl --fail --location --continue-at -",
+        "hashlib.md5",
+        "gzip -dc",
+        "staging-checksums.json",
+        "raw sequencing data must not be",
     ],
 }
 

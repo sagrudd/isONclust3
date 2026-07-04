@@ -151,6 +151,21 @@ Then run toy or externally mounted GB10 workloads through
 `scripts/run-gb10-benchmark.sh`. Generated reports, raw inputs, and bulky output
 directories must remain outside Git.
 
+Stage the Phanerognostikon DRR178488 FASTQ on GB10 before running producer
+evidence:
+
+```sh
+scripts/stage-ena-fastq.sh \
+  --uri https://ftp.sra.ebi.ac.uk/vol1/fastq/DRR178/DRR178488/DRR178488_1.fastq.gz \
+  --md5 916dc2b07307f84bd4840098b8668aa9 \
+  --output-dir /home/stephen/gb10-verification-20260704/data/DRR178488
+```
+
+The staging helper verifies the ENA MD5, writes the decompressed
+`reads.fastq` expected by `scripts/run-gb10-benchmark.sh`, and records
+SHA-256/byte metadata in `staging-checksums.json` and
+`staging-checksums.tsv`.
+
 Before collecting GB10 evidence, run the local Docker toy smoke:
 
 ```sh

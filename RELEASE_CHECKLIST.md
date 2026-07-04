@@ -27,6 +27,9 @@ Use this checklist before a release-candidate tag or before updating
 - [ ] Run toy ONT and toy PacBio manifests through
       `scripts/check-docker-toy-benchmarks.sh`.
 - [ ] Confirm accepted medium ONT manifest evidence remains archived outside Git.
+- [ ] Stage the DRR178488 Phanerognostikon FASTQ with
+      `scripts/stage-ena-fastq.sh`, verify the ENA MD5, and retain
+      `staging-checksums.json` outside Git.
 - [ ] Run accepted Phanerognostikon-scale ONT manifest on GB10.
 - [ ] Capture JSON and TSV reports with image identity, command, input checksums,
       output checksums, wall time, peak RSS, CPU architecture, and thread count.
