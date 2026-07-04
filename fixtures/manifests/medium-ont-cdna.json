@@ -8,9 +8,8 @@
   "mode": "ont",
   "seeding": "minimizer",
   "source": {
-    "description": "Medium ONT cDNA workload reserved for GB10 producer-evidence collection.",
-    "availability": "external_pending",
-    "blocker_id": "ISOCLUST-BLOCK-002"
+    "description": "Medium ONT cDNA workload from ENA run DRR138512 with GB10 producer evidence recorded outside Git.",
+    "availability": "external_verified"
   },
   "platform_targets": ["linux/arm64"],
   "files": [],
@@ -32,13 +31,23 @@
     "requires_gb10_report": true,
     "requires_container_digest": true,
     "requires_output_checksums": true,
-    "status": "blocked_pending_data",
-    "blocker_id": "ISOCLUST-BLOCK-002"
+    "status": "accepted_contract",
+    "source_commit": "8ca0a8ddb8a7250765cb3e6b11e8463c476196b6",
+    "tool_version": "0.3.0",
+    "run_id": "gb10-medium-drr138512-20260704",
+    "container_digest": "sha256:65d2628dbef727f9dd307a7a13cf48506d8225ff7cff187baeea07552d215502",
+    "gb10_report_path": "/home/stephen/gb10-verification-20260704/results/isONclust3-medium-drr138512/reports/isonclust3__isonclust3-medium-ont-cdna__medium__linux-arm64__gb10-medium-drr138512-20260704.json",
+    "gb10_tsv_path": "/home/stephen/gb10-verification-20260704/results/isONclust3-medium-drr138512/reports/isonclust3__isonclust3-medium-ont-cdna__medium__linux-arm64__gb10-medium-drr138512-20260704.tsv",
+    "input_fastq_sha256": "1280e7af119051204874163263b59abbbcf9a9f1a4a9384674b240959029bf03",
+    "final_clusters_sha256": "a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7",
+    "final_clusters_bytes": 16380513,
+    "wall_time_seconds": 167.691568,
+    "peak_rss_mb": 1939.456
   },
   "profiling_plan": {
     "scope": "smallest-accepted-larger-workload",
     "status": "blocked_pending_data",
-    "blocker_id": "ISOCLUST-BLOCK-002",
+    "blocker_id": "ISOCLUST-BLOCK-003",
     "required_facets": [
       "seed-generation",
       "minimizer-extraction",

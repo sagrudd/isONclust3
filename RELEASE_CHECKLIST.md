@@ -26,7 +26,8 @@ Use this checklist before a release-candidate tag or before updating
 - [ ] Build the benchmark image from a clean checkout.
 - [ ] Run toy ONT and toy PacBio manifests through
       `scripts/check-docker-toy-benchmarks.sh`.
-- [ ] Run accepted medium ONT and Phanerognostikon-scale ONT manifests on GB10.
+- [ ] Confirm accepted medium ONT manifest evidence remains archived outside Git.
+- [ ] Run accepted Phanerognostikon-scale ONT manifest on GB10.
 - [ ] Capture JSON and TSV reports with image identity, command, input checksums,
       output checksums, wall time, peak RSS, CPU architecture, and thread count.
 - [ ] Store bulky reports and generated outputs outside Git.
@@ -40,8 +41,10 @@ Use this checklist before a release-candidate tag or before updating
 
 - [ ] Confirm `OUTPUT_CONTRACTS.md` still matches emitted
       `clustering/final_clusters.tsv`.
-- [ ] Publish accepted `final_clusters.tsv` checksums for every generated
-      `newONform` benchmark input.
+- [ ] Confirm the accepted medium DRR138512 `final_clusters.tsv` checksum for
+      the `newONform` generated benchmark input.
+- [ ] Publish accepted `final_clusters.tsv` checksums for remaining generated
+      `newONform` benchmark inputs.
 - [ ] Update `newONform` submodule, generated-input registers, release notes,
       blockers, and Sphinx documentation in the same release train.
 - [ ] Confirm unresolved gates remain listed in `BLOCKERS.md`.

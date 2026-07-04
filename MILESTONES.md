@@ -96,9 +96,9 @@ Docker/GB10 evidence path. `PERFORMANCE_DEEP_DIVE.md` and
 `scripts/run-local-profiling.sh` provide a local profiling harness and ranked
 optimization candidates for seed extraction, cluster assignment, merge
 bookkeeping, FASTQ output materialization, and GFF-assisted clustering. Accepted
-toy ONT/PacBio GB10 contract reports are recorded; medium and Phanerognostikon
-GB10 reports plus large-workload `final_clusters.tsv` checksums are still
-blocked by `ISOCLUST-BLOCK-001` and `ISOCLUST-BLOCK-002`.
+toy ONT/PacBio and medium DRR138512 GB10 contract reports are recorded.
+Phanerognostikon GB10 reports plus its large-workload `final_clusters.tsv`
+checksum are still blocked by `ISOCLUST-BLOCK-001` and `ISOCLUST-BLOCK-002`.
 
 ## Milestone 4: Algorithmic Optimization
 
@@ -139,9 +139,13 @@ and Phanerognostikon manifests, local Docker toy smoke automation, benchmark
 acceptance criteria, and `scripts/run-gb10-benchmark.sh` are in place. Toy
 ONT/PacBio GB10 contract reports are accepted and archived outside Git under
 `/home/stephen/gb10-verification-20260704/results/isONclust3-provenance/`.
-Medium and Phanerognostikon accepted GB10 reports, larger-workload input/output
-checksums, and generated `final_clusters.tsv` producer checksums remain blocked
-under `ISOCLUST-BLOCK-001` and `ISOCLUST-BLOCK-002`.
+Medium DRR138512 accepted GB10 evidence is archived outside Git under
+`/home/stephen/gb10-verification-20260704/results/isONclust3-medium-drr138512/`
+with input/output checksums and a generated `final_clusters.tsv` producer
+checksum for `newONform`. Phanerognostikon accepted GB10 reports,
+larger-workload input/output checksums, and generated `final_clusters.tsv`
+producer checksums remain blocked under `ISOCLUST-BLOCK-001` and
+`ISOCLUST-BLOCK-002`.
 
 ## Milestone 6: Tight newONform Integration
 
@@ -159,4 +163,5 @@ Acceptance criteria:
 Status: active. `newONform` tracks this fork as `external/isONclust3` and now
 directly consumes the committed tiny ONT and PacBio output-contract fixtures.
 The README documents the end-to-end handoff command sequence. Accepted upstream
-producer evidence for larger workloads remains outstanding.
+producer evidence for medium DRR138512 is recorded; the Phanerognostikon
+generated-input handoff remains outstanding.

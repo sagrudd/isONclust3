@@ -11,9 +11,25 @@ REQUIRED_DOWNSTREAM_HANDOFFS = {
     "isonclust3-medium-ont-cdna": "drr138512-final-clusters",
     "isonclust3-phanerognostikon-ont-cdna": "drr178488-final-clusters",
 }
-REQUIRED_BLOCKED_EXTERNAL_MANIFESTS = {
-    "isonclust3-medium-ont-cdna",
+REQUIRED_PENDING_EXTERNAL_MANIFESTS = {
     "isonclust3-phanerognostikon-ont-cdna",
+}
+REQUIRED_ACCEPTED_EXTERNAL_MANIFESTS = {
+    "isonclust3-medium-ont-cdna": {
+        "source_commit": "8ca0a8ddb8a7250765cb3e6b11e8463c476196b6",
+        "tool_version": "0.3.0",
+        "run_id": "gb10-medium-drr138512-20260704",
+        "container_digest": (
+            "sha256:65d2628dbef727f9dd307a7a13cf48506d8225ff7cff187baeea07552d215502"
+        ),
+        "input_fastq_sha256": (
+            "1280e7af119051204874163263b59abbbcf9a9f1a4a9384674b240959029bf03"
+        ),
+        "final_clusters_sha256": (
+            "a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7"
+        ),
+        "final_clusters_bytes": 16380513,
+    },
 }
 REQUIRED_EXTERNAL_PROFILING_FACETS = {
     "final-clusters-contract",
@@ -223,7 +239,7 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
                     )
 
     manifest_id = manifest.get("manifest_id")
-    if manifest_id in REQUIRED_BLOCKED_EXTERNAL_MANIFESTS:
+    if manifest_id in REQUIRED_PENDING_EXTERNAL_MANIFESTS:
         if source.get("availability") != "external_pending":
             errors.append(
                 f"{path.relative_to(repo)} source.availability must be external_pending"
@@ -274,6 +290,56 @@ def validate_manifest(repo: Path, path: Path) -> list[str]:
                         f"{path.relative_to(repo)} profiling_plan.required_facets "
                         f"missing: {', '.join(sorted(missing_facets))}"
                     )
+    elif manifest_id in REQUIRED_ACCEPTED_EXTERNAL_MANIFESTS:
+        expected_evidence = REQUIRED_ACCEPTED_EXTERNAL_MANIFESTS[manifest_id]
+        if source.get("availability") != "external_verified":
+            errors.append(
+                f"{path.relative_to(repo)} source.availability must be external_verified"
+            )
+        if source.get("blocker_id") is not None:
+            errors.append(
+                f"{path.relative_to(repo)} source.blocker_id must be omitted once verified"
+            )
+        if acceptance.get("status") != "accepted_contract":
+            errors.append(
+                f"{path.relative_to(repo)} acceptance.status must be accepted_contract"
+            )
+        if acceptance.get("blocker_id") is not None:
+            errors.append(
+                f"{path.relative_to(repo)} acceptance.blocker_id must be omitted once accepted"
+            )
+        profiling_plan = manifest.get("profiling_plan")
+        if not isinstance(profiling_plan, dict):
+            errors.append(f"{path.relative_to(repo)} missing profiling_plan")
+        else:
+            if profiling_plan.get("blocker_id") != "ISOCLUST-BLOCK-003":
+                errors.append(
+                    f"{path.relative_to(repo)} profiling_plan.blocker_id must be "
+                    "ISOCLUST-BLOCK-003 for accepted producer evidence"
+                )
+            if profiling_plan.get("status") != "blocked_pending_data":
+                errors.append(
+                    f"{path.relative_to(repo)} profiling_plan.status must remain "
+                    "blocked_pending_data until larger-workload profiling is complete"
+                )
+        for key, expected_value in expected_evidence.items():
+            if acceptance.get(key) != expected_value:
+                errors.append(
+                    f"{path.relative_to(repo)} acceptance.{key} must be {expected_value}"
+                )
+        for key in ("gb10_report_path", "gb10_tsv_path"):
+            value = acceptance.get(key)
+            if not isinstance(value, str) or not value.startswith("/home/stephen/"):
+                errors.append(
+                    f"{path.relative_to(repo)} acceptance.{key} must cite the GB10 "
+                    "artifact path under /home/stephen"
+                )
+        for key in ("wall_time_seconds", "peak_rss_mb"):
+            value = acceptance.get(key)
+            if not isinstance(value, (int, float)) or value <= 0:
+                errors.append(
+                    f"{path.relative_to(repo)} acceptance.{key} must be positive"
+                )
 
     if manifest_id in REQUIRED_DOWNSTREAM_HANDOFFS:
         handoff = manifest.get("downstream_handoff")

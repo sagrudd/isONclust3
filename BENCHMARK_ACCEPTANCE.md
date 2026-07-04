@@ -43,6 +43,18 @@ Every accepted Dockerized or GB10 report must include:
   input checksums, generated `final_clusters.tsv` checksums, wall time,
   peak RSS, CPU architecture, thread count, JSON/TSV reports, run logs, and
   Docker stats logs. Bulky reports remain outside Git.
+- Medium DRR138512 ONT GB10 evidence for source commit
+  `8ca0a8ddb8a7250765cb3e6b11e8463c476196b6` and tool version `0.3.0` is
+  accepted contract evidence under
+  `/home/stephen/gb10-verification-20260704/results/isONclust3-medium-drr138512/`.
+  It records container digest
+  `sha256:65d2628dbef727f9dd307a7a13cf48506d8225ff7cff187baeea07552d215502`,
+  input FASTQ checksum
+  `1280e7af119051204874163263b59abbbcf9a9f1a4a9384674b240959029bf03`,
+  generated `final_clusters.tsv` checksum
+  `a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7`,
+  16,380,513 output bytes, 167.691568 seconds wall time, and 1939.456 MiB
+  peak RSS. Bulky reports remain outside Git.
 - Every benchmark manifest must include `linux/arm64` in `platform_targets` so
   Dockerized GB10 execution remains an explicit release requirement.
 - Benchmark `platform_targets` must use the supported Linux target vocabulary:
@@ -71,9 +83,9 @@ Every accepted Dockerized or GB10 report must include:
   `isonclust3:gb10` image, with `--mode` and `--seeding` matching the manifest
   metadata, no unrecognized command flags, and each supported flag appearing
   exactly once in the canonical file-based handoff sequence.
-- Medium ONT and Phanerognostikon-scale workloads must not be accepted until
-  their source inputs, producer commands, and generated cluster-table checksums
-  are recorded.
+- Phanerognostikon-scale workloads must not be accepted until their source
+  inputs, producer commands, and generated cluster-table checksums are
+  recorded.
 - Waived medium or Phanerognostikon producer gaps do not claim accepted GB10
   producer evidence or generated `final_clusters.tsv` checksum readiness.
 - Medium ONT and Phanerognostikon-scale manifests must record the downstream

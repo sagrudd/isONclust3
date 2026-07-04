@@ -24,13 +24,14 @@ downstream generated-input checksums are complete.
 
 ## Evidence Required Before RC Acceptance
 
-- Accepted GB10 benchmark reports for toy ONT, toy PacBio, medium ONT, and
-  Phanerognostikon-scale ONT workloads.
+- Accepted GB10 benchmark reports for toy ONT, toy PacBio, and medium ONT are
+  recorded; Phanerognostikon-scale ONT remains required.
 - Container image identity, command lines, input checksums, generated
   output checksums, generated `final_clusters.tsv` checksums, wall time, peak
   RSS, CPU architecture, and thread count for each accepted run.
-- Accepted medium and Phanerognostikon generated `final_clusters.tsv` producer
-  checksums for `newONform` release evidence.
+- Accepted Phanerognostikon generated `final_clusters.tsv` producer checksums
+  for `newONform` release evidence. Medium DRR138512 is accepted with checksum
+  `a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7`.
 - Larger-workload profiling evidence for seed generation, minimizer/syncmer
   extraction, clustering bookkeeping, cluster FASTQ output, and GFF-assisted
   paths before further algorithmic optimization claims.
@@ -39,10 +40,10 @@ downstream generated-input checksums are complete.
 
 ## Known Limits
 
-- `ISOCLUST-BLOCK-001`: accepted GB10 benchmark reports have not yet been
-  collected.
-- `ISOCLUST-BLOCK-002`: generated medium and Phanerognostikon
-  `final_clusters.tsv` outputs do not yet have accepted producer checksums.
+- `ISOCLUST-BLOCK-001`: accepted Phanerognostikon GB10 benchmark reports have
+  not yet been collected.
+- `ISOCLUST-BLOCK-002`: the generated Phanerognostikon `final_clusters.tsv`
+  output does not yet have an accepted producer checksum.
 - `ISOCLUST-BLOCK-003`: accepted larger-workload profiling evidence is still
   pending.
 - Local toy profiling and Docker smoke automation are readiness gates, not

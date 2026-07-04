@@ -102,7 +102,11 @@ those committed outputs directly through its `external/isONclust3` submodule.
 
 Release evidence for medium and Phanerognostikon-scale workloads must use the
 same handoff and must publish the generated `final_clusters.tsv` checksums for
-`newONform` before those runs can be accepted.
+`newONform` before those runs can be accepted. Medium DRR138512 is accepted
+under `/home/stephen/gb10-verification-20260704/results/isONclust3-medium-drr138512/`
+with final cluster checksum
+`a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7`;
+Phanerognostikon remains pending.
 
 # Release And Benchmark Evidence
 

@@ -59,7 +59,7 @@
           "minLength": 1
         },
         "availability": {
-          "enum": ["external_pending"]
+          "enum": ["external_pending", "external_verified"]
         },
         "blocker_id": {
           "const": "ISOCLUST-BLOCK-002"
@@ -117,10 +117,54 @@
           "const": true
         },
         "status": {
-          "enum": ["blocked_pending_data"]
+          "enum": ["blocked_pending_data", "accepted_contract"]
         },
         "blocker_id": {
           "enum": ["ISOCLUST-BLOCK-001", "ISOCLUST-BLOCK-002"]
+        },
+        "source_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "tool_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "container_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "gb10_report_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "gb10_tsv_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input_fastq_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "final_clusters_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "final_clusters_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "wall_time_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "peak_rss_mb": {
+          "type": "number",
+          "exclusiveMinimum": 0
         }
       }
     },
@@ -175,7 +219,7 @@
           "const": "blocked_pending_data"
         },
         "blocker_id": {
-          "const": "ISOCLUST-BLOCK-002"
+          "enum": ["ISOCLUST-BLOCK-002", "ISOCLUST-BLOCK-003"]
         },
         "required_facets": {
           "type": "array",

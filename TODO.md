@@ -184,11 +184,11 @@ Tasks are ordered to improve the fork without breaking the upstream
   - [x] Record accepted toy ONT and toy PacBio GB10 reports with source commit,
         tool version, image digest, checksums, wall time, peak RSS, CPU
         architecture, and thread count.
-  - [ ] Record accepted medium ONT GB10 reports after generated input and
+  - [x] Record accepted medium ONT GB10 reports after generated input and
         output checksums are available.
   - [ ] Record accepted Phanerognostikon-scale ONT GB10 reports after generated
         input and output checksums are available.
-- [ ] Expose generated `final_clusters.tsv` checksums for `newONform` release
+- [x] Expose generated `final_clusters.tsv` checksums for `newONform` release
       evidence.
 
 ## 7. newONform Product Integration
@@ -198,5 +198,5 @@ Tasks are ordered to improve the fork without breaking the upstream
       consolidation workflow.
 - [x] Add a shared fixture path that lets `newONform` validate `isONclust3`
       output directly.
-- [ ] Keep `newONform` generated-input registers aligned with accepted
+- [x] Keep `newONform` generated-input registers aligned with accepted
       `isONclust3` output checksums.

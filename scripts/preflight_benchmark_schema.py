@@ -134,6 +134,17 @@ def _validate_root_properties(
             "requires_output_checksums",
             "status",
             "blocker_id",
+            "source_commit",
+            "tool_version",
+            "run_id",
+            "container_digest",
+            "gb10_report_path",
+            "gb10_tsv_path",
+            "input_fastq_sha256",
+            "final_clusters_sha256",
+            "final_clusters_bytes",
+            "wall_time_seconds",
+            "peak_rss_mb",
         ),
     }
     for field, expected_order in nested_orders.items():
@@ -299,6 +310,14 @@ def _validate_profiling_plan_definition(
         errors.append(f"{path.relative_to(repo)} profiling scope must be fixed")
     if properties.get("status", {}).get("const") != "blocked_pending_data":
         errors.append(f"{path.relative_to(repo)} profiling status must stay blocked")
+    if properties.get("blocker_id", {}).get("enum") != [
+        "ISOCLUST-BLOCK-002",
+        "ISOCLUST-BLOCK-003",
+    ]:
+        errors.append(
+            f"{path.relative_to(repo)} profiling blocker must cover pending data "
+            "and accepted-workload profiling blockers"
+        )
     facets = properties.get("required_facets", {}).get("items", {})
     if facets.get("enum") != list(BENCHMARK_PROFILING_FACETS):
         errors.append(f"{path.relative_to(repo)} profiling facets enum is incomplete")

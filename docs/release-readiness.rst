@@ -19,14 +19,18 @@ Minimum Local Checks
 Current High-Priority Blockers
 ------------------------------
 
-- ``ISOCLUST-BLOCK-001``: accepted medium and Phanerognostikon GB10 benchmark
-  reports are still required. Toy ONT and toy PacBio GB10 contract reports are
-  accepted for source commit ``3ba608e3fa87d855f11d75e3c77556f2dd6b1a59`` and
-  tool version ``0.3.0`` under
+- ``ISOCLUST-BLOCK-001``: accepted Phanerognostikon GB10 benchmark reports are
+  still required. Toy ONT and toy PacBio GB10 contract reports are accepted for
+  source commit ``3ba608e3fa87d855f11d75e3c77556f2dd6b1a59`` and tool version
+  ``0.3.0`` under
   ``/home/stephen/gb10-verification-20260704/results/isONclust3-provenance/``.
-- ``ISOCLUST-BLOCK-002``: medium and Phanerognostikon generated
-  ``final_clusters.tsv`` producer checksums are still required for
-  ``newONform``.
+  Medium DRR138512 GB10 contract evidence is accepted for source commit
+  ``8ca0a8ddb8a7250765cb3e6b11e8463c476196b6`` under
+  ``/home/stephen/gb10-verification-20260704/results/isONclust3-medium-drr138512/``.
+- ``ISOCLUST-BLOCK-002``: the Phanerognostikon generated
+  ``final_clusters.tsv`` producer checksum is still required for
+  ``newONform``; medium DRR138512 is accepted with checksum
+  ``a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7``.
 - ``ISOCLUST-BLOCK-003``: accepted larger-workload profiling evidence is still
   required before further algorithmic optimization claims.
 
