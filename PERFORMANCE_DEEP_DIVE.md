@@ -73,6 +73,21 @@ contract match. This covers seed-generation, minimizer-extraction,
 quality-filtering, final-clusters contract, fastq-output, and
 default-clustering facets for the smallest accepted larger workload.
 
+Rejected larger-workload post-cluster profiling is archived outside Git under:
+
+```text
+/home/stephen/gb10-verification-20260704/results/isONclust3-larger-profile-drr138512-7c29eec-post-cluster/reports/drr138512-post-cluster-7c29eec.json
+```
+
+The post-cluster DRR138512 run completed with process exit code 0, 438.801846
+seconds wall time, and 2161.395 MiB peak RSS, but it changed
+`final_clusters.tsv` from the accepted checksum
+`a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7` to
+`cab07475f8e3559187191f86f50a5c7534658ad960cb881dd837b5305f3ad547`.
+Treat this as rejected handoff evidence for the accepted medium workload until
+release owners either define a separate post-cluster compatibility class or
+approve a scoped waiver.
+
 ## Ranked Facets
 
 1. Seed extraction and filtering in the sorting pass.
@@ -108,6 +123,9 @@ default-clustering facets for the smallest accepted larger workload.
      to review.
    - Measurement: run `scripts/run-local-profiling.sh --include-post-cluster`
      before changing data structures, then repeat with a larger workload.
+     Medium DRR138512 post-cluster evidence is rejected for handoff
+     compatibility because the generated `final_clusters.tsv` checksum differs
+     from the accepted default-path checksum.
    - Output risk: high. Merge thresholds directly affect final clusters.
 
 4. Per-cluster FASTQ output materialization.

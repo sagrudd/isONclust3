@@ -32,10 +32,11 @@ evidence remains pending under `ISOCLUST-BLOCK-003`.
 - Accepted Phanerognostikon generated `final_clusters.tsv` producer checksums
   for `newONform` release evidence. Medium DRR138512 is accepted with checksum
   `a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7`.
-- Larger-workload profiling evidence for post-cluster merge bookkeeping and
-  GFF-assisted paths before further algorithmic optimization claims. Default
-  medium DRR138512 seed-generation/minimizer-extraction and write-FASTQ output
-  profiling is recorded outside Git.
+- Larger-workload profiling evidence for GFF-assisted paths before further
+  algorithmic optimization claims. Default medium DRR138512
+  seed-generation/minimizer-extraction and write-FASTQ output profiling is
+  recorded outside Git; medium post-cluster profiling is rejected for handoff
+  compatibility because it changes `final_clusters.tsv`.
 - Matching `newONform` submodule, generated-input register, blocker, and
   documentation updates in the same release train.
 
@@ -46,7 +47,8 @@ evidence remains pending under `ISOCLUST-BLOCK-003`.
 - `ISOCLUST-BLOCK-002`: the generated Phanerognostikon `final_clusters.tsv`
   output has an accepted producer checksum for downstream `newONform`.
 - `ISOCLUST-BLOCK-003`: accepted larger-workload profiling evidence is still
-  pending for post-cluster and GFF-assisted paths.
+  pending for GFF-assisted paths; post-cluster medium evidence is rejected for
+  handoff compatibility.
 - Medium DRR138512 default-path profiling is archived under
   `/home/stephen/gb10-verification-20260704/results/isONclust3-larger-profile-drr138512-7a3f390/`
   with exit code 0, 161.454274 seconds wall time, 2161.68 MiB peak RSS, exact
@@ -57,6 +59,12 @@ evidence remains pending under `ISOCLUST-BLOCK-003`.
   with exit code 0, 186.226314 seconds wall time, 2162.18 MiB peak RSS, exact
   final-clusters contract match, and checksum
   `a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7`.
+- Medium DRR138512 post-cluster profiling is archived under
+  `/home/stephen/gb10-verification-20260704/results/isONclust3-larger-profile-drr138512-7c29eec-post-cluster/`
+  with process exit code 0, 438.801846 seconds wall time, 2161.395 MiB peak RSS,
+  but `final_clusters.tsv` changed to
+  `cab07475f8e3559187191f86f50a5c7534658ad960cb881dd837b5305f3ad547`; this is
+  rejected handoff evidence, not accepted contract evidence.
 - Local toy profiling and Docker smoke automation are readiness gates, not
   GB10 release evidence.
 
