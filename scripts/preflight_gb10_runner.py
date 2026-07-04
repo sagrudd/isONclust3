@@ -16,6 +16,8 @@ REQUIRED_RUNNER_MARKERS = (
     '"thread_count"',
     '"peak_rss_mb"',
     '"container_digest"',
+    '"source_commit"',
+    '"tool_version"',
 )
 REQUIRED_TSV_FIELDS = (
     "project",
@@ -23,6 +25,8 @@ REQUIRED_TSV_FIELDS = (
     "benchmark_tier",
     "platform",
     "container_digest",
+    "source_commit",
+    "tool_version",
     "wall_time_seconds",
     "peak_rss_mb",
     "thread_count",

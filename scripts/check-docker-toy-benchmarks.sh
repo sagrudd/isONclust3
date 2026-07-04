@@ -10,6 +10,9 @@ Options:
   --image IMAGE        Image tag to build or reuse. Default: isonclust3:gb10-toy.
   --platform PLATFORM  Docker platform. Default: linux/arm64.
   --output-dir DIR     Keep reports under DIR instead of a temporary directory.
+  --source-commit SHA  Git commit to record in report metadata.
+  --tool-version VERSION
+                       isONclust3 version to record in report metadata.
   --skip-build         Reuse an existing image tag.
   -h, --help           Show this help.
 USAGE
@@ -19,6 +22,8 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 image="isonclust3:gb10-toy"
 platform="linux/arm64"
 output_dir=""
+source_commit=""
+tool_version=""
 skip_build="false"
 
 while [[ $# -gt 0 ]]; do
@@ -33,6 +38,14 @@ while [[ $# -gt 0 ]]; do
       ;;
     --output-dir)
       output_dir="$2"
+      shift 2
+      ;;
+    --source-commit)
+      source_commit="$2"
+      shift 2
+      ;;
+    --tool-version)
+      tool_version="$2"
       shift 2
       ;;
     --skip-build)
@@ -64,6 +77,23 @@ if [[ "$skip_build" != "true" ]]; then
   docker build --platform "$platform" -t "$image" "$repo_root"
 fi
 
+if [[ -z "$source_commit" ]]; then
+  source_commit="$(git -C "$repo_root" rev-parse HEAD 2>/dev/null || echo "unknown")"
+fi
+if [[ -z "$tool_version" ]]; then
+  tool_version="$(
+    awk '
+      /^\[package\]/ { in_package = 1; next }
+      /^\[/ && in_package { exit }
+      in_package && $1 == "version" {
+        gsub(/"/, "", $3)
+        print $3
+        exit
+      }
+    ' "$repo_root/Cargo.toml"
+  )"
+fi
+
 run_and_compare() {
   local name="$1"
   local manifest="$repo_root/fixtures/manifests/tiny-$name.json"
@@ -80,6 +110,8 @@ run_and_compare() {
     --output-dir "$run_dir" \
     --image "$image" \
     --platform "$platform" \
+    --source-commit "$source_commit" \
+    --tool-version "$tool_version" \
     --run-id "local-toy-$name"
 
   cmp "$expected" "$run_dir/isonclust3/clustering/final_clusters.tsv"

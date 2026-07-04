@@ -18,6 +18,9 @@ Optional:
   --seeding MODE        Seeding mode. Default: minimizer.
   --run-id ID           Immutable run ID. Default: UTC timestamp.
   --threads N           Thread count recorded in report metadata. Default: 1.
+  --source-commit SHA   Git commit recorded in report metadata. Default: current checkout.
+  --tool-version VERSION
+                       isONclust3 version recorded in report metadata. Default: Cargo.toml version.
   --container-name NAME Docker container name. Default: derived from run ID.
   --stats-hold-seconds N
                        Seconds to keep the container alive after isONclust3 exits
@@ -33,6 +36,8 @@ safe_token() {
     | sed -E 's#[ /]+#-#g; s#[^a-z0-9._:-]#-#g; s#-+#-#g; s#^-##; s#-$##'
 }
 
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
 image="isonclust3:gb10"
 platform="linux/arm64"
 fastq_name="reads.fastq"
@@ -40,6 +45,8 @@ mode="ont"
 seeding="minimizer"
 run_id="$(date -u +"%Y%m%dT%H%M%SZ")"
 threads="1"
+source_commit=""
+tool_version=""
 stats_hold_seconds="3"
 container_name=""
 input_dir=""
@@ -64,6 +71,8 @@ while [[ $# -gt 0 ]]; do
     --seeding) seeding="$2"; seeding_set="true"; shift 2 ;;
     --run-id) run_id="$2"; shift 2 ;;
     --threads) threads="$2"; shift 2 ;;
+    --source-commit) source_commit="$2"; shift 2 ;;
+    --tool-version) tool_version="$2"; shift 2 ;;
     --stats-hold-seconds) stats_hold_seconds="$2"; shift 2 ;;
     --container-name) container_name="$2"; shift 2 ;;
     --write-fastq) write_fastq="true"; shift ;;
@@ -111,6 +120,22 @@ fi
 if [[ "$mode" != "ont" && "$mode" != "pacbio" ]]; then
   echo "--mode must be ont or pacbio" >&2
   exit 2
+fi
+if [[ -z "$source_commit" ]]; then
+  source_commit="$(git -C "$repo_root" rev-parse HEAD 2>/dev/null || echo "unknown")"
+fi
+if [[ -z "$tool_version" ]]; then
+  tool_version="$(
+    awk '
+      /^\[package\]/ { in_package = 1; next }
+      /^\[/ && in_package { exit }
+      in_package && $1 == "version" {
+        gsub(/"/, "", $3)
+        print $3
+        exit
+      }
+    ' "$repo_root/Cargo.toml"
+  )"
 fi
 
 input_dir="$(cd "$input_dir" && pwd)"
@@ -221,6 +246,8 @@ export ISONCLUST3_BENCHMARK_TIER="$benchmark_tier"
 export ISONCLUST3_PLATFORM="$platform"
 export ISONCLUST3_IMAGE="$image"
 export ISONCLUST3_CONTAINER_DIGEST="$container_digest"
+export ISONCLUST3_SOURCE_COMMIT="$source_commit"
+export ISONCLUST3_TOOL_VERSION="$tool_version"
 export ISONCLUST3_FASTQ_HOST="$fastq_host"
 export ISONCLUST3_FINAL_CLUSTERS="$run_out/clustering/final_clusters.tsv"
 export ISONCLUST3_RUN_LOG="$run_log"
@@ -278,6 +305,8 @@ report = {
     "host_os": os.environ["ISONCLUST3_HOST_OS"],
     "cpu_architecture": os.environ["ISONCLUST3_HOST_ARCH"],
     "container_digest": os.environ["ISONCLUST3_CONTAINER_DIGEST"],
+    "source_commit": os.environ["ISONCLUST3_SOURCE_COMMIT"],
+    "tool_version": os.environ["ISONCLUST3_TOOL_VERSION"],
     "run_id": os.environ["ISONCLUST3_RUN_ID"],
     "mode": os.environ["ISONCLUST3_MODE"],
     "seeding": os.environ["ISONCLUST3_SEEDING"],
@@ -323,6 +352,8 @@ with Path(os.environ["ISONCLUST3_REPORT_TSV"]).open("w", encoding="utf-8", newli
             "benchmark_tier",
             "platform",
             "container_digest",
+            "source_commit",
+            "tool_version",
             "wall_time_seconds",
             "peak_rss_mb",
             "thread_count",
@@ -339,6 +370,8 @@ with Path(os.environ["ISONCLUST3_REPORT_TSV"]).open("w", encoding="utf-8", newli
             "benchmark_tier": report["benchmark_tier"],
             "platform": report["platform"],
             "container_digest": report["container_digest"],
+            "source_commit": report["source_commit"],
+            "tool_version": report["tool_version"],
             "wall_time_seconds": report["metrics"]["wall_time_seconds"],
             "peak_rss_mb": report["metrics"]["peak_rss_mb"],
             "thread_count": report["metrics"]["thread_count"],
