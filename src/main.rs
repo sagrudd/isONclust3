@@ -159,10 +159,9 @@ fn main() {
         cm_mini = 0.8;
         s = 9;
         t = 3;
-    } else if cli.quality_threshold.is_some() {
-        let qt = cli.quality_threshold.unwrap();
-        if cli.k.is_some() {
-            k = cli.k.unwrap();
+    } else if let Some(qt) = cli.quality_threshold {
+        if let Some(cli_k) = cli.k {
+            k = cli_k;
         } else {
             panic!("Please set k")
         }
@@ -180,8 +179,7 @@ fn main() {
     if let Some(verb) = verbo{
         verbose = true;
     }*/
-    if cli.quality_threshold.is_some() {
-        let qt = cli.quality_threshold.unwrap();
+    if let Some(qt) = cli.quality_threshold {
         quality_threshold = qt.powi(k as i32);
     }
     let post_cluster = cli.post_cluster;
@@ -206,22 +204,24 @@ fn main() {
     if let Some(seed) = seeding_input {
         seeding = seed;
     }
-    if cli.k.is_some() {
-        k = cli.k.unwrap();
+    if let Some(cli_k) = cli.k {
+        k = cli_k;
     }
 
-    if cli.min_shared_minis.is_some() {
-        min_shared_minis = cli.min_shared_minis.unwrap()
+    if let Some(cli_min_shared_minis) = cli.min_shared_minis {
+        min_shared_minis = cli_min_shared_minis
     }
     if seeding == "syncmer" {
-        if cli.s.is_some() {
-            s = cli.s.unwrap();
+        if let Some(cli_s) = cli.s {
+            s = cli_s;
         }
-        if cli.t.is_some() {
-            t = cli.t.unwrap();
+        if let Some(cli_t) = cli.t {
+            t = cli_t;
         }
-    } else if seeding == "minimizer" && cli.w.is_some() {
-        w = cli.w.unwrap();
+    } else if seeding == "minimizer" {
+        if let Some(cli_w) = cli.w {
+            w = cli_w;
+        }
     }
     if let Err(error) = validate_seed_parameters(k, w, s, t, seeding) {
         panic!("{error}");
