@@ -21,7 +21,7 @@ upstream evidence.
   `/home/stephen/gb10-verification-20260704/results/isONclust3-provenance/`
   with source commit, tool version, image digest, command, checksums, wall
   time, peak RSS, CPU architecture, and thread count recorded.
-- Current-source GB10 Docker toy smoke evidence for source commit
+- Post-clippy GB10 Docker toy smoke evidence for source commit
   `aa494f6b6ae9a5ce99fd889b90328941553ef2a5` is archived under
   `/home/stephen/gb10-verification-20260704/results/isONclust3-aa494f6-docker-toy-smoke/`
   with ONT and PacBio reports recording `exit_code=0`, `platform=linux/arm64`,
