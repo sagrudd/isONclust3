@@ -96,7 +96,8 @@ Docker/GB10 evidence path. `PERFORMANCE_DEEP_DIVE.md` and
 `scripts/run-local-profiling.sh` provide a local profiling harness and ranked
 optimization candidates for seed extraction, cluster assignment, merge
 bookkeeping, FASTQ output materialization, and GFF-assisted clustering. Accepted
-GB10 reports and large-workload `final_clusters.tsv` checksums are still
+toy ONT/PacBio GB10 contract reports are recorded; medium and Phanerognostikon
+GB10 reports plus large-workload `final_clusters.tsv` checksums are still
 blocked by `ISOCLUST-BLOCK-001` and `ISOCLUST-BLOCK-002`.
 
 ## Milestone 4: Algorithmic Optimization
@@ -135,8 +136,10 @@ Acceptance criteria:
 
 Status: active. Dockerfile, toy ONT/PacBio benchmark manifests, pending medium
 and Phanerognostikon manifests, local Docker toy smoke automation, benchmark
-acceptance criteria, and `scripts/run-gb10-benchmark.sh` are in place. Actual
-accepted GB10 reports, container digests, larger-workload input/output
+acceptance criteria, and `scripts/run-gb10-benchmark.sh` are in place. Toy
+ONT/PacBio GB10 contract reports are accepted and archived outside Git under
+`/home/stephen/gb10-verification-20260704/results/isONclust3-provenance/`.
+Medium and Phanerognostikon accepted GB10 reports, larger-workload input/output
 checksums, and generated `final_clusters.tsv` producer checksums remain blocked
 under `ISOCLUST-BLOCK-001` and `ISOCLUST-BLOCK-002`.
 
