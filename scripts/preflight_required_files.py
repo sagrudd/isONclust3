@@ -127,6 +127,16 @@ REQUIRED_TEXT = {
         "Seed extraction and filtering",
         "Do not mark GB10 blockers resolved",
     ],
+    "scripts/run-larger-workload-profiling.sh": [
+        "--reference-fasta FILE",
+        "--annotation-gff FILE",
+        "gff-assisted-write-fastq",
+        "GFF-assisted variants require --reference-fasta and --annotation-gff",
+        "cmd+=(--init-cl \"$reference_fasta\" --gff \"$annotation_gff\")",
+        "\"gff-assisted\" if \"gff-assisted\" in variant else \"de-novo-initialization\"",
+        "\"role\": \"reference_fasta\"",
+        "\"role\": \"annotation_gff3\"",
+    ],
     "RELEASE_CHECKLIST.md": [
         "scripts/release-preflight.py --expected-version",
         "scripts/run-local-profiling.sh --case all --include-fastq-output --include-post-cluster --include-gff",

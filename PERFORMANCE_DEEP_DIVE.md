@@ -147,8 +147,10 @@ approve a scoped waiver.
      records and has different seed-generation locality than the default path.
    - Measurement: run `scripts/run-local-profiling.sh --include-gff` against
      the committed tiny ONT/PacBio reference FASTA and GFF3 fixtures, then
-     repeat with an approved external profiling input before making
-     release-evidence claims.
+     repeat with `scripts/run-larger-workload-profiling.sh --variant
+     gff-assisted --reference-fasta <reference.fa> --annotation-gff
+     <annotation.gff3>` against an approved external profiling input before
+     making release-evidence claims.
    - Output risk: medium. This is an optional path, but it shares clustering
      internals with the default mode.
 

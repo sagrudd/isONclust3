@@ -15,11 +15,14 @@ Required:
 Optional:
   --expected-final-clusters FILE  Expected final_clusters.tsv for exact
                                   compatibility comparison.
+  --reference-fasta FILE          Reference FASTA for GFF-assisted variants.
+  --annotation-gff FILE           GFF3 annotation for GFF-assisted variants.
   --output-dir DIR                Report/output root. Default: target/larger-profile.
   --binary PATH                   Existing isONclust3 binary. Default: target/release/isONclust3.
   --skip-build                    Reuse --binary without cargo build --release.
   --variant NAME                  default-no-fastq, write-fastq, post-cluster,
-                                  or post-cluster-write-fastq.
+                                  post-cluster-write-fastq, gff-assisted,
+                                  or gff-assisted-write-fastq.
   --case-id ID                    Stable report case ID. Default: manifest ID plus variant.
   -h, --help                      Show this help.
 USAGE
@@ -29,6 +32,8 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 manifest_path=""
 fastq_path=""
 expected_final_clusters=""
+reference_fasta=""
+annotation_gff=""
 output_dir="$repo_root/target/larger-profile"
 binary="$repo_root/target/release/isONclust3"
 skip_build="false"
@@ -47,6 +52,14 @@ while [[ $# -gt 0 ]]; do
       ;;
     --expected-final-clusters)
       expected_final_clusters="$2"
+      shift 2
+      ;;
+    --reference-fasta)
+      reference_fasta="$2"
+      shift 2
+      ;;
+    --annotation-gff)
+      annotation_gff="$2"
       shift 2
       ;;
     --output-dir)
@@ -87,9 +100,9 @@ if [[ -z "$manifest_path" || -z "$fastq_path" ]]; then
   exit 2
 fi
 case "$variant" in
-  default-no-fastq|write-fastq|post-cluster|post-cluster-write-fastq) ;;
+  default-no-fastq|write-fastq|post-cluster|post-cluster-write-fastq|gff-assisted|gff-assisted-write-fastq) ;;
   *)
-    echo "--variant must be default-no-fastq, write-fastq, post-cluster, or post-cluster-write-fastq" >&2
+    echo "--variant must be default-no-fastq, write-fastq, post-cluster, post-cluster-write-fastq, gff-assisted, or gff-assisted-write-fastq" >&2
     exit 2
     ;;
 esac
@@ -98,6 +111,12 @@ manifest_path="$(cd "$(dirname "$manifest_path")" && pwd)/$(basename "$manifest_
 fastq_path="$(cd "$(dirname "$fastq_path")" && pwd)/$(basename "$fastq_path")"
 if [[ -n "$expected_final_clusters" ]]; then
   expected_final_clusters="$(cd "$(dirname "$expected_final_clusters")" && pwd)/$(basename "$expected_final_clusters")"
+fi
+if [[ -n "$reference_fasta" ]]; then
+  reference_fasta="$(cd "$(dirname "$reference_fasta")" && pwd)/$(basename "$reference_fasta")"
+fi
+if [[ -n "$annotation_gff" ]]; then
+  annotation_gff="$(cd "$(dirname "$annotation_gff")" && pwd)/$(basename "$annotation_gff")"
 fi
 if [[ ! -f "$manifest_path" ]]; then
   echo "missing manifest: $manifest_path" >&2
@@ -109,6 +128,23 @@ if [[ ! -f "$fastq_path" ]]; then
 fi
 if [[ -n "$expected_final_clusters" && ! -f "$expected_final_clusters" ]]; then
   echo "missing expected final_clusters.tsv: $expected_final_clusters" >&2
+  exit 2
+fi
+if [[ "$variant" == gff-assisted* ]]; then
+  if [[ -z "$reference_fasta" || -z "$annotation_gff" ]]; then
+    echo "GFF-assisted variants require --reference-fasta and --annotation-gff" >&2
+    exit 2
+  fi
+  if [[ ! -f "$reference_fasta" ]]; then
+    echo "missing reference FASTA: $reference_fasta" >&2
+    exit 2
+  fi
+  if [[ ! -f "$annotation_gff" ]]; then
+    echo "missing annotation GFF3: $annotation_gff" >&2
+    exit 2
+  fi
+elif [[ -n "$reference_fasta" || -n "$annotation_gff" ]]; then
+  echo "--reference-fasta and --annotation-gff are only valid for GFF-assisted variants" >&2
   exit 2
 fi
 
@@ -165,17 +201,22 @@ cmd=(
   --outfolder "$run_dir"
   --seeding "$manifest_seeding"
 )
-if [[ "$variant" == "default-no-fastq" || "$variant" == "post-cluster" ]]; then
+if [[ "$variant" == "default-no-fastq" || "$variant" == "post-cluster" || "$variant" == "gff-assisted" ]]; then
   cmd+=(--no-fastq)
 fi
 if [[ "$variant" == "post-cluster" || "$variant" == "post-cluster-write-fastq" ]]; then
   cmd+=(--post-cluster)
+fi
+if [[ "$variant" == gff-assisted* ]]; then
+  cmd+=(--init-cl "$reference_fasta" --gff "$annotation_gff")
 fi
 
 python3 - \
   "$manifest_path" \
   "$fastq_path" \
   "$expected_final_clusters" \
+  "$reference_fasta" \
+  "$annotation_gff" \
   "$report_json" \
   "$report_tsv" \
   "$log_file" \
@@ -201,18 +242,20 @@ from pathlib import Path
 manifest_path = Path(sys.argv[1])
 fastq = Path(sys.argv[2])
 expected_path = Path(sys.argv[3]) if sys.argv[3] else None
-report_json = Path(sys.argv[4])
-report_tsv = Path(sys.argv[5])
-log_file = Path(sys.argv[6])
-run_dir = Path(sys.argv[7])
-case_id = sys.argv[8]
-variant = sys.argv[9]
-manifest_id = sys.argv[10]
-benchmark_tier = sys.argv[11]
-mode = sys.argv[12]
-seeding = sys.argv[13]
-manifest_expected_sha = sys.argv[14] or None
-cmd = sys.argv[15:]
+reference_fasta = Path(sys.argv[4]) if sys.argv[4] else None
+annotation_gff = Path(sys.argv[5]) if sys.argv[5] else None
+report_json = Path(sys.argv[6])
+report_tsv = Path(sys.argv[7])
+log_file = Path(sys.argv[8])
+run_dir = Path(sys.argv[9])
+case_id = sys.argv[10]
+variant = sys.argv[11]
+manifest_id = sys.argv[12]
+benchmark_tier = sys.argv[13]
+mode = sys.argv[14]
+seeding = sys.argv[15]
+manifest_expected_sha = sys.argv[16] or None
+cmd = sys.argv[17:]
 
 
 def sha256(path: Path) -> str | None:
@@ -248,6 +291,30 @@ contract_match = (
     and observed_sha == expected_sha
 )
 
+inputs = [
+    {
+        "role": "input_fastq",
+        "path": str(fastq),
+        "sha256": sha256(fastq),
+    }
+]
+if reference_fasta is not None:
+    inputs.append(
+        {
+            "role": "reference_fasta",
+            "path": str(reference_fasta),
+            "sha256": sha256(reference_fasta),
+        }
+    )
+if annotation_gff is not None:
+    inputs.append(
+        {
+            "role": "annotation_gff3",
+            "path": str(annotation_gff),
+            "sha256": sha256(annotation_gff),
+        }
+    )
+
 report = {
     "schema_version": 1,
     "project": "isONclust3",
@@ -268,13 +335,7 @@ report = {
         "wall_time_seconds": wall_time,
         "peak_rss_mb": peak_rss_mb,
     },
-    "inputs": [
-        {
-            "role": "input_fastq",
-            "path": str(fastq),
-            "sha256": sha256(fastq),
-        }
-    ],
+    "inputs": inputs,
     "outputs": [
         {
             "role": "final_clusters",
@@ -292,6 +353,7 @@ report = {
         "final-clusters-contract",
         "fastq-output" if "write-fastq" in variant else "handoff-no-fastq",
         "post-cluster" if "post-cluster" in variant else "default-clustering",
+        "gff-assisted" if "gff-assisted" in variant else "de-novo-initialization",
     ],
     "log": str(log_file),
 }
