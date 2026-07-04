@@ -32,9 +32,10 @@ evidence remains pending under `ISOCLUST-BLOCK-003`.
 - Accepted Phanerognostikon generated `final_clusters.tsv` producer checksums
   for `newONform` release evidence. Medium DRR138512 is accepted with checksum
   `a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7`.
-- Larger-workload profiling evidence for seed generation, minimizer/syncmer
-  extraction, clustering bookkeeping, cluster FASTQ output, and GFF-assisted
-  paths before further algorithmic optimization claims.
+- Larger-workload profiling evidence for post-cluster merge bookkeeping,
+  cluster FASTQ output, and GFF-assisted paths before further algorithmic
+  optimization claims. Default medium DRR138512 seed-generation and
+  minimizer-extraction profiling is recorded outside Git.
 - Matching `newONform` submodule, generated-input register, blocker, and
   documentation updates in the same release train.
 
@@ -45,7 +46,12 @@ evidence remains pending under `ISOCLUST-BLOCK-003`.
 - `ISOCLUST-BLOCK-002`: the generated Phanerognostikon `final_clusters.tsv`
   output has an accepted producer checksum for downstream `newONform`.
 - `ISOCLUST-BLOCK-003`: accepted larger-workload profiling evidence is still
-  pending.
+  pending for post-cluster, cluster FASTQ output, and GFF-assisted paths.
+- Medium DRR138512 default-path profiling is archived under
+  `/home/stephen/gb10-verification-20260704/results/isONclust3-larger-profile-drr138512-7a3f390/`
+  with exit code 0, 161.454274 seconds wall time, 2161.68 MiB peak RSS, exact
+  final-clusters contract match, and checksum
+  `a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7`.
 - Local toy profiling and Docker smoke automation are readiness gates, not
   GB10 release evidence.
 

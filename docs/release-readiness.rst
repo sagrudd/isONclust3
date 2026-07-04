@@ -34,7 +34,13 @@ Current High-Priority Blockers
   medium DRR138512 is accepted with checksum
   ``a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7``.
 - ``ISOCLUST-BLOCK-003``: accepted larger-workload profiling evidence is still
-  required before further algorithmic optimization claims.
+  required before further algorithmic optimization claims for post-cluster,
+  cluster FASTQ output, and GFF-assisted paths. Medium DRR138512 default-path
+  profiling is archived under
+  ``/home/stephen/gb10-verification-20260704/results/isONclust3-larger-profile-drr138512-7a3f390/``
+  with exit code 0, 161.454274 seconds wall time, 2161.68 MiB peak RSS, exact
+  final-clusters contract match, and checksum
+  ``a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7``.
 
 Waivers must name the blocker, workload, available evidence, downstream
 ``newONform`` impact, and expiry condition. A waiver narrows release scope; it

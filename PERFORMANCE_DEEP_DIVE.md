@@ -42,6 +42,22 @@ profiling plan, wall time, peak RSS, input checksum, generated
 non-release evidence and must remain under ignored `target/` paths unless
 release owners explicitly move summaries into a reviewed evidence register.
 
+Accepted larger-workload default-path profiling is archived outside Git under:
+
+```text
+/home/stephen/gb10-verification-20260704/results/isONclust3-larger-profile-drr138512-7a3f390/reports/drr138512-default-no-fastq-7a3f390.json
+```
+
+The DRR138512 run completed on GB10 Linux ARM64 with exit code 0, 161.454274
+seconds wall time, 2161.68 MiB peak RSS, input FASTQ checksum
+`1280e7af119051204874163263b59abbbcf9a9f1a4a9384674b240959029bf03`,
+generated `final_clusters.tsv` checksum
+`a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7`, and exact
+contract match against the accepted expected checksum. This covers
+seed-generation, minimizer-extraction, quality-filtering, final-clusters
+contract, handoff-no-fastq, and default-clustering facets for the smallest
+accepted larger workload.
+
 ## Ranked Facets
 
 1. Seed extraction and filtering in the sorting pass.
@@ -56,8 +72,8 @@ release owners explicitly move summaries into a reviewed evidence register.
      `profiling_plan` that covers seed generation, minimizer extraction,
      quality filtering, and exact `final_clusters.tsv` compatibility before
      those workloads can become accepted evidence.
-     Use `scripts/run-larger-workload-profiling.sh` against the medium
-     DRR138512 manifest as the smallest accepted larger workload.
+     Medium DRR138512 default-path evidence is recorded under
+     `/home/stephen/gb10-verification-20260704/results/isONclust3-larger-profile-drr138512-7a3f390/`.
    - Output risk: medium. The sorted read order influences cluster IDs and
      therefore `final_clusters.tsv` ordering.
 
