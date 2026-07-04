@@ -21,6 +21,12 @@ upstream evidence.
   `/home/stephen/gb10-verification-20260704/results/isONclust3-provenance/`
   with source commit, tool version, image digest, command, checksums, wall
   time, peak RSS, CPU architecture, and thread count recorded.
+- Current-source GB10 Docker toy smoke evidence for source commit
+  `aa494f6b6ae9a5ce99fd889b90328941553ef2a5` is archived under
+  `/home/stephen/gb10-verification-20260704/results/isONclust3-aa494f6-docker-toy-smoke/`
+  with ONT and PacBio reports recording `exit_code=0`, `platform=linux/arm64`,
+  `cpu_architecture=aarch64`, and container digest
+  `sha256:d30b77137d6fa813c336ffc740f68c304e8363c42333c7e4080a594c8de00acc`.
 - Medium DRR138512 ONT GB10 contract evidence is accepted under
   `/home/stephen/gb10-verification-20260704/results/isONclust3-medium-drr138512/`
   for source commit `8ca0a8ddb8a7250765cb3e6b11e8463c476196b6`, tool version

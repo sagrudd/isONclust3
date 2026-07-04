@@ -26,6 +26,9 @@ evidence remains pending under `ISOCLUST-BLOCK-003`.
 
 - Accepted GB10 benchmark reports for toy ONT, toy PacBio, medium ONT, and
   Phanerognostikon-scale ONT are recorded.
+- Current-source GB10 Docker toy smoke evidence for commit
+  `aa494f6b6ae9a5ce99fd889b90328941553ef2a5` is archived under
+  `/home/stephen/gb10-verification-20260704/results/isONclust3-aa494f6-docker-toy-smoke/`.
 - Container image identity, command lines, input checksums, generated
   output checksums, generated `final_clusters.tsv` checksums, wall time, peak
   RSS, CPU architecture, and thread count for each accepted run.

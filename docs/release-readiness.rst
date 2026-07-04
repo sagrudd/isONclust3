@@ -34,6 +34,10 @@ Current High-Priority Blockers
   source commit ``3ba608e3fa87d855f11d75e3c77556f2dd6b1a59`` and tool version
   ``0.3.0`` under
   ``/home/stephen/gb10-verification-20260704/results/isONclust3-provenance/``.
+  Current-source Docker toy smoke evidence for commit
+  ``aa494f6b6ae9a5ce99fd889b90328941553ef2a5`` is archived under
+  ``/home/stephen/gb10-verification-20260704/results/isONclust3-aa494f6-docker-toy-smoke/``
+  with ONT and PacBio reports recording ``exit_code=0`` on ``linux/arm64``.
   Medium DRR138512 GB10 contract evidence is accepted for source commit
   ``8ca0a8ddb8a7250765cb3e6b11e8463c476196b6`` under
   ``/home/stephen/gb10-verification-20260704/results/isONclust3-medium-drr138512/``.
