@@ -166,6 +166,7 @@ REQUIRED_TEXT = {
         "local profiling harness",
         "Gate the local profiling harness report contract as non-release evidence.",
         "Profile seed generation and minimizer/syncmer extraction",
+        "Capture accepted larger-workload GFF-assisted profiling evidence",
         "Add benchmark evidence before and after every algorithmic optimization",
         "Record accepted GB10 benchmark reports",
         "Expose generated `final_clusters.tsv` checksums",

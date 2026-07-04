@@ -107,7 +107,10 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Profile FASTQ record sorting and per-cluster output generation with
       `--include-fastq-output` and accepted medium DRR138512 write-FASTQ
       larger-workload evidence.
-- [x] Profile GFF-assisted clustering separately from the default path.
+- [x] Profile GFF-assisted clustering separately from the default path on local
+      tiny fixtures.
+- [ ] Capture accepted larger-workload GFF-assisted profiling evidence under
+      `ISOCLUST-BLOCK-003` before making GFF optimization claims.
 
 ## 5. Optimizations
 
