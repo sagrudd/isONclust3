@@ -58,6 +58,21 @@ seed-generation, minimizer-extraction, quality-filtering, final-clusters
 contract, handoff-no-fastq, and default-clustering facets for the smallest
 accepted larger workload.
 
+Accepted larger-workload cluster FASTQ output profiling is archived outside Git
+under:
+
+```text
+/home/stephen/gb10-verification-20260704/results/isONclust3-larger-profile-drr138512-313a7f7-write-fastq/reports/drr138512-write-fastq-313a7f7.json
+```
+
+The write-FASTQ DRR138512 run completed on GB10 Linux ARM64 with exit code 0,
+186.226314 seconds wall time, 2162.18 MiB peak RSS, the same input FASTQ
+checksum, generated `final_clusters.tsv` checksum
+`a37798b916ba5078ca90bed40946ad694bbae957d724034a51e040689406acc7`, and exact
+contract match. This covers seed-generation, minimizer-extraction,
+quality-filtering, final-clusters contract, fastq-output, and
+default-clustering facets for the smallest accepted larger workload.
+
 ## Ranked Facets
 
 1. Seed extraction and filtering in the sorting pass.
@@ -103,6 +118,8 @@ accepted larger workload.
      cluster-to-record map first.
    - Measurement: run `scripts/run-local-profiling.sh --include-fastq-output`
      and compare memory against the default `--no-fastq` handoff.
+     Medium DRR138512 write-FASTQ evidence is recorded under
+     `/home/stephen/gb10-verification-20260704/results/isONclust3-larger-profile-drr138512-313a7f7-write-fastq/`.
    - Output risk: low for `newONform` handoff when `final_clusters.tsv` is
      unchanged, medium for users relying on cluster FASTQ files.
 

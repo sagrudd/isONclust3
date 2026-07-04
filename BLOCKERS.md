@@ -6,7 +6,7 @@ upstream evidence.
 
 | ID | Area | Blocker | Required Resolution |
 | --- | --- | --- | --- |
-| ISOCLUST-BLOCK-003 | Performance profile | Local toy profiling automation, optimization ranking, and default medium DRR138512 larger-workload profiling now exist, but post-cluster merge bookkeeping, cluster FASTQ output, and GFF-assisted clustering have not yet been profiled on accepted larger workloads. | Use `scripts/run-local-profiling.sh` for toy before/after checks and `scripts/run-larger-workload-profiling.sh` for accepted larger workloads, then rank larger-workload wall time, peak RSS, mode, read count, and output-risk notes before algorithmic changes. |
+| ISOCLUST-BLOCK-003 | Performance profile | Local toy profiling automation, optimization ranking, and medium DRR138512 default plus write-FASTQ larger-workload profiling now exist, but post-cluster merge bookkeeping and GFF-assisted clustering have not yet been profiled on accepted larger workloads. | Use `scripts/run-local-profiling.sh` for toy before/after checks and `scripts/run-larger-workload-profiling.sh` for accepted larger workloads, then rank larger-workload wall time, peak RSS, mode, read count, and output-risk notes before algorithmic changes. |
 ## Resolved Blockers
 
 - Strict `cargo fmt --check`, `cargo test`, and `cargo clippy --all-targets -- -D warnings`

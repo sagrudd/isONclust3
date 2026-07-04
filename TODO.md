@@ -105,7 +105,8 @@ Tasks are ordered to improve the fork without breaking the upstream
 - [x] Profile clustering merge bookkeeping and shared-seed maps with
       post-clustering enabled.
 - [x] Profile FASTQ record sorting and per-cluster output generation with
-      `--include-fastq-output`.
+      `--include-fastq-output` and accepted medium DRR138512 write-FASTQ
+      larger-workload evidence.
 - [x] Profile GFF-assisted clustering separately from the default path.
 
 ## 5. Optimizations
