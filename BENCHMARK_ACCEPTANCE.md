@@ -35,6 +35,14 @@ Every accepted Dockerized or GB10 report must include:
 ## Initial Gates
 
 - Toy ONT and toy PacBio fixtures must pass checksum-backed regeneration.
+- Toy ONT and toy PacBio GB10 reports for source commit
+  `3ba608e3fa87d855f11d75e3c77556f2dd6b1a59` and tool version `0.3.0` are
+  accepted contract evidence under
+  `/home/stephen/gb10-verification-20260704/results/isONclust3-provenance/`.
+  They record source commit, tool version, container digest, command,
+  input checksums, generated `final_clusters.tsv` checksums, wall time,
+  peak RSS, CPU architecture, thread count, JSON/TSV reports, run logs, and
+  Docker stats logs. Bulky reports remain outside Git.
 - Every benchmark manifest must include `linux/arm64` in `platform_targets` so
   Dockerized GB10 execution remains an explicit release requirement.
 - Benchmark `platform_targets` must use the supported Linux target vocabulary:
